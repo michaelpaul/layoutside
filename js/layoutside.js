@@ -1,21 +1,59 @@
 var lg = function (m) { console.log(m) };
 
 (function () {
-    var grides = [40, 10];
+    var config = {
+        column_count: 24,
+        column_width: 30,
+        gutter_width: 10
+    };   
 
+    /* main */
     var Layoutside = function () {
         lg('loaded...');
-    }; 
+        this.Toolbar.init();
+        this.Container.init();
+    };
     
     Layoutside.prototype = {
-        open: function () {lg('open ');},
-        save: function () {lg('saving');},        
-        saveAs: function () {lg('save as');},        
-        getCode: function () {lg('give me the code');}        
+        setOption: function (n, v) {
+            config[n] = v;
+        },
+        getOption: function (n) {
+            return config[n];
+        }
+    }, parent = Layoutside.prototype;
+
+    Layoutside.prototype.Container = {
+        init: function () {
+            this.ui = $('#edit-container');
+        }, 
+        reset: function () {
+            this.ui.html('');
+        }, 
+        addSection: function () {
+            this.ui.append('<div><p>Helloo</p></div>')
+        }    
     };
     
     Layoutside.prototype.Layout = {
-        init: function () {lg('iniciar layout'); }
+        open: function () { 
+            lg('open'); 
+            
+            parent.Container.reset();
+        },
+        save: function () {lg('saving');},        
+        saveAs: function () {lg('save as');},        
+        getCode: function () {lg('give me the code');},
+        download: function () {}
+    };
+    
+    Layoutside.prototype.Toolbar = {
+        init: function () {
+            $('a.icon-section').click(function () {
+                parent.Container.addSection();
+                return false;    
+            });
+        }
     };
     
     window.Layoutside = Layoutside;
