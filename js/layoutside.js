@@ -24,15 +24,37 @@ var lg = function (m) { console.log(m) };
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Container = {
+        current: {},
+        nodes: [], 
         init: function () {
-            this.ui = $('#edit-container');
+            this.ui = $('.canvas');
+            this.addContainer();
+            this.current = this.ui.children();
+            this.nodes.push(this.current);
         }, 
         reset: function () {
-            this.ui.html('');
+            this.ui.html('');            
+            this.nodes = [];
+            this.init();
         }, 
+        
         addSection: function () {
-            this.ui.append('<div><p>Helloo</p></div>')
-        }    
+            var s = $('<div class="span-4" style="background-color: red;"><p>Helloo</p></div>');
+            this.current.append(s);
+        },
+       
+        addHorizontalRule: function () {
+            var hr = $('<hr>');
+            this.current.append(hr);
+        },    
+        
+        addClear: function () {},    
+        addContainer: function () {
+            var self = this, container = $('<div class="container">');
+            container.click(function () { self.current = $(this); });
+            this.ui.append(container);
+        },    
+        toogleGrid: function () {}
     };
     
     Layoutside.prototype.Layout = {
@@ -49,10 +71,12 @@ var lg = function (m) { console.log(m) };
     
     Layoutside.prototype.Toolbar = {
         init: function () {
-            $('a.icon-section').click(function () {
-                parent.Container.addSection();
-                return false;    
-            });
+            var c = parent.Container;
+            
+            $('a.icon').click(function (e) { e.preventDefault(); } );
+            $('a.icon-section').bind('click', function () { c.addSection(); });
+            $('a.icon-hr').bind('click', function () { c.addHorizontalRule(); });
+            $('a.icon-container').bind('click', function () { c.addContainer(); });
         }
     };
     

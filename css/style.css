@@ -59,7 +59,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 */
 .icon { width: 32px; height: 32px; overflow: hidden; float: left; text-indent: -200px;
     background:  url(../images/icons.png) no-repeat transparent; }
-.icon-separator { background:  /*url(../images/vert-separator.png)*/ repeat-y; height: 22px; padding: 2px;margin-top: 4px;}
+.icon-separator { padding: 2px; margin-top: 4px;color: gray; font-weight: bold; font-size: 1.2em;}
 .icon-resize {    background-position: -32px 0; }
 .icon-sort {      background-position: -64px 0; } 
 .icon-section {   background-position: -96px 0; }
@@ -82,4 +82,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
 /* jquery-ui }}} */
+
+#edit-container div.container { min-height: 150px;} 
+#edit-container div.container:hover {  background-color: blue;} 
 
