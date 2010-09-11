@@ -8,45 +8,9 @@
     <!--[if lt IE 8]>
     <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection" />
     <![endif]-->
+    
     <link rel="stylesheet" href="css/style.css" type="text/css" media="handheld, all" />
-    <script src="js/jquery.min.js"></script>
-
-    <script type="text/javascript">
-    jQuery(function () { 
-/*        for(var i = 0; i < 2; i++){    
-            var s = $('.container:last');
-            s.find('p').clone().appendTo(s);
-        }
-*/
-
-/*        $('#menu li ul').hover(function () {
-            $(this).show();} , function () {$(this).hide();
-        });
-
-        $('#menu > li > a').hover(function () {
-            $(this).next('ul').show();
-        }, function () {
-            $(this).next('ul').hide();
-        });      
-*/
-        $('#toolbar ul li a').click(function () { 
-            var self = $(this);
-            self.parents('ul').find('a').removeClass('icon-active');
-            $(this).toggleClass('icon-active');
-            return false;
-        });
-
-/*        $('#toolbar ul li a').click(function () {
-
-            var pa = $(this).css('backgroundPosition').split(' '), 
-                x = parseInt(pa[0]) + (-32), y = pa[1];
-console.log(x + ' ' + y);
-            $(this).css('backgroundPosition', x + 'px ' + y);
-            return false;
-        });
-*/
-    });  
-    </script>
+    <link rel="stylesheet" href="js/jquery/css/smoothness/jquery-ui-1.8.2.custom.css" type="text/css" />
 </head>
 <body class="">
     <div id="widemenu">    
@@ -111,6 +75,15 @@ console.log(x + ' ' + y);
             </div>
         </div>
     </div>
+    <script src="js/jquery/js/jquery-1.4.2.min.js"></script>
+    <script src="js/jquery/js/jquery-ui-1.8.2.custom.min.js"></script>
+    <script type="text/javascript" src="js/layoutside.js"></script>    
+    <script type="text/javascript">
+    jQuery(function () {
+        window.Layoutside = new Layoutside();
+        Layoutside.open(155);
+    });
+    </script>
 </body>
 </html>
 
