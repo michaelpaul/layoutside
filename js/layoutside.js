@@ -10,6 +10,7 @@ var lg = function (m) { console.log(m) };
     /* main */
     var Layoutside = function () {
         lg('loaded...');
+
         this.Toolbar.init();
         this.Container.init();
     };
@@ -24,36 +25,40 @@ var lg = function (m) { console.log(m) };
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Container = {
-        current: {},
-        nodes: [], 
         init: function () {
-            this.ui = $('.canvas');
-            this.addContainer();
-            this.current = this.ui.children();
-            this.nodes.push(this.current);
+            this.ui = $('#container');
         }, 
         reset: function () {
             this.ui.html('');            
-            this.nodes = [];
-            this.init();
         }, 
         
         addSection: function () {
-            var s = $('<div class="span-4" style="background-color: red;"><p>Helloo</p></div>');
-            this.current.append(s);
+            var section = $('<div class="span-4 section"><p>Hello World</p></div>'),
+                sectionDialog = parent.Dialogs.initSection(section);
+            
+            section.dblclick(function () { 
+                sectionDialog.dialog('open');
+            });
+            
+            this.ui.append(section);
         },
        
         addHorizontalRule: function () {
             var hr = $('<hr>');
-            this.current.append(hr);
+            this.ui.append(hr);
         },    
-        
-        addClear: function () {},    
+        /* deprecated         
+        addClear: function () {
+            var dv = $('<div class="clear"></div>');
+            this.ui.append(dv);        
+        },    
+
         addContainer: function () {
             var self = this, container = $('<div class="container">');
             container.click(function () { self.current = $(this); });
             this.ui.append(container);
         },    
+        */
         toogleGrid: function () {}
     };
     
@@ -76,7 +81,33 @@ var lg = function (m) { console.log(m) };
             $('a.icon').click(function (e) { e.preventDefault(); } );
             $('a.icon-section').bind('click', function () { c.addSection(); });
             $('a.icon-hr').bind('click', function () { c.addHorizontalRule(); });
-            $('a.icon-container').bind('click', function () { c.addContainer(); });
+            // $('a.icon-clear').bind('click', function () { c.addClear(); });
+            // $('a.icon-container').bind('click', function () { c.addContainer(); });
+        }
+    };
+    
+    Layoutside.prototype.Dialogs = {
+        sectionUi: $("#sectionDialog"), 
+        
+        initSection: function (section) {
+            var nd = this.sectionUi.clone();
+            nd.dialog({
+                autoOpen: false, width: 300, height: 200, 
+                open: function () {
+                    lg('section dialog open called from ');
+                    lg(section);
+                },
+		        buttons: {
+			        "Update": function() { 
+			            alert('Update something...');
+				        $(this).dialog("close"); 
+			        }, 
+			        "Cancel": function() { 
+				        $(this).dialog("close"); 
+			        } 
+		        }
+		    });
+		    return nd;
         }
     };
     

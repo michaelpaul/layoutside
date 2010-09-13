@@ -2,7 +2,7 @@
 
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
-#edit-container { /* padd topo e fundo */ padding-top: 50px; padding-bottom: 35px; 
+#container { /* padd topo e fundo */ padding-top: 50px; padding-bottom: 35px; 
     min-height: 600px; height: 250px;} 
 
 .showgrid {background:url(../images/grid.png);}
@@ -35,7 +35,7 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); /* for webkit browsers */
     color: #92cecf;
-    height: 37px; width: 500px; 
+    height: 37px; width: 400px; 
     margin: 0 auto;
 }
 
@@ -81,8 +81,12 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 /* {{{ jquery-ui */
 .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
+.ui-dialog { font-size: 75% !important;} 
 /* jquery-ui }}} */
 
-#edit-container div.container { min-height: 150px;} 
-#edit-container div.container:hover {  background-color: blue;} 
+#dialogs { display: none;  }
+
+/* debug */
+.section { background-color: lightblue; } 
+#container div[class^=span]:hover { background-color: lightgreen; } 
 
