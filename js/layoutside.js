@@ -25,13 +25,50 @@ var lg = function (m) { console.log(m) };
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Container = {
+        editMode: '', 
+        ui: $('#container'),
+
         init: function () {
-            this.ui = $('#container');
+            this.setEditMode('select');
         }, 
+
         reset: function () {
             this.ui.html('');            
         }, 
-        
+
+        setEditMode: function (mode) {
+            if(this.editMode == mode)
+                return null;
+
+            this.editMode = mode;
+            parent.Toolbar.ui.find('a.icon-select, a.icon-sort')
+                .removeClass('icon-active');
+
+            switch(mode) {
+                case 'sort':
+                    lg('init sortable');
+                    $('a.icon-sort').addClass('icon-active');
+
+                    if(!this.ui.hasClass('ui-sortable')) { 
+                        this.ui.sortable({  
+                            // tolerance: 'pointer', 
+                            // containment: 'parent', 
+                            items: 'div[class^=span]',
+                            opacity: 0.6 , 
+                            grid: [40, 10],  
+                        });
+                        this.ui.disableSelection();
+                    } else 
+                        this.ui.sortable('enable');
+
+                    break;
+                case 'select':
+                default:
+                    lg('init selectable');
+                    this.ui.sortable('disable');
+                    $('a.icon-select').addClass('icon-active');
+            }
+        },
         addSection: function () {
             var section = $('<div class="span-4 section"><p>Hello World</p></div>'),
                 sectionDialog = parent.Dialogs.initSection(section);
@@ -75,10 +112,14 @@ var lg = function (m) { console.log(m) };
     };
     
     Layoutside.prototype.Toolbar = {
+        ui: $('#toolbar'),
         init: function () {
             var c = parent.Container;
-            
             $('a.icon').click(function (e) { e.preventDefault(); } );
+
+            $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
+            $('a.icon-sort').bind('click', function () { c.setEditMode('sort'); });
+
             $('a.icon-section').bind('click', function () { c.addSection(); });
             $('a.icon-hr').bind('click', function () { c.addHorizontalRule(); });
             // $('a.icon-clear').bind('click', function () { c.addClear(); });
