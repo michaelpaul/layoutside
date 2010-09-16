@@ -46,7 +46,6 @@ var lg = function (m) { console.log(m) };
 
             switch(mode) {
                 case 'sort':
-                    lg('init sortable');
                     $('a.icon-sort').addClass('icon-active');
 
                     if(!this.ui.hasClass('ui-sortable')) { 
@@ -57,26 +56,32 @@ var lg = function (m) { console.log(m) };
                             opacity: 0.6 , 
                             grid: [40, 10],  
                         });
-                        this.ui.disableSelection();
+                        // this.ui.disableSelection();
                     } else 
                         this.ui.sortable('enable');
 
                     break;
                 case 'select':
                 default:
-                    lg('init selectable');
                     this.ui.sortable('disable');
                     $('a.icon-select').addClass('icon-active');
             }
         },
         addSection: function () {
-            var section = $('<div class="span-4 section"><p>Hello World</p></div>'),
+            var section = $('<div class="span-4 section" ' +
+                'contenteditable="true"><p>Hello World</p></div>'),
                 sectionDialog = parent.Dialogs.initSection(section);
             
             section.dblclick(function () { 
                 sectionDialog.dialog('open');
             });
             
+            section.resizable({
+                grid: [40, 10], 
+                maxWidth: 950, 
+                autoHide: true
+            });
+
             this.ui.append(section);
         },
        

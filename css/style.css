@@ -79,7 +79,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 /* toolbar }}} */
 
 /* {{{ jquery-ui */
-.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
 .ui-dialog { font-size: 75% !important;} 
 /* jquery-ui }}} */
