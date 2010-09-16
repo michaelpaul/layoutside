@@ -26,6 +26,7 @@ var lg = function (m) { console.log(m) };
 
     Layoutside.prototype.Container = {
         editMode: '', 
+
         ui: $('#container'),
 
         init: function () {
@@ -67,6 +68,7 @@ var lg = function (m) { console.log(m) };
                     $('a.icon-select').addClass('icon-active');
             }
         },
+
         addSection: function () {
             var section = $('<div class="span-4 section" ' +
                 'contenteditable="true"><p>Hello World</p></div>'),
@@ -79,29 +81,21 @@ var lg = function (m) { console.log(m) };
             section.resizable({
                 grid: [40, 10], 
                 maxWidth: 950, 
-                autoHide: true
+                autoHide: true, 
+                containment: 'parent'
             });
 
             this.ui.append(section);
         },
-       
+        // @deprecated
         addHorizontalRule: function () {
             var hr = $('<hr>');
             this.ui.append(hr);
         },    
-        /* deprecated         
-        addClear: function () {
-            var dv = $('<div class="clear"></div>');
-            this.ui.append(dv);        
-        },    
-
-        addContainer: function () {
-            var self = this, container = $('<div class="container">');
-            container.click(function () { self.current = $(this); });
-            this.ui.append(container);
-        },    
-        */
-        toogleGrid: function () {}
+        
+        toggleGrid: function () {
+            parent.Container.ui.toggleClass('showgrid');
+        }
     };
     
     Layoutside.prototype.Layout = {
@@ -110,6 +104,7 @@ var lg = function (m) { console.log(m) };
             
             parent.Container.reset();
         },
+
         save: function () {lg('saving');},        
         saveAs: function () {lg('save as');},        
         getCode: function () {lg('give me the code');},
@@ -126,9 +121,7 @@ var lg = function (m) { console.log(m) };
             $('a.icon-sort').bind('click', function () { c.setEditMode('sort'); });
 
             $('a.icon-section').bind('click', function () { c.addSection(); });
-            $('a.icon-hr').bind('click', function () { c.addHorizontalRule(); });
-            // $('a.icon-clear').bind('click', function () { c.addClear(); });
-            // $('a.icon-container').bind('click', function () { c.addContainer(); });
+            $('a.icon-toggle-grid').bind('click', function () { c.toggleGrid(); });
         }
     };
     
@@ -160,41 +153,3 @@ var lg = function (m) { console.log(m) };
     window.Layoutside = Layoutside;
 })();
 
-/*
-grids = [40, 10];
-sortOptions = { items: 'div[class^=span]', 
-    // tolerance: 'pointer', 
-    // containment: 'parent', 
-    opacity: 0.6 , 
-    grid: grids,  
-};
-
-$(function() {
-    $('#toolbar ul li a').click(function () { 
-                var self = $(this);
-                self.parents('ul').find('a').removeClass('icon-active');
-                $(this).toggleClass('icon-active');
-                return false;
-            });
-            
-    $('#nested ').sortable({items: 'div[class^=span]', tolerance: 'pointer'});
-	$(".container").sortable(sortOptions);
-	$(".container").disableSelection();
-
-    $("div[class^=span]").resizable({
-        grid: grids, 
-        maxWidth: 950, 
-        autoHide: true, 
-        stop: function (e, ui) {
-            var f = ui.size.width, i = ui.originalSize.width, elm = ui.element;
-            var di = Math.round((f - i) / (40));
-            var curClass = elm.attr('class');
-            elm.attr('class', curClass.replace(/span-(\d+)/, function (m, l) {
-                return 'span-' + (parseInt(l)  + di);
-            }));
-            addLast();
-        } 
-    });
-});
-
-*/

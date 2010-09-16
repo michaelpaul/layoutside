@@ -8,7 +8,7 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 .showgrid {background:url(../images/grid.png);}
 
 #widetool { bottom: 0; } 
-#widetool, #widemenu { position: fixed; width: 100%; } 
+#widetool, #widemenu { position: fixed; width: 100%; z-index: 2; } 
 #widemenu, #toolbar { background-color: #31353e; } 
 #toolbar ul { list-style: none; margin: 0; padding: 0;} 
 
@@ -44,11 +44,11 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #user { font-size: 12px; float: right; margin-right: 10px;}
 #user a { float: right; }
 
-#measurements { float: right; margin-right: 10px; }
-#measurements input { border: 0; color: white; padding: 1px; text-align: center; 
+#measures { float: right; margin-right: 10px; }
+#measures input { border: 0; color: white; padding: 1px; text-align: center; 
     background-color: #1c1d21; width: 30px; font-size: 10px; border: 1px solid #1c1d21; }
 
-#measurements input:focus { border: 1px solid #92cecf; }
+#measures input:focus { border: 1px solid #92cecf; }
  
 /* icons */
 /*
@@ -66,7 +66,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .icon-container { background-position: -128px 0; }
 .icon-clear {     background-position: -160px 0; }
 .icon-hr {        background-position: -192px 0; }
-.icon-toogle-grid { background-position: -224px 0; }
+.icon-toggle-grid { background-position: -224px 0; }
 /* icons hover */
 .icon-select:hover, .icon-select.icon-active {    background-position: 0 -32px; }  
 .icon-resize:hover, .icon-resize.icon-active {    background-position: -32px -32px; }  
@@ -75,7 +75,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .icon-container:hover, .icon-container.icon-active{ background-position: -128px -32px; }
 .icon-clear:hover, .icon-clear.icon-active {     background-position: -160px -32px; }
 .icon-hr:hover, .icon-hr.icon-active {        background-position: -192px -32px; }
-.icon-toogle-grid:hover, .icon-toogle-grid.icon-active { background-position: -224px -32px; }
+.icon-toggle-grid:hover, .icon-toggle-grid.icon-active { background-position: -224px -32px; }
 /* toolbar }}} */
 
 /* {{{ jquery-ui */
