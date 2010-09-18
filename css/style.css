@@ -3,7 +3,7 @@
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
 #container { /* padd topo e fundo */ padding-top: 50px; padding-bottom: 35px; 
-    min-height: 600px; height: 250px;} 
+    min-height: 600px; height: auto;} 
 
 .showgrid {background:url(../images/grid.png);}
 
@@ -86,7 +86,8 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 
 #dialogs { display: none;  }
 
-/* debug */
+/* debug/dev actions */
 .section { background-color: lightblue; } 
-#container div[class^=span]:hover { background-color: lightgreen; } 
+.current-section { background-color: DodgerBlue !important; } 
+.hover-section { background-color: lightgreen ; } 
 

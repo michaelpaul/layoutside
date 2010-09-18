@@ -26,11 +26,15 @@ var lg = function (m) { console.log(m) };
 
     Layoutside.prototype.Container = {
         editMode: '', 
-
         ui: $('#container'),
+        currentSection: null,
 
         init: function () {
+            var self = this;
             this.setEditMode('select');
+            this.currentSection = this.ui;
+            
+            this.ui.click(function () { self.setCurrentSection(this); });
         }, 
 
         reset: function () {
@@ -51,9 +55,8 @@ var lg = function (m) { console.log(m) };
 
                     if(!this.ui.hasClass('ui-sortable')) { 
                         this.ui.sortable({  
-                            // tolerance: 'pointer', 
-                            // containment: 'parent', 
-                            items: 'div[class^=span]',
+                            containment: 'parent', 
+                            items: '> div[class^=span]',
                             opacity: 0.6 , 
                             grid: [40, 10],  
                         });
@@ -68,14 +71,35 @@ var lg = function (m) { console.log(m) };
                     $('a.icon-select').addClass('icon-active');
             }
         },
+        
+        setCurrentSection: function (node) {
+            var currentClass = 'current-section', $n = $(node);
+            
+            this.ui.find('.' + currentClass).removeClass(currentClass);
+            if(!$n.hasClass('container'))
+                $n.addClass(currentClass);
+            this.currentSection = $n; 
+        }, 
 
         addSection: function () {
             var section = $('<div class="span-4 section" ' +
                 'contenteditable="true"><p>Hello World</p></div>'),
-                sectionDialog = parent.Dialogs.initSection(section);
-            
-            section.dblclick(function () { 
+                sectionDialog = parent.Dialogs.initSection(section),
+                self = this, hoverClass = 'hover-section';
+//            section.css('height', 'auto');
+
+            section.click(function (e) {
+                e.stopPropagation();  
+                self.setCurrentSection(this);
+            }).dblclick(function () { 
                 sectionDialog.dialog('open');
+            });
+
+            section.mouseover(function (e) {  
+                e.stopPropagation();
+                section.addClass(hoverClass);
+            }).mouseout(function (e) {  
+                section.removeClass(hoverClass);
             });
             
             section.resizable({
@@ -85,7 +109,7 @@ var lg = function (m) { console.log(m) };
                 containment: 'parent'
             });
 
-            this.ui.append(section);
+            this.currentSection.append(section);
         },
         // @deprecated
         addHorizontalRule: function () {
