@@ -1,5 +1,3 @@
-var lg = function (m) { console.log(m) };
-
 (function () {
     var config = {
         column_count: 24,
@@ -37,15 +35,13 @@ var lg = function (m) { console.log(m) };
             this.ui.click(function () { self.setCurrentSection(this); });
         }, 
 
-        reset: function () {
-            this.ui.html('');            
-        }, 
-
         setEditMode: function (mode) {
             if(this.editMode == mode)
                 return null;
 
             this.editMode = mode;
+            var isSortable = this.ui.hasClass('ui-sortable'); 
+            
             parent.Toolbar.ui.find('a.icon-select, a.icon-sort')
                 .removeClass('icon-active');
 
@@ -53,21 +49,20 @@ var lg = function (m) { console.log(m) };
                 case 'sort':
                     $('a.icon-sort').addClass('icon-active');
 
-                    if(!this.ui.hasClass('ui-sortable')) { 
+                    if(!isSortable) {
                         this.ui.sortable({  
-                            containment: 'parent', 
                             items: '> div[class^=span]',
                             opacity: 0.6 , 
-                            grid: [40, 10],  
+                            grid: [40, 10]
                         });
-                        // this.ui.disableSelection();
                     } else 
                         this.ui.sortable('enable');
 
                     break;
                 case 'select':
                 default:
-                    this.ui.sortable('disable');
+                    if(isSortable)
+                        this.ui.sortable('disable');
                     $('a.icon-select').addClass('icon-active');
             }
         },
@@ -81,12 +76,16 @@ var lg = function (m) { console.log(m) };
             this.currentSection = $n; 
         }, 
 
+        addLast: function () {
+            var sections = this.ui.find('> .section');
+//            lg(sections.length);
+        },
+        
         addSection: function () {
-            var section = $('<div class="span-4 section" ' +
-                'contenteditable="true"><p>Hello World</p></div>'),
+            var section = $('<div class="span-3 section"></div>'),
                 sectionDialog = parent.Dialogs.initSection(section),
-                self = this, hoverClass = 'hover-section';
-//            section.css('height', 'auto');
+                self = this, hoverClass = 'hover-section', 
+                lastResize = 0;
 
             section.click(function (e) {
                 e.stopPropagation();  
@@ -101,21 +100,24 @@ var lg = function (m) { console.log(m) };
             }).mouseout(function (e) {  
                 section.removeClass(hoverClass);
             });
-            
+
             section.resizable({
-                grid: [40, 10], 
+                grid: [40, 10],
+                distance: 40, 
                 maxWidth: 950, 
                 autoHide: true, 
-                containment: 'parent'
+                containment: 'parent', 
+                resize: function (e, ui) { 
+                    var i = ui.originalSize.width, f = ui.size.width;
+//                    lg(f / 40);
+                }, 
+                stop: function (e, ui) {    
+   //                 lg('stop');
+                }
             });
 
             this.currentSection.append(section);
         },
-        // @deprecated
-        addHorizontalRule: function () {
-            var hr = $('<hr>');
-            this.ui.append(hr);
-        },    
         
         toggleGrid: function () {
             parent.Container.ui.toggleClass('showgrid');
@@ -125,8 +127,9 @@ var lg = function (m) { console.log(m) };
     Layoutside.prototype.Layout = {
         open: function () { 
             lg('open'); 
-            
-            parent.Container.reset();
+
+            for(var i = 0 ; i < 5; i++)
+                parent.Container.addSection();  
         },
 
         save: function () {lg('saving');},        
@@ -137,6 +140,7 @@ var lg = function (m) { console.log(m) };
     
     Layoutside.prototype.Toolbar = {
         ui: $('#toolbar'),
+
         init: function () {
             var c = parent.Container;
             $('a.icon').click(function (e) { e.preventDefault(); } );
@@ -175,5 +179,11 @@ var lg = function (m) { console.log(m) };
     };
     
     window.Layoutside = Layoutside;
+
+    var lg = function (f) { 
+        if(!console) return false;
+        console.log(f);
+        console.log("\n");
+    };
 })();
 

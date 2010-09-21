@@ -87,7 +87,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #dialogs { display: none;  }
 
 /* debug/dev actions */
-.section { background-color: lightblue; } 
+.section { min-height: 2em; background-color: lightblue; } 
 .current-section { background-color: DodgerBlue !important; } 
 .hover-section { background-color: lightgreen ; } 
 
