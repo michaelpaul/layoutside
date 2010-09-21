@@ -2,26 +2,30 @@
     var config = {
         column_count: 24,
         column_width: 30,
-        gutter_width: 10
+        gutter_width: 10,
+        totalColWidth: 40 // column_width + gutter_width
     };   
-
+    
     /* main */
     var Layoutside = function () {
+        var self = this;
         lg('loaded...');
 
         this.Toolbar.init();
         this.Container.init();
-    };
-    
-    Layoutside.prototype = {
-        setOption: function (n, v) {
-            config[n] = v;
-        },
-        getOption: function (n) {
-            return config[n];
-        }
-    }, parent = Layoutside.prototype;
 
+        $(document).keydown(function (e) {
+            if(e.keyCode == $.ui.keyCode.DELETE) {
+                var cs = self.Container.currentSection;
+                
+                if(!cs.hasClass('container')) {
+                    cs.remove();
+                    self.Container.currentSection = self.Container.ui;
+                }
+            }
+        });
+    }, parent = Layoutside.prototype;
+   
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
@@ -52,8 +56,12 @@
                     if(!isSortable) {
                         this.ui.sortable({  
                             items: '> div[class^=span]',
-                            opacity: 0.6 , 
-                            grid: [40, 10]
+                            opacity: 0.6, 
+                            grid: [config.totalColWidth, 10],
+                            start: function (e, ui) {   
+                                var ch = ui.helper.height();
+                                ui.placeholder.height(ch);
+                            }
                         });
                     } else 
                         this.ui.sortable('enable');
@@ -76,13 +84,39 @@
             this.currentSection = $n; 
         }, 
 
-        addLast: function () {
-            var sections = this.ui.find('> .section');
-//            lg(sections.length);
+        getSectionWidth: function (elm) {
+            return parseInt(elm.attr('class').split(' ')[0].split('-')[1]);
+        },
+ 
+        addLast: function (context) {
+            var gotContext = typeof context !== 'undefined', 
+                sections = $('> .section',  gotContext ? context : this.ui), 
+                soma = 0, maxWidth = config.column_count, self = this;
+
+            if(gotContext) {
+                maxWidth = this.getSectionWidth(context);
+                lg(maxWidth);
+            }
+   
+            sections.filter('.last').removeClass('last');
+
+            sections.map(function (i, elm) {
+                var curSection = $(elm);
+
+                soma += self.getSectionWidth(curSection);
+
+                if(soma == maxWidth) {
+                    curSection.toggleClass('last');
+                    soma = 0;
+                }
+                // tem sub sections
+                if(curSection.find('.section').length)
+                    self.addLast(curSection);
+            });
         },
         
         addSection: function () {
-            var section = $('<div class="span-3 section"></div>'),
+            var section = $('<div class="span-1 section"></div>'),
                 sectionDialog = parent.Dialogs.initSection(section),
                 self = this, hoverClass = 'hover-section', 
                 lastResize = 0;
@@ -100,23 +134,32 @@
             }).mouseout(function (e) {  
                 section.removeClass(hoverClass);
             });
+            
+            var lastClass = 1;
 
             section.resizable({
-                grid: [40, 10],
-                distance: 40, 
                 maxWidth: 950, 
-                autoHide: true, 
+                autoHide: true,
+                handles: 'e', 
+                grid: [config.totalColWidth, 10],
                 containment: 'parent', 
                 resize: function (e, ui) { 
-                    var i = ui.originalSize.width, f = ui.size.width;
-//                    lg(f / 40);
+                    var elm = ui.helper, nc = Math.round(elm.width() / config.totalColWidth);
+                    if(lastClass == nc) 
+                        return false;
+                    lastClass = nc;
+                    var ccls = elm.attr('class');
+                    elm.attr('class', ccls.replace(/^span-\d+/, 'span-' + nc));
+                    self.addLast();
                 }, 
-                stop: function (e, ui) {    
-   //                 lg('stop');
+
+                stop: function () {
+
                 }
             });
 
             this.currentSection.append(section);
+            this.addLast();
         },
         
         toggleGrid: function () {
@@ -128,8 +171,9 @@
         open: function () { 
             lg('open'); 
 
-            for(var i = 0 ; i < 5; i++)
+            /*for(var i = 0 ; i < 7; i++)
                 parent.Container.addSection();  
+            parent.Container.addLast();*/
         },
 
         save: function () {lg('saving');},        
@@ -166,7 +210,6 @@
                 },
 		        buttons: {
 			        "Update": function() { 
-			            alert('Update something...');
 				        $(this).dialog("close"); 
 			        }, 
 			        "Cancel": function() { 
@@ -183,7 +226,6 @@
     var lg = function (f) { 
         if(!console) return false;
         console.log(f);
-        console.log("\n");
     };
 })();
 
