@@ -44,7 +44,7 @@
                 return null;
 
             this.editMode = mode;
-            var isSortable = this.ui.hasClass('ui-sortable'); 
+            var isSortable = this.ui.hasClass('ui-sortable'), self = this; 
             
             parent.Toolbar.ui.find('a.icon-select, a.icon-sort')
                 .removeClass('icon-active');
@@ -54,13 +54,18 @@
                     $('a.icon-sort').addClass('icon-active');
 
                     if(!isSortable) {
-                        this.ui.sortable({  
+                        this.ui.sortable({
                             items: '> div[class^=span]',
+                            scroll: false, 
                             opacity: 0.6, 
+                            cursor: 'move', 
                             grid: [config.totalColWidth, 10],
                             start: function (e, ui) {   
                                 var ch = ui.helper.height();
                                 ui.placeholder.height(ch);
+                            }, 
+                            stop: function () {
+                                self.addLast();
                             }
                         });
                     } else 
@@ -171,9 +176,9 @@
         open: function () { 
             lg('open'); 
 
-            /*for(var i = 0 ; i < 7; i++)
+            for(var i = 0 ; i < 7; i++)
                 parent.Container.addSection();  
-            parent.Container.addLast();*/
+            parent.Container.addLast();
         },
 
         save: function () {lg('saving');},        
