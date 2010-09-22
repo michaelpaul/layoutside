@@ -29,6 +29,7 @@
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
+
         currentSection: null,
 
         init: function () {
@@ -36,7 +37,10 @@
             this.setEditMode('select');
             this.currentSection = this.ui;
             
-            this.ui.click(function () { self.setCurrentSection(this); });
+            this.ui.click(function () { 
+                self.setCurrentSection(this); 
+                self.setMeasures(0, 0);
+            });
         }, 
 
         setEditMode: function (mode) {
@@ -119,9 +123,12 @@
                     self.addLast(curSection);
             });
         },
-        
+        setMeasures: function (w, h) {
+            parent.Toolbar.widthInput.val(w);
+            parent.Toolbar.heightInput.val(h);
+        },
         addSection: function () {
-            var section = $('<div class="span-1 section"></div>'),
+            var section = $('<div class="span-3 section"><div id="content"></div></div>'),
                 sectionDialog = parent.Dialogs.initSection(section),
                 self = this, hoverClass = 'hover-section', 
                 lastResize = 0;
@@ -129,7 +136,11 @@
             section.click(function (e) {
                 e.stopPropagation();  
                 self.setCurrentSection(this);
-            }).dblclick(function () { 
+                self.setMeasures(section.width(), section.height());
+            }).dblclick(function (e) { 
+                if(self.editMode == 'sort')
+                    return false;
+                e.stopPropagation();
                 sectionDialog.dialog('open');
             });
 
@@ -145,17 +156,21 @@
             section.resizable({
                 maxWidth: 950, 
                 autoHide: true,
-                handles: 'e', 
-                grid: [config.totalColWidth, 10],
+                // handles: 'e', 
+                grid: [config.totalColWidth],
                 containment: 'parent', 
                 resize: function (e, ui) { 
-                    var elm = ui.helper, nc = Math.round(elm.width() / config.totalColWidth);
+                    var elm = ui.helper, w = elm.width(), nc = Math.round(w / config.totalColWidth);
+                    parent.Toolbar.heightInput.val(ui.size.height);
+
                     if(lastClass == nc) 
                         return false;
+
                     lastClass = nc;
                     var ccls = elm.attr('class');
                     elm.attr('class', ccls.replace(/^span-\d+/, 'span-' + nc));
                     self.addLast();
+                    parent.Toolbar.widthInput.val(w);
                 }, 
 
                 stop: function () {
@@ -189,9 +204,12 @@
     
     Layoutside.prototype.Toolbar = {
         ui: $('#toolbar'),
+        widthInput: $('#section-w').val(0), 
+        heightInput: $('#section-h').val(0), 
+        prevHeight: 0,
 
         init: function () {
-            var c = parent.Container;
+            var c = parent.Container, self = this;
             $('a.icon').click(function (e) { e.preventDefault(); } );
 
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
@@ -199,6 +217,13 @@
 
             $('a.icon-section').bind('click', function () { c.addSection(); });
             $('a.icon-toggle-grid').bind('click', function () { c.toggleGrid(); });
+
+            this.heightInput.keyup(function () {
+                var h = self.heightInput.val(), s = parent.Container.currentSection;
+                
+                if(/^\d+$/.test(h) && !s.hasClass('container')) 
+                    s.height(parseInt(h));
+            });
         }
     };
     
