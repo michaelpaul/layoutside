@@ -37,7 +37,7 @@
             this.setEditMode('select');
             this.currentSection = this.ui;
             
-            this.ui.click(function () { 
+            this.ui.click(function () {
                 self.setCurrentSection(this); 
                 self.setMeasures(0, 0);
             });
@@ -85,11 +85,11 @@
         },
         
         setCurrentSection: function (node) {
-            var currentClass = 'current-section', $n = $(node);
+            var curClass = 'current-section', $n = $(node);
             
-            this.ui.find('.' + currentClass).removeClass(currentClass);
+            this.ui.find('.' + curClass).removeClass(curClass);
             if(!$n.hasClass('container'))
-                $n.addClass(currentClass);
+                $n.addClass(curClass);
             this.currentSection = $n; 
         }, 
 
@@ -102,10 +102,8 @@
                 sections = $('> .section',  gotContext ? context : this.ui), 
                 soma = 0, maxWidth = config.column_count, self = this;
 
-            if(gotContext) {
+            if(gotContext) 
                 maxWidth = this.getSectionWidth(context);
-                lg(maxWidth);
-            }
    
             sections.filter('.last').removeClass('last');
 
@@ -123,26 +121,32 @@
                     self.addLast(curSection);
             });
         },
+
         setMeasures: function (w, h) {
             parent.Toolbar.widthInput.val(w);
             parent.Toolbar.heightInput.val(h);
         },
+
         addSection: function () {
             var section = $('<div class="span-3 section"><div id="content"></div></div>'),
-                sectionDialog = parent.Dialogs.initSection(section),
-                self = this, hoverClass = 'hover-section', 
-                lastResize = 0;
-
+                self = this, sectionDialog = parent.Dialogs.initSection(section),
+                hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
+            
             section.click(function (e) {
-                e.stopPropagation();  
-                self.setCurrentSection(this);
-                self.setMeasures(section.width(), section.height());
-            }).dblclick(function (e) { 
-                if(self.editMode == 'sort')
-                    return false;
                 e.stopPropagation();
-                sectionDialog.dialog('open');
-            });
+                nclicks = nclicks + 1;
+
+                if (nclicks < 2) { 
+                    self.setCurrentSection(section.get(0));
+                    self.setMeasures(section.width(), section.height());
+                    window.setTimeout(function () {
+                        nclicks = 0;
+                    }, 500);
+                } else { // handle dblclick
+                    sectionDialog.dialog('open');
+                    nclicks = 0;
+                }
+            }); 
 
             section.mouseover(function (e) {  
                 e.stopPropagation();
@@ -150,31 +154,27 @@
             }).mouseout(function (e) {  
                 section.removeClass(hoverClass);
             });
-            
-            var lastClass = 1;
 
             section.resizable({
                 maxWidth: 950, 
                 autoHide: true,
-                // handles: 'e', 
                 grid: [config.totalColWidth],
                 containment: 'parent', 
+
                 resize: function (e, ui) { 
-                    var elm = ui.helper, w = elm.width(), nc = Math.round(w / config.totalColWidth);
+                    var elm = ui.helper, w = elm.width(), curClass = '', 
+                        nc = Math.round(w / config.totalColWidth);
+
                     parent.Toolbar.heightInput.val(ui.size.height);
 
                     if(lastClass == nc) 
                         return false;
 
                     lastClass = nc;
-                    var ccls = elm.attr('class');
-                    elm.attr('class', ccls.replace(/^span-\d+/, 'span-' + nc));
+                    curClass = elm.attr('class');
+                    elm.attr('class', curClass.replace(/^span-\d+/, 'span-' + nc));
                     self.addLast();
                     parent.Toolbar.widthInput.val(w);
-                }, 
-
-                stop: function () {
-
                 }
             });
 
@@ -189,7 +189,7 @@
     
     Layoutside.prototype.Layout = {
         open: function () { 
-            lg('open'); 
+            lg('open layout'); 
 
             for(var i = 0 ; i < 7; i++)
                 parent.Container.addSection();  
@@ -206,7 +206,6 @@
         ui: $('#toolbar'),
         widthInput: $('#section-w').val(0), 
         heightInput: $('#section-h').val(0), 
-        prevHeight: 0,
 
         init: function () {
             var c = parent.Container, self = this;
@@ -232,11 +231,11 @@
         
         initSection: function (section) {
             var nd = this.sectionUi.clone();
+
             nd.dialog({
                 autoOpen: false, width: 300, height: 200, 
                 open: function () {
-                    lg('section dialog open called from ');
-                    lg(section);
+                    lg('section dialog open');
                 },
 		        buttons: {
 			        "Update": function() { 
@@ -247,6 +246,7 @@
 			        } 
 		        }
 		    });
+
 		    return nd;
         }
     };
