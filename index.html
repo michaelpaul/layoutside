@@ -61,11 +61,49 @@
     </div>
 
     <div id="dialogs">
-        <div id="sectionDialog" title="Section Dialog">
-	        <p>Show section propertis.</p>
+        <div class="sectionDialog" title="Section Dialog">
+            <form name="sectionProperties">	        
+                <p>
+                    <label>Id</label>
+                    <input name="sec-id" type="text">
+                    <label>Class</label>
+                    <input name="class-name" type="text">
+                </p>
+	            <p>
+                    <label>Tagname</label>
+                    <select name="tagname">
+                        <option>div</option>
+                        <option>section</option>
+                        <option>nav</option>
+                        <option>header</option>
+                        <option>footer</option>
+                    </select>
+                </p>
+                <p class="slider-space-row">
+                    <label>Left space</label>
+                    <div class="space-slider"></div>
+                </p>
+                <div class="clear"></div>
+                <p class="slider-space-row">
+                    <label>Rigth space</label>
+                    <div class="space-slider"></div>
+                </p>
+                <div class="clear"></div>
+                <p>
+                    <label>Aditional classes</label><br>
+                        <input type="checkbox">Last
+                        <input type="checkbox"> Clear 
+                        <input type="checkbox"> box 
+                        <input type="checkbox"> border
+                        <br>
+                        <input type="checkbox"> colborder 
+                        <input type="checkbox"> append-bottom
+                        <input type="checkbox"> prepend-top
+                </p>
+            </form>
         </div>
     </div>
-    
+
     <script src="js/jquery/js/jquery-1.4.2.min.js"></script>
     <script src="js/jquery/js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/layoutside.js"></script>    

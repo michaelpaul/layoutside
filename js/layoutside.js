@@ -94,7 +94,8 @@
         }, 
 
         getSectionWidth: function (elm) {
-            return parseInt(elm.attr('class').split(' ')[0].split('-')[1]);
+            return parseInt(elm[0].className.split(' ')[0].split('-')[1]);
+//            return parseInt(elm.attr('class').split(' ')[0].split('-')[1]);
         },
  
         addLast: function (context) {
@@ -171,8 +172,10 @@
                         return false;
 
                     lastClass = nc;
-                    curClass = elm.attr('class');
-                    elm.attr('class', curClass.replace(/^span-\d+/, 'span-' + nc));
+                    curClass = elm[0].className;
+//                    curClass = elm.attr('class');
+//                    elm.attr('class', curClass.replace(/^span-\d+/, 'span-' + nc));
+                    elm[0].className = curClass.replace(/^span-\d+/, 'span-' + nc);
                     self.addLast();
                     parent.Toolbar.widthInput.val(w);
                 }
@@ -227,25 +230,22 @@
     };
     
     Layoutside.prototype.Dialogs = {
-        sectionUi: $("#sectionDialog"), 
+        sectionUi: $(".sectionDialog"), 
         
         initSection: function (section) {
             var nd = this.sectionUi.clone();
 
             nd.dialog({
-                autoOpen: false, width: 300, height: 200, 
+                resizable: false, autoOpen: false, width: 300, height: 225, 
                 open: function () {
                     lg('section dialog open');
-                },
-		        buttons: {
-			        "Update": function() { 
-				        $(this).dialog("close"); 
-			        }, 
-			        "Cancel": function() { 
-				        $(this).dialog("close"); 
-			        } 
-		        }
+                }
 		    });
+
+            $('.space-slider', nd).slider( {
+	            min: 1, max: config.column_count,
+                start: function () { }
+            });
 
 		    return nd;
         }

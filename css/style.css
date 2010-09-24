@@ -93,3 +93,11 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .hover-section { background-color: lightgreen ; } 
 .ui-sortable .hover-section { cursor: move; }
 
+.slider-space-row { width: 30%; float: left; }
+.space-slider { width: 60%; float: left; } 
+
+.sectionDialog input[type=text] { width: 40%; margin: 0.5em 0 0 0;} 
+.sectionDialog select { margin-left: 7%; width: 40%; } 
+.sectionDialog p { margin: 0 0 1em; } 
+
+.sectionDialog .ui-slider { position: absolute; left: 25%;}
