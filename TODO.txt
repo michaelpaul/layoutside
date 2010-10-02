@@ -1,0 +1,3 @@
+- tamanho do grid deve atingir fundo, toolbar deve cobrir grid;
+- ajustar altura da section aninhada quando estiver sendo redimencionada;
+  
