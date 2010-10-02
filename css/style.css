@@ -2,10 +2,11 @@
 body { overflow-x: hidden; }
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
-#container { /* padd topo e fundo */ padding-top: 50px; padding-bottom: 35px; 
-    min-height: 600px; height: auto;} 
+#cntplc { /* padd topo e fundo  */ padding-top: 45px;  padding-bottom: 35px; } 
+#containerGrid div, #container { min-height: 600px; height: auto; } 
 
 .showgrid {background:url(../images/grid.png);}
+.bshowgrid { display: none; } 
 
 #widetool { bottom: 0; } 
 #widetool, #widemenu { position: fixed; width: 100%; z-index: 2; } 
@@ -101,3 +102,6 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .sectionDialog p { margin: 0 0 1em; } 
 
 .sectionDialog .ui-slider { position: absolute; left: 25%;}
+
+
+#containerGrid div { background-color: #e8efaa /* #e8effb */; float: left; }

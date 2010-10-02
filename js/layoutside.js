@@ -186,7 +186,8 @@
         },
         
         toggleGrid: function () {
-            parent.Container.ui.toggleClass('showgrid');
+            // parent.Container.ui.toggleClass('showgrid');
+            $('#containerGrid').toggleClass('bshowgrid');
         }
     };
     
@@ -195,14 +196,31 @@
             lg('open layout'); 
 
             for(var i = 0 ; i < 7; i++)
-                parent.Container.addSection();  
+; //                parent.Container.addSection();  
+//            parent.Container.toggleGrid();
             parent.Container.addLast();
+            this.buildGrid();
         },
 
         save: function () {lg('saving');},        
         saveAs: function () {lg('save as');},        
         getCode: function () {lg('give me the code');},
-        download: function () {}
+        download: function () {},
+        buildGrid: function () {
+            var ui = $('#containerGrid'), i = 0;
+            var clm = {};
+            
+            for(; i < config.column_count; i++){
+                clm = $('<div>&nbsp;</div>');
+                clm.css({width: config.column_width , 
+                    marginRight: config.gutter_width
+                })
+                ui.append(clm);
+            }
+                
+            ui.find('div:last').css('marginRight', 0);
+        }
+        
     };
     
     Layoutside.prototype.Toolbar = {
