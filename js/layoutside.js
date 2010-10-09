@@ -36,9 +36,9 @@
             var self = this;
             this.setEditMode('select');
             this.currentSection = this.ui;
-            
-            this.ui.click(function () {
-                self.setCurrentSection(this); 
+
+            this.ui.add('body').click(function () {
+                self.setCurrentSection(self.ui); 
                 self.setMeasures(0, 0);
             });
         }, 
@@ -157,10 +157,12 @@
             });
 
             section.resizable({
+                minHeight: 24,
                 maxWidth: 950, 
                 autoHide: true,
+                zIndex: 100, 
                 grid: [config.totalColWidth],
-                containment: 'parent', 
+                // containment: 'parent', 
 
                 resize: function (e, ui) { 
                     var elm = ui.helper, w = elm.width(), curClass = '', 
@@ -187,7 +189,7 @@
         
         toggleGrid: function () {
             // parent.Container.ui.toggleClass('showgrid');
-            $('#containerGrid').toggleClass('bshowgrid');
+            $('#containerGrid').toggleClass('togglegrid');
         }
     };
     
@@ -196,7 +198,7 @@
             lg('open layout'); 
 
             for(var i = 0 ; i < 7; i++)
-; //                parent.Container.addSection();  
+                parent.Container.addSection();  
 //            parent.Container.toggleGrid();
             parent.Container.addLast();
             this.buildGrid();
@@ -212,7 +214,7 @@
             
             for(; i < config.column_count; i++){
                 clm = $('<div>&nbsp;</div>');
-                clm.css({width: config.column_width , 
+                clm.css({width: config.column_width, 
                     marginRight: config.gutter_width
                 })
                 ui.append(clm);
@@ -230,7 +232,7 @@
 
         init: function () {
             var c = parent.Container, self = this;
-            $('a.icon').click(function (e) { e.preventDefault(); } );
+            $('a.icon').click(function (e) { e.stopPropagation(); e.preventDefault(); } );
 
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
             $('a.icon-sort').bind('click', function () { c.setEditMode('sort'); });
@@ -241,8 +243,12 @@
             this.heightInput.keyup(function () {
                 var h = self.heightInput.val(), s = parent.Container.currentSection;
                 
-                if(/^\d+$/.test(h) && !s.hasClass('container')) 
-                    s.height(parseInt(h));
+                if(/^\d+$/.test(h) && !s.hasClass('container')) {
+                    h = parseInt(h);
+                    if(h < 24) // min-height
+                        return false;
+                    s.height(h);
+                }
             });
         }
     };
