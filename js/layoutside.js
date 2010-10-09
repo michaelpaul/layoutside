@@ -38,6 +38,7 @@
             this.currentSection = this.ui;
 
             this.ui.add('body').click(function () {
+                lg('from body');
                 self.setCurrentSection(self.ui); 
                 self.setMeasures(0, 0);
             });
@@ -88,7 +89,7 @@
             var curClass = 'current-section', $n = $(node);
             
             this.ui.find('.' + curClass).removeClass(curClass);
-            if(!$n.hasClass('container'))
+            if($n.hasClass('section'))
                 $n.addClass(curClass);
             this.currentSection = $n; 
         }, 
@@ -214,7 +215,7 @@
             
             for(; i < config.column_count; i++){
                 clm = $('<div>&nbsp;</div>');
-                clm.css({width: config.column_width, 
+                clm.css({width: config.column_width , 
                     marginRight: config.gutter_width
                 })
                 ui.append(clm);
@@ -232,6 +233,7 @@
 
         init: function () {
             var c = parent.Container, self = this;
+            // evitar acao padrão de link e propagacao para o body 
             $('a.icon').click(function (e) { e.stopPropagation(); e.preventDefault(); } );
 
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });

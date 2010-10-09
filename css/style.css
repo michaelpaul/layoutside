@@ -7,7 +7,7 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #containerGrid { position: absolute; } 
 /* #containerGrid, #containerGrid div {  }  */
 #containerGrid div { min-height: 600px; }  
-#container { min-height: 600px; margin-bottom: 42px;} 
+#container { min-height: 600px; margin-bottom: 42px; overflow: hidden;} 
 
 .showgrid {background:url(../images/grid.png);}
 .togglegrid { display: none; } 
