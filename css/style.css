@@ -1,4 +1,5 @@
-/*azul claro #92cecf */
+/* @import "topographic.css"; */
+
 body { overflow-x: hidden; }
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
@@ -6,11 +7,12 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 
 #containerGrid { position: absolute; } 
 #containerGrid, #containerGrid div { min-height: 600px; } 
-#containerGrid div {  height: 100%; }  
+
+#containerGrid div { float: left; height: 100%; background-color: #e8effb; }  
 #container { margin-bottom: 42px; overflow: hidden;} 
 
-.showgrid {background:url(../images/grid.png);}
-.togglegrid { display: none; } 
+.showgrid { background: url(../images/grid.png); }
+.togglegrid { opacity: 0; } 
 
 #widetool { bottom: 0; } 
 #widemenu { border-bottom: 3px solid white;} 
@@ -61,7 +63,8 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 /*
 document.execCommand("BackgroundImageCache",false,true);
 png ie
-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader (src='images/mater.png', sizingMethod='scale'); 
+filter: progid:DXImageTransform.Microsoft
+    .AlphaImageLoader (src='images/mater.png', sizingMethod='scale'); 
 http://msdn.microsoft.com/en-us/library/ms532969.aspx
 */
 .icon { width: 32px; height: 32px; overflow: hidden; float: left; text-indent: -200px;
@@ -94,10 +97,12 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #dialogs { display: none;  }
 
 /* debug/dev actions */
-.section { min-height: 10px; height: 2em; background-color: lightblue; } 
+.section { min-height: 2em; background-color: lightblue; overflow: hidden; } 
+.section-content { height: auto; } 
 .current-section { background-color: DodgerBlue !important; } 
 .hover-section { background-color: lightgreen ; } 
 .ui-sortable .hover-section { cursor: move; }
+.ui-sortable-disabled .hover-section { cursor: auto; }
 
 .slider-space-row { width: 30%; float: left; }
 .space-slider { width: 60%; float: left; } 
@@ -105,8 +110,5 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .sectionDialog input[type=text] { width: 40%; margin: 0.5em 0 0 0;} 
 .sectionDialog select { margin-left: 7%; width: 40%; } 
 .sectionDialog p { margin: 0 0 1em; } 
-
 .sectionDialog .ui-slider { position: absolute; left: 25%;}
 
-
-#containerGrid div { background-color: #EEFFAA /* azul - #e8effb */; float: left; }

@@ -18,7 +18,7 @@
             if(e.keyCode == $.ui.keyCode.ESCAPE) {
                 var cs = self.Container.currentSection;
                 // não remover container quando selecionado
-                if(cs != self.Container.ui) {
+                if(cs[0] != self.Container.ui[0]) {
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
                     self.Container.addLast();
@@ -143,7 +143,8 @@
         },
 
         addSection: function () {
-            var section = $('<div class="span-3 section"><div id="content"></div></div>'),
+            var section = $('<div class="span-3 section">'  + 
+                '<div class="section-content" ></div></div>'),
                 self = this, sectionDialog = parent.Dialogs.initSection(section),
                 hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
             
@@ -170,6 +171,8 @@
                 section.removeClass(hoverClass);
             });
 
+            var lastResizedParent = null;
+            
             section.resizable({
                 minHeight: 24,
                 maxWidth: 950, 
@@ -177,7 +180,29 @@
                 zIndex: 100, 
                 grid: [config.totalColWidth],
                 // containment: 'parent', 
+                
+                start: function (e, ui) {
+                    var p = ui.element.parent();
 
+                    if(p[0] != self.ui[0]) {
+                        var h = p.height();
+                        p.css({'minHeight': h, 'height': 'auto'});
+                        lastResizedParent = p;
+                    }
+                },
+                stop: function () {
+                    if(lastResizedParent) {
+                        var parentHeight = lastResizedParent.height();
+                        
+                        lastResizedParent.css({
+                            'height': parentHeight, 
+                            'minHeight': null
+                        });
+                        
+                        lastResizedParent = null;
+                    }
+                }, 
+                
                 resize: function (e, ui) { 
                     var elm = ui.helper, w = elm.width(), curClass = '', 
                         nc = Math.round(w / config.totalColWidth);
@@ -194,7 +219,11 @@
                     parent.Toolbar.widthInput.val(w);
                 }
             });
-
+/*
+            var target = this.currentSection[0] == self.ui[0] ? 
+                self.ui : this.currentSection.find('> .section-content');
+            target.append(section);
+            */
             this.currentSection.append(section);
             this.addLast();
         },
