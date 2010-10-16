@@ -1,9 +1,9 @@
-/* @import "topographic.css"; */
+@import "topographic.css"; 
 
 body { overflow-x: hidden; }
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
-#containerPlaceholder { padding-top: 38px; } 
+#containerPlaceholder { padding-top: 42px; } 
 
 #containerGrid { position: absolute; } 
 #containerGrid, #containerGrid div { min-height: 600px; } 
@@ -15,7 +15,6 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 .togglegrid { opacity: 0; } 
 
 #widetool { bottom: 0; } 
-#widemenu { border-bottom: 3px solid white;} 
 #widetool, #widemenu { position: fixed; width: 100%; z-index: 2; } 
 #widemenu, #toolbar { background-color: #31353e; } 
 #toolbar ul { list-style: none; margin: 0; padding: 0;} 
@@ -24,13 +23,13 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #logo { float: left; width: 127px; height: 35px; margin-top: 1px;}
 #widemenu, #menu { height: 37px; z-index: 1000;} 
 #menuarea { background: url(../images/header.jpg) center top transparent no-repeat; width: 950px; margin: 0 auto; }
-#menu { float: left; margin: 5px 0 0 0; padding: 0;} 
+#menu { float: left; margin: 3px 0 0 10px; padding: 0; height: 100%; } 
 #menu li { list-style: none; float: left; margin-left: 30px; padding: 6px;} 
 #menu li ul, #menuarea li li { background-color: black; margin: 0; padding: 0; }
-#menu li li { float: none; margin-left: -6px; border: 2px solid black;padding: 2px 4px;}  
+#menu li li { float: none; margin-left: -6px; border: 2px solid black; padding: 2px 4px;}  
 #menu li:hover { background-color: black;}  
 #menu li li:hover { background-color: #92cecf;}  
-#menu li ul { display: none; } 
+#menu li ul { display: none; margin: 3px 0 0; } 
 #menu li:hover ul { display: block; position: absolute;}  
 
 /* menubar }}} */
@@ -44,13 +43,13 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
     background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); /* for webkit browsers */
     color: #92cecf;
     height: 37px; 
-    width: 375px; 
+    width: 350px; 
     margin: 0 auto;
 }
 
 #toolbar ul { padding: 2px; margin-left: 5px; } 
 #toolbar ul li { float: left; } 
-#user { font-size: 12px; float: right; margin-right: 10px;}
+#user { display: none; font-size: 12px; float: right; margin-right: 10px;}
 #user a { float: right; }
 
 #measures { float: right; margin-right: 10px; }
@@ -100,7 +99,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 .section { min-height: 2em; background-color: lightblue; overflow: hidden; } 
 .section-content { height: auto; } 
 .current-section { background-color: DodgerBlue !important; } 
-.hover-section { background-color: lightgreen ; } 
+.hover-section { background-color: lightgreen  !important; } 
 .ui-sortable .hover-section { cursor: move; }
 .ui-sortable-disabled .hover-section { cursor: auto; }
 

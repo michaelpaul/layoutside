@@ -32,7 +32,8 @@
         ui: $('#container'),
         grid: $('#containerGrid'), 
         currentSection: null,
-
+        isResizingSection: false, 
+        
         init: function () {
             var self = this;
             this.setEditMode('select');
@@ -144,8 +145,8 @@
 
         addSection: function () {
             var section = $('<div class="span-3 section">'  + 
-                '<div class="section-content" ></div></div>'),
-                self = this, sectionDialog = parent.Dialogs.initSection(section),
+                '<div class="section-content"></div></div>'),
+                self = this, /*sectionDialog = parent.Dialogs.initSection(section),*/
                 hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
             
             section.click(function (e) {
@@ -159,12 +160,15 @@
                         nclicks = 0;
                     }, 500);
                 } else { // handle dblclick
-                    sectionDialog.dialog('open');
+                    // sectionDialog.dialog('open');
                     nclicks = 0;
                 }
             }); 
 
             section.mouseover(function (e) {  
+                if(self.isResizingSection)
+                    return false;
+                    
                 e.stopPropagation();
                 section.addClass(hoverClass);
             }).mouseout(function (e) {  
@@ -179,18 +183,24 @@
                 autoHide: true,
                 zIndex: 100, 
                 grid: [config.totalColWidth],
+                // handles: 'e', 
                 // containment: 'parent', 
                 
                 start: function (e, ui) {
                     var p = ui.element.parent();
 
+                    self.isResizingSection = true;
+                    
                     if(p[0] != self.ui[0]) {
                         var h = p.height();
                         p.css({'minHeight': h, 'height': 'auto'});
                         lastResizedParent = p;
                     }
                 },
+                
                 stop: function () {
+                    self.isResizingSection = false;
+                    // ajustar altura do elemento pai se necessario
                     if(lastResizedParent) {
                         var parentHeight = lastResizedParent.height();
                         
