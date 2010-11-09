@@ -15,12 +15,13 @@
         this.Container.init();
 
         $(document).keydown(function (e) {
-            if(e.keyCode == $.ui.keyCode.DELETE) {
+            if(e.keyCode == $.ui.keyCode.ESCAPE) {
                 var cs = self.Container.currentSection;
-                
-                if(!cs.hasClass('container')) {
+                // não remover container quando selecionado
+                if(cs[0] != self.Container.ui[0]) {
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
+                    self.Container.addLast();
                 }
             }
         });
@@ -29,17 +30,18 @@
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
-
+        grid: $('#containerGrid'), 
         currentSection: null,
-
+        isResizingSection: false, 
+        
         init: function () {
             var self = this;
             this.setEditMode('select');
             this.currentSection = this.ui;
             
-            this.ui.click(function () {
-                self.setCurrentSection(this); 
-                self.setMeasures(0, 0);
+            this.ui.add(this.grid).click(function (e) {
+                self.setCurrentSection(self.ui); 
+                self.setMeasures();
             });
         }, 
 
@@ -88,49 +90,63 @@
             var curClass = 'current-section', $n = $(node);
             
             this.ui.find('.' + curClass).removeClass(curClass);
-            if(!$n.hasClass('container'))
+            if($n.hasClass('section'))
                 $n.addClass(curClass);
             this.currentSection = $n; 
         }, 
 
         getSectionWidth: function (elm) {
             return parseInt(elm[0].className.split(' ')[0].split('-')[1]);
-//            return parseInt(elm.attr('class').split(' ')[0].split('-')[1]);
         },
  
         addLast: function (context) {
-            var gotContext = typeof context !== 'undefined', 
-                sections = $('> .section',  gotContext ? context : this.ui), 
-                soma = 0, maxWidth = config.column_count, self = this;
+            var hasContext = typeof context !== 'undefined', 
+                sections = $('> .section',  hasContext ? context : this.ui), 
+                sum = 0, columnCount = config.column_count, i, f;
 
-            if(gotContext) 
-                maxWidth = this.getSectionWidth(context);
-   
+            if(hasContext) 
+                columnCount = this.getSectionWidth(context);
+
             sections.filter('.last').removeClass('last');
+            sections.filter('.clear').removeClass('clear');
+            
+            for(i = 0, f = sections.length; i < f; i = i + 1) {
+                var curSection = $(sections[i]), 
+                    prevColumnCount = this.getSectionWidth(curSection),
+                    nextSection = curSection.next('.section');
 
-            sections.map(function (i, elm) {
-                var curSection = $(elm);
+                sum += prevColumnCount;
 
-                soma += self.getSectionWidth(curSection);
-
-                if(soma == maxWidth) {
+                if(sum > columnCount) {
+                    curSection.toggleClass('clear');
+                    sum = prevColumnCount;
+                } else if(sum == columnCount) {
                     curSection.toggleClass('last');
-                    soma = 0;
-                }
-                // tem sub sections
+                  
+                    if(nextSection.length)
+                        nextSection.toggleClass('clear');
+                    sum = 0;
+                } 
+                
+                // tem sub sections?
                 if(curSection.find('.section').length)
-                    self.addLast(curSection);
-            });
+                    this.addLast(curSection);
+            }
         },
 
         setMeasures: function (w, h) {
+            var container = parent.Container, 
+                w = w ? w : container.ui.width(),
+                h = h ? h : container.ui.height();
+            
             parent.Toolbar.widthInput.val(w);
             parent.Toolbar.heightInput.val(h);
         },
 
         addSection: function () {
-            var section = $('<div class="span-3 section"><div id="content"></div></div>'),
-                self = this, sectionDialog = parent.Dialogs.initSection(section),
+            var section = $('<div class="span-3 section">'  + 
+                '<div class="section-content"></div></div>'),
+                self = this, /*sectionDialog = parent.Dialogs.initSection(section),*/
                 hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
             
             section.click(function (e) {
@@ -144,24 +160,59 @@
                         nclicks = 0;
                     }, 500);
                 } else { // handle dblclick
-                    sectionDialog.dialog('open');
+                    // sectionDialog.dialog('open');
                     nclicks = 0;
                 }
             }); 
 
             section.mouseover(function (e) {  
+                if(self.isResizingSection)
+                    return false;
+                    
                 e.stopPropagation();
                 section.addClass(hoverClass);
             }).mouseout(function (e) {  
                 section.removeClass(hoverClass);
             });
 
+            var lastResizedParent = null;
+            
             section.resizable({
+                minHeight: 24,
                 maxWidth: 950, 
                 autoHide: true,
+                zIndex: 100, 
                 grid: [config.totalColWidth],
-                containment: 'parent', 
+                // handles: 'e', 
+                // containment: 'parent', 
+                
+                start: function (e, ui) {
+                    var p = ui.element.parent();
 
+                    self.isResizingSection = true;
+                    
+                    if(p[0] != self.ui[0]) {
+                        var h = p.height();
+                        p.css({'minHeight': h, 'height': 'auto'});
+                        lastResizedParent = p;
+                    }
+                },
+                
+                stop: function () {
+                    self.isResizingSection = false;
+                    // ajustar altura do elemento pai se necessario
+                    if(lastResizedParent) {
+                        var parentHeight = lastResizedParent.height();
+                        
+                        lastResizedParent.css({
+                            'height': parentHeight, 
+                            'minHeight': null
+                        });
+                        
+                        lastResizedParent = null;
+                    }
+                }, 
+                
                 resize: function (e, ui) { 
                     var elm = ui.helper, w = elm.width(), curClass = '', 
                         nc = Math.round(w / config.totalColWidth);
@@ -173,20 +224,22 @@
 
                     lastClass = nc;
                     curClass = elm[0].className;
-//                    curClass = elm.attr('class');
-//                    elm.attr('class', curClass.replace(/^span-\d+/, 'span-' + nc));
                     elm[0].className = curClass.replace(/^span-\d+/, 'span-' + nc);
                     self.addLast();
                     parent.Toolbar.widthInput.val(w);
                 }
             });
-
+/*
+            var target = this.currentSection[0] == self.ui[0] ? 
+                self.ui : this.currentSection.find('> .section-content');
+            target.append(section);
+            */
             this.currentSection.append(section);
             this.addLast();
         },
         
         toggleGrid: function () {
-            parent.Container.ui.toggleClass('showgrid');
+            $('#containerGrid').toggleClass('togglegrid');
         }
     };
     
@@ -196,13 +249,30 @@
 
             for(var i = 0 ; i < 7; i++)
                 parent.Container.addSection();  
-            parent.Container.addLast();
+                
+            this.buildGrid();
+            parent.Container.setMeasures();
         },
 
         save: function () {lg('saving');},        
         saveAs: function () {lg('save as');},        
         getCode: function () {lg('give me the code');},
-        download: function () {}
+        download: function () {},
+        buildGrid: function () {
+            var ui = $('#containerGrid'), i = 0;
+            var clm = {};
+            
+            for(; i < config.column_count; i++){
+                clm = $(document.createElement('div'));
+                clm.css({ width: config.column_width , 
+                    marginRight: config.gutter_width
+                })
+                ui.append(clm);
+            }
+                
+            ui.find('div:last').css('marginRight', 0);
+        }
+        
     };
     
     Layoutside.prototype.Toolbar = {
@@ -212,6 +282,7 @@
 
         init: function () {
             var c = parent.Container, self = this;
+
             $('a.icon').click(function (e) { e.preventDefault(); } );
 
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
@@ -222,9 +293,13 @@
 
             this.heightInput.keyup(function () {
                 var h = self.heightInput.val(), s = parent.Container.currentSection;
-                
-                if(/^\d+$/.test(h) && !s.hasClass('container')) 
-                    s.height(parseInt(h));
+
+                if(!isNaN(h) && !s.hasClass('container')) {
+                    h = parseInt(h);
+                    if(h < 24) // min-height
+                        return false;
+                    s.height(h);
+                }
             });
         }
     };
