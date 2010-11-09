@@ -178,16 +178,16 @@
             var lastResizedParent = null;
             
             section.resizable({
-                minHeight: 24,
+               // minHeight: 24,
                 maxWidth: 950, 
                 autoHide: true,
                 zIndex: 100, 
                 grid: [config.totalColWidth],
-                // handles: 'e', 
+                handles: 'e', 
                 // containment: 'parent', 
                 
                 start: function (e, ui) {
-                    var p = ui.element.parent();
+                    /* var p = ui.element.parent();
 
                     self.isResizingSection = true;
                     
@@ -195,11 +195,11 @@
                         var h = p.height();
                         p.css({'minHeight': h, 'height': 'auto'});
                         lastResizedParent = p;
-                    }
+                    }*/
                 },
                 
                 stop: function () {
-                    self.isResizingSection = false;
+                    /*self.isResizingSection = false;
                     // ajustar altura do elemento pai se necessario
                     if(lastResizedParent) {
                         var parentHeight = lastResizedParent.height();
@@ -210,7 +210,7 @@
                         });
                         
                         lastResizedParent = null;
-                    }
+                    }*/
                 }, 
                 
                 resize: function (e, ui) { 

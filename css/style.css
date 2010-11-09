@@ -96,7 +96,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #dialogs { display: none;  }
 
 /* debug/dev actions */
-.section { min-height: 2em; background-color: lightblue; overflow: hidden; } 
+.section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 
 .section-content { height: auto; } 
 .current-section { background-color: DodgerBlue !important; } 
 .hover-section { background-color: lightgreen  !important; } 
