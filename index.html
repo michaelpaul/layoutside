@@ -21,6 +21,7 @@
                     <ul><li><a href="#">save</a></li>
                         <li><a href="#">save as lorem ispum</a></li></ul>
                 </li>
+                <li><a id="openeditor" href="#" title="Editor">editor</a></li>
                 <li><a href="#" title="Layout">download</a></li>
                 <li><a href="#" title="Layout">get the code</a>
                     <ul><li><a href="#">html</a></li>
@@ -105,15 +106,78 @@
                 </p>
             </form>
         </div>
+
+        <div id="editor" title="Source editor">
+            <select name="test" style="float: right;">
+                <option value="value">ligth</option>
+                <option value="value">nome</option>     
+                <option value="value">michael</option>
+            </select>
+            <div id="editorAres" style="margin-top: 30px; border: 1px solid black;">
+                <textarea id="sourceEditor" style="width: 100%; height: 350px;">&lt;html> cols="120" rows="30"
+  &lt;head>
+    &lt;title>HTML Example&lt;/title>
+    &lt;script type="text/javascript">
+      function foo(bar, baz) {
+        alert("quux");
+        return bar + baz + 1;
+      }
+    &lt;/script>
+    &lt;style type="text/css">
+      div.border {
+        border: 1px solid black;
+        padding: 3px;
+      }
+      #foo code {
+        font-family: courier, monospace;
+        font-size: 80%;
+        color: #448888;
+      }
+    &lt;/style>
+  &lt;/head>
+  &lt;body>
+    &lt;p>Duh&lt;/p>
+  &lt;/body>
+&lt;/html>
+                </textarea>
+            </div>
+        </div>
     </div>
 
     <script src="js/jquery/js/jquery-1.4.2.min.js"></script>
     <script src="js/jquery/js/jquery-ui-1.8.5.custom.min.js"></script>
+    <script src="js/codemirror/js/codemirror.js"></script>
     <script type="text/javascript" src="js/layoutside.js"></script>    
     <script type="text/javascript">
     jQuery(function () {
         window.Layoutside = new Layoutside();
         Layoutside.Layout.open(155);
+        
+        $('#editor').dialog({
+            resizable: false, autoOpen: true, width: '75%', height: 475,
+            buttons: {
+                'Apply': function () {
+                },
+                'Close': function () {
+                    alert('bye');
+                }
+            }, 
+            open: function () {
+                console.log('code editor open');
+            }
+	    });
+        var pts = 'js/codemirror/css/';
+        var editor = CodeMirror.fromTextArea('sourceEditor', {
+            parserfile: ["parsexml.js", 
+                "parsecss.js", 
+                "tokenizejavascript.js", 
+                "parsejavascript.js", 
+                "parsehtmlmixed.js"],
+            stylesheet: [pts + "xmlcolors.css", 
+                pts + "jscolors.css", 
+                pts + "csscolors.css"],
+            path: 'js/codemirror/js/'
+        });
     });
     </script>
 </body>

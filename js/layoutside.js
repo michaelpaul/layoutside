@@ -146,7 +146,7 @@
         addSection: function () {
             var section = $('<div class="span-3 section">'  + 
                 '<div class="section-content"></div></div>'),
-                self = this, /*sectionDialog = parent.Dialogs.initSection(section),*/
+                self = this, sectionDialog = parent.Dialogs.initSection(section),
                 hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
             
             section.click(function (e) {
@@ -160,7 +160,7 @@
                         nclicks = 0;
                     }, 500);
                 } else { // handle dblclick
-                    // sectionDialog.dialog('open');
+                    sectionDialog.dialog('open');
                     nclicks = 0;
                 }
             }); 
