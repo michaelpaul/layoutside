@@ -21,7 +21,7 @@
                     <ul><li><a href="#">save</a></li>
                         <li><a href="#">save as lorem ispum</a></li></ul>
                 </li>
-                <li><a id="openeditor" href="#" title="Editor">editor</a></li>
+                <li><a id="openEditor" href="#" title="Editor">editor</a></li>
                 <li><a href="#" title="Layout">download</a></li>
                 <li><a href="#" title="Layout">get the code</a>
                     <ul><li><a href="#">html</a></li>
@@ -108,38 +108,18 @@
         </div>
 
         <div id="editor" title="Source editor">
-            <select name="test" style="float: right;">
-                <option value="value">ligth</option>
-                <option value="value">nome</option>     
-                <option value="value">michael</option>
-            </select>
-            <div id="editorAres" style="margin-top: 30px; border: 1px solid black;">
-                <textarea id="sourceEditor" style="width: 100%; height: 350px;">&lt;html> cols="120" rows="30"
-  &lt;head>
-    &lt;title>HTML Example&lt;/title>
-    &lt;script type="text/javascript">
-      function foo(bar, baz) {
-        alert("quux");
-        return bar + baz + 1;
-      }
-    &lt;/script>
-    &lt;style type="text/css">
-      div.border {
-        border: 1px solid black;
-        padding: 3px;
-      }
-      #foo code {
-        font-family: courier, monospace;
-        font-size: 80%;
-        color: #448888;
-      }
-    &lt;/style>
-  &lt;/head>
-  &lt;body>
-    &lt;p>Duh&lt;/p>
-  &lt;/body>
-&lt;/html>
-                </textarea>
+            <label for="section-list">Current section: </label>
+            <select id="section-list" name="test"></select>
+            <div id="editorAres" style="border: 1px solid #AAA;">
+                <textarea id="sourceEditor" style="width: 100%; height: 350px;">
+&lt;h2>Lorem ipsum dolor&lt;/h2>  
+&lt;p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo 
+ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis 
+parturient montes, nascetur ridiculus mus.&lt;/p>
+&lt;p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. 
+Nulla consequat massa quis enim. Vivamus elementum semper nisi. 
+Aenean vulputate eleifend&lt;/p>
+                 </textarea>
             </div>
         </div>
     </div>
@@ -152,21 +132,46 @@
     jQuery(function () {
         window.Layoutside = new Layoutside();
         Layoutside.Layout.open(155);
+
+        var target = null;
+        var pts = 'js/codemirror/css/';
         
         $('#editor').dialog({
-            resizable: false, autoOpen: true, width: '75%', height: 475,
+            resizable: false, autoOpen: false, width: '75%', height: 475,
             buttons: {
-                'Apply': function () {
+                'Update': function () {
+                    if(target == null)
+                        return false;
+// console.log(target.find('.section-content'));
+                    target.find('.section-content').html(editor.getCode());        
                 },
                 'Close': function () {
-                    alert('bye');
+                    $('#editor').dialog('close');
                 }
             }, 
             open: function () {
-                console.log('code editor open');
+       //         console.log('code editor open');
+                var sections = Layoutside.Container.ui.find('> .section');
+                var o;
+                $('#section-list').html('');
+                sections.each(function (i, s) {
+                    o = document.createElement('option');
+                    o.innerHTML = 'Section ' + (i + 1);
+                    $(o).data('domNode', s);
+                    $('#section-list').append(o);                
+                });
+                target = $($('#section-list option:first').data('domNode'));
+                editor.setCode(target.find('.section-content').html());            
             }
-	    });
-        var pts = 'js/codemirror/css/';
+	    }); 
+
+
+        $('#openEditor').click(function (e) {
+            $('#editor').dialog('open');
+            e.preventDefault();
+        });
+
+
         var editor = CodeMirror.fromTextArea('sourceEditor', {
             parserfile: ["parsexml.js", 
                 "parsecss.js", 
@@ -177,6 +182,15 @@
                 pts + "jscolors.css", 
                 pts + "csscolors.css"],
             path: 'js/codemirror/js/'
+        });
+
+        $('#section-list').change(function () {
+            target = $($(this).find('option')
+                .eq($(this).attr('selectedIndex')).data('domNode'));
+            editor.setCode(target.find('.section-content').html());            
+                /*var sect = $($(this).find('option')
+                .eq($(this).attr('selectedIndex')).data('domNode'));
+            sect.html(editor.getCode()); */
         });
     });
     </script>
