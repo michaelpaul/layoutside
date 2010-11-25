@@ -109,18 +109,8 @@
 
         <div id="editor" title="Source editor">
             <label for="section-list">Current section: </label>
-            <select id="section-list" name="test"></select>
-            <div id="editorAres" style="border: 1px solid #AAA;">
-                <textarea id="sourceEditor" style="width: 100%; height: 350px;">
-&lt;h2>Lorem ipsum dolor&lt;/h2>  
-&lt;p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo 
-ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis 
-parturient montes, nascetur ridiculus mus.&lt;/p>
-&lt;p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. 
-Nulla consequat massa quis enim. Vivamus elementum semper nisi. 
-Aenean vulputate eleifend&lt;/p>
-                 </textarea>
-            </div>
+            <select id="section-list" name="test"></select><br>
+            <textarea id="sourceEditor" style="width: 97%;"></textarea>
         </div>
     </div>
 
@@ -132,68 +122,9 @@ Aenean vulputate eleifend&lt;/p>
     jQuery(function () {
         window.Layoutside = new Layoutside();
         Layoutside.Layout.open(155);
-
-        var target = null;
-        var pts = 'js/codemirror/css/';
-        
-        $('#editor').dialog({
-            resizable: false, autoOpen: false, width: '75%', height: 475,
-            buttons: {
-                'Update': function () {
-                    if(target == null)
-                        return false;
-// console.log(target.find('.section-content'));
-                    target.find('.section-content').html(editor.getCode());        
-                },
-                'Close': function () {
-                    $('#editor').dialog('close');
-                }
-            }, 
-            open: function () {
-       //         console.log('code editor open');
-                var sections = Layoutside.Container.ui.find('> .section');
-                var o;
-                $('#section-list').html('');
-                sections.each(function (i, s) {
-                    o = document.createElement('option');
-                    o.innerHTML = 'Section ' + (i + 1);
-                    $(o).data('domNode', s);
-                    $('#section-list').append(o);                
-                });
-                target = $($('#section-list option:first').data('domNode'));
-                editor.setCode(target.find('.section-content').html());            
-            }
-	    }); 
-
-
-        $('#openEditor').click(function (e) {
-            $('#editor').dialog('open');
-            e.preventDefault();
-        });
-
-
-        var editor = CodeMirror.fromTextArea('sourceEditor', {
-            parserfile: ["parsexml.js", 
-                "parsecss.js", 
-                "tokenizejavascript.js", 
-                "parsejavascript.js", 
-                "parsehtmlmixed.js"],
-            stylesheet: [pts + "xmlcolors.css", 
-                pts + "jscolors.css", 
-                pts + "csscolors.css"],
-            path: 'js/codemirror/js/'
-        });
-
-        $('#section-list').change(function () {
-            target = $($(this).find('option')
-                .eq($(this).attr('selectedIndex')).data('domNode'));
-            editor.setCode(target.find('.section-content').html());            
-                /*var sect = $($(this).find('option')
-                .eq($(this).attr('selectedIndex')).data('domNode'));
-            sect.html(editor.getCode()); */
-        });
     });
     </script>
+    
 </body>
 </html>
 

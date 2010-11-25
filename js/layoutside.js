@@ -5,7 +5,7 @@
         gutter_width: 10,
         totalColWidth: 40 // column_width + gutter_width
     };   
-    
+
     /* main */
     var Layoutside = function () {
         var self = this;
@@ -13,7 +13,8 @@
 
         this.Toolbar.init();
         this.Container.init();
-
+        this.Editor.init();
+        
         $(document).keydown(function (e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE) {
                 var cs = self.Container.currentSection;
@@ -240,6 +241,10 @@
         
         toggleGrid: function () {
             $('#containerGrid').toggleClass('togglegrid');
+        },
+
+        updateGridHeight: function () {
+            $('#containerGrid').height(parent.Container.ui.height() + 40);
         }
     };
     
@@ -256,7 +261,7 @@
 
         save: function () {lg('saving');},        
         saveAs: function () {lg('save as');},        
-        getCode: function () {lg('give me the code');},
+        // getCode: function () {lg('give me the code');},
         download: function () {},
         buildGrid: function () {
             var ui = $('#containerGrid'), i = 0;
@@ -323,6 +328,83 @@
             });
 
 		    return nd;
+        }
+    };
+    
+    Layoutside.prototype.Editor = {
+        editor: null,
+        dialogUi: null, 
+        stylePath: 'js/codemirror/css/',
+        
+        init: function () {
+            this.setupDialog();
+//            $(this.editor).appendTo('#editorAres');
+            
+            $('#openEditor').click(function (e) {
+                $('#editor').dialog('open');
+                e.preventDefault();
+            });
+        },
+        startEditor: function () {
+            if(this.editor === null)
+                this.editor = $('#sourceEditor');
+            /*
+                this.editor = CodeMirror.fromTextArea('sourceEditor', {
+                    parserfile: ["parsexml.js", 
+                        "parsecss.js", 
+                        "tokenizejavascript.js", 
+                        "parsejavascript.js", 
+                        "parsehtmlmixed.js"],
+                    stylesheet: [this.stylePath + "xmlcolors.css", 
+                        this.stylePath + "jscolors.css", 
+                        this.stylePath + "csscolors.css"],
+                    path: 'js/codemirror/js/'
+                });
+            */
+        },
+        setupDialog: function () {
+            var target = null, self = this;
+            this.dialogUi = $('#editor');
+            
+            this.dialogUi.dialog({
+                resizable: true, autoOpen: false, width: '65%', height: 400,
+                buttons: {
+                    'Update': function () {
+                        if(target == null)
+                            return false;
+                        var c = self.editor.val(); // getCode
+                        target.find('.section-content').html(c);        
+                        parent.Container.updateGridHeight();
+                    },
+                    'Close': function () {
+                        self.dialogUi.dialog('close');
+                    }
+                }, 
+                open: function () {
+                    self.startEditor();
+
+                    var sections = parent.Container.ui.find('> .section');
+                    var o = null;
+                    
+                    $('#section-list').html('');
+                    
+                    sections.each(function (i, s) {
+                        o = document.createElement('option');
+                        o.innerHTML = 'Section ' + (i + 1);
+                        $(o).data('domNode', s);
+                        $('#section-list').append(o);                
+                    });
+                    
+                    target = $($('#section-list option:first').data('domNode'));
+                    self.editor.html(target.find('.section-content').html()); // setCode           
+                }
+            }); 
+
+            $('#section-list').change(function () {
+                target = $($(this).find('option')
+                    .eq($(this).attr('selectedIndex')).data('domNode'));
+                self.editor.val(target.find('.section-content').html()); // setCode
+            });
         }
     };
     
