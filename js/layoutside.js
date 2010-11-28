@@ -187,47 +187,44 @@
                 handles: 'e', 
                 // containment: 'parent', 
                 
-                start: function (e, ui) {
-                    /* var p = ui.element.parent();
-
-                    self.isResizingSection = true;
-                    
-                    if(p[0] != self.ui[0]) {
-                        var h = p.height();
-                        p.css({'minHeight': h, 'height': 'auto'});
-                        lastResizedParent = p;
-                    }*/
-                },
-                
-                stop: function () {
-                    /*self.isResizingSection = false;
-                    // ajustar altura do elemento pai se necessario
-                    if(lastResizedParent) {
-                        var parentHeight = lastResizedParent.height();
-                        
-                        lastResizedParent.css({
-                            'height': parentHeight, 
-                            'minHeight': null
-                        });
-                        
-                        lastResizedParent = null;
-                    }*/
-                }, 
+                start: function (e, ui) { },
+                stop: function () { }, 
                 
                 resize: function (e, ui) { 
-                    var elm = ui.helper, w = elm.width(), curClass = '', 
-                        nc = Math.round(w / config.totalColWidth);
+                    var elm = ui.helper, sectionWidth = elm.width(), curClass = '', 
+                        nc = Math.round(sectionWidth / config.totalColWidth);
 
                     parent.Toolbar.heightInput.val(ui.size.height);
 
                     if(lastClass == nc) 
                         return false;
 
+                    var childs = elm.find('> .section');
+
+                    // preservar largura min/max quando ouver 'filhos'                    
+                    if(childs.length) {
+                        var largSection = self.getSectionWidth(elm), largMaiorFilho = 0;
+                        
+                        childs.each(function (k, v) {
+                            var $c = $(v), cw = self.getSectionWidth($c);
+
+                            lgm('max child w', sectionWidth);
+                            $c.resizable("option", "maxWidth", sectionWidth);   
+                                
+                            if(cw > largMaiorFilho)
+                                largMaiorFilho = cw;
+                        });                 
+
+                        section.resizable("option", "minWidth", 
+                            largMaiorFilho * config.totalColWidth);
+                    }
+
+                    
                     lastClass = nc;
                     curClass = elm[0].className;
                     elm[0].className = curClass.replace(/^span-\d+/, 'span-' + nc);
                     self.addLast();
-                    parent.Toolbar.widthInput.val(w);
+                    parent.Toolbar.widthInput.val(sectionWidth);
                 }
             });
 /*
@@ -235,6 +232,14 @@
                 self.ui : this.currentSection.find('> .section-content');
             target.append(section);
             */
+            
+            // definir largumar maxima da section quando filha
+            if(this.currentSection[0] != self.ui[0]) {
+                lgm('maxwidth', self.getSectionWidth(this.currentSection) * config.totalColWidth);
+                section.resizable("option", "maxWidth", 
+                    self.getSectionWidth(this.currentSection) * config.totalColWidth);         
+            }           
+
             this.currentSection.append(section);
             this.addLast();
         },
@@ -413,6 +418,9 @@
     var lg = function (f) { 
         if(!console) return false;
         console.log(f);
+    }, lgm = function (m, v) {
+        lg(m + ': ' + v);
     };
+    
 })();
 

@@ -5,7 +5,7 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 
 #containerPlaceholder { padding-top: 42px; } 
 
-#containerGrid { position: absolute; } 
+#containerGrid { position: absolute; overflow: hidden;} 
 #containerGrid, #containerGrid div { min-height: 600px; } 
 
 #containerGrid div { float: left; height: 100%; background-color: #e8effb; }  

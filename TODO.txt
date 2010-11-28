@@ -1,18 +1,21 @@
 bugs 
 
-- altura da grid deve atingir fundo, toolbar deve cobrir grid
+
+- add clear/last durante o sort e para subsections com diferentes tamanhos 
+- icone resize aparecendo todas as sections aninhadas  
+- área de click nos links do menu, cor do link após clique
+
+* ajustar largura minima/maxima subsection
+* edição de código para subsections 
+* altura da grid deve atingir fundo, toolbar deve cobrir grid
+
 * definir section atual quando o click for fora de uma section
 * verificar necessidade de scrollbar na pagina
 * mudar cor de fundo para sub sections
 * altura de sub section
-- largura de sub section
-- add clear/last durante o sort e para subsections com diferentes tamanhos 
 * cursor no modo sort e select
 * remover/ignorar hover disparado ao redimencionar sub section
-- icone resize aparecendo todas as sections aninhadas  
 * altura da section ao adicionar sub section
-- área de click nos links do menu, cor do link após clique
-- ajustar largura minima/maxima subsection
 
 otimização
 
