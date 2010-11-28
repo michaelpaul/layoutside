@@ -1,12 +1,11 @@
 bugs 
 
-
 - add clear/last durante o sort e para subsections com diferentes tamanhos 
 - icone resize aparecendo todas as sections aninhadas  
 - área de click nos links do menu, cor do link após clique
+- edição de código para subsections 
 
 * ajustar largura minima/maxima subsection
-* edição de código para subsections 
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
 
 * definir section atual quando o click for fora de uma section
@@ -24,3 +23,5 @@ otimização
 melhoria
 
 - aumentar tamanho dos handles do resize
+- aumentar altura inicial sections
+

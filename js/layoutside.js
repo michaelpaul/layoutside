@@ -378,7 +378,7 @@
                         if(target == null)
                             return false;
                         var c = self.editor.val(); // getCode
-                        target.find('.section-content').html(c);        
+                        target.find('> .section-content').html(c);        
                         parent.Container.updateGridHeight();
                     },
                     'Close': function () {
