@@ -1,0 +1,36 @@
+application: layoutside
+version: 1
+runtime: python
+api_version: 1
+ 
+builtins:
+- datastore_admin: on
+- appstats: on
+- remote_api: on
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?index\.yaml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?\..*
+
+handlers:
+- url: /editor/css
+  static_dir: editor/css
+- url: /editor/js
+  static_dir: editor/js
+- url: /editor/images
+  static_dir: editor/images
+
+- url: /(index\.html)?
+  static_files: index.html
+  upload: index.html
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /editor/.*
+  script: editor/main.py
+

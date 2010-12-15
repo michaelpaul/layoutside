@@ -1,0 +1,6 @@
+#! /bin/bash
+
+APP_DIR=/var/www/layoutside/
+
+dev_appserver.py --datastore_path=$APP_DIR"datastore/main.db" $APP_DIR
+

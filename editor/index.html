@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Layoutside</title>
+    <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <![endif]-->
+    
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="handheld, all">
+    <link rel="stylesheet" href="js/jquery/css/smoothness/jquery-ui-1.8.5.custom.css" type="text/css">
+</head>
+<body class="">
+    <div id="widemenu">    
+        <div id="menuarea">
+            <a href="#" title="Layoutside"><img id="logo" src="images/logo.jpg" alt="Layoutside" /></a>
+            <ul id="menu">
+                <li><a href="#" title="Layout">layout</a>
+                    <ul><li><a id="save-layout" href="#">save</a></li>
+                        <li><a href="#">save as lorem ispum</a></li></ul>
+                </li>
+                <li><a id="openEditor" href="#" title="Editor">editor</a></li>
+                <li><a href="#" title="Layout">download</a></li>
+                <li><a href="#" title="Layout">get the code</a>
+                    <ul><li><a href="#">html</a></li>
+                        <li><a href="#">lorem ispum dolor sit amet</a></li>
+                        <li><a href="#">css</a></li>
+                        <li><a href="#">tar package</a></li></ul>
+                </li>
+                <li><a href="#" title="Layout">feedback</a></li>
+                <li><a href="#" title="Layout">help</a>
+                    <ul><li><a href="#">forum</a></li>
+                        <li><a href="#">go to somewhere else</a></li>
+                        <li><a href="#">about</a></li></ul>
+                </li>
+            </ul>
+            <div id="user">
+                <a href="#" title="User">michaelpaul</a> <br />
+                <a href="#" title="logout">logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="containerPlaceholder" class="container">
+        <div id="containerGrid"></div> 
+        <div id="container"></div> 
+    </div>
+            
+    <div id="widetool">
+        <div id="toolbar">
+            <ul>
+                <li><a class="icon icon-select" href="#select" title="Select">Select</a></li>
+                <li><a class="icon icon-sort" href="#sort" title="Reorder">Reorder</a></li>
+                <li class="icon-separator">|</li>
+                <li><a class="icon icon-section" href="#add-section" title="Add section">Add section</a></li>
+                <li class="icon-separator">|</li>
+                <li><a class="icon icon-toggle-grid" href="#" title="toggle grid">toggle grid</a></li>
+            </ul>
+            <div id="measures">
+                <input id="section-w" type="text" value="0" disabled="disabled"> x <input id="section-h" type="text" value="0"> px
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogs">
+        <div class="sectionDialog" title="Section Dialog">
+            <form name="sectionProperties">	        
+                <p>
+                    <label>Id</label>
+                    <input name="sec-id" type="text">
+                    <label>Class</label>
+                    <input name="class-name" type="text">
+                </p>
+	            <p>
+                    <label>Tagname</label>
+                    <select name="tagname">
+                        <option>div</option>
+                        <option>section</option>
+                        <option>nav</option>
+                        <option>header</option>
+                        <option>footer</option>
+                    </select>
+                </p>
+                <p class="slider-space-row">
+                    <label>Left space</label>
+                    <div class="space-slider"></div>
+                </p>
+                <div class="clear"></div>
+                <p class="slider-space-row">
+                    <label>Rigth space</label>
+                    <div class="space-slider"></div>
+                </p>
+                <div class="clear"></div>
+                <p>
+                    <label>Aditional classes</label><br>
+                        <input type="checkbox">Last
+                        <input type="checkbox"> Clear 
+                        <input type="checkbox"> box 
+                        <input type="checkbox"> border
+                        <br>
+                        <input type="checkbox"> colborder 
+                        <input type="checkbox"> append-bottom
+                        <input type="checkbox"> prepend-top
+                </p>
+            </form>
+        </div>
+
+        <div id="editor" title="Source editor">
+            <label for="section-list">Current section: </label>
+            <select id="section-list" name="test"></select><br>
+            <textarea id="sourceEditor" style="width: 97%;"></textarea>
+        </div>
+    </div>
+
+    <script src="js/jquery/js/jquery-1.4.2.min.js"></script>
+    <script src="js/jquery/js/jquery-ui-1.8.5.custom.min.js"></script>
+    <script type="text/javascript" src="js/layoutside.js"></script>    
+    <script type="text/javascript">
+    jQuery(function () {
+        window.Layoutside = new Layoutside();
+        Layoutside.Layout.open(155);
+    });
+    </script>
+    
+</body>
+</html>
+
