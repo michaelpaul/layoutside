@@ -5,11 +5,14 @@
         gutter_width: 10,
         totalColWidth: 40 // column_width + gutter_width
     };   
-
+    
     /* main */
     var Layoutside = function () {
         var self = this;
         lg('loaded...');
+
+        // menu bar
+        $('#save-layout').click(saveLayout);
 
         this.Toolbar.init();
         this.Container.init();
@@ -28,6 +31,81 @@
         });
     }, parent = Layoutside.prototype;
    
+   
+    function saveLayout() {
+        var layout = {
+            'config': config,
+            'sections': []
+        };
+        
+        function iter(context) {
+            $('> .section', context).each(function (k, v) {
+                var $elm = $(v), childs = $elm.children('.section');    
+                
+                var section = {
+                    'name': 'section name ' + k,
+                    'tagname': v.tagName, 
+                    'body': $elm.find('.section-content').html(),
+                    'html_id': v.id,
+                    'css_class': v.className,
+                    'width': parent.Container.getSectionWidth($elm),
+                    'parent': (typeof context == 'object' ? context.id : null),
+                    'order': k,
+                };
+                
+                layout.sections.push(section);
+                
+                if(childs.length) {
+                    iter(v);
+                }
+            });    
+        }
+        
+        iter('#container');
+        // console.log(layout);
+        // carregar layout
+        /*
+        foreach section
+            if section have parent
+                continue
+            addSection(section)    
+        foreach section
+            addSection(section)
+        */
+        /*
+        var i = 0, l = layout.sections.length;
+        
+        for(; i < l; i++) {
+            if(layout.sections[i].parent) {
+                continue;
+            }
+            
+            lg('append "' + layout.sections[i].name + '"');
+            parent.Container.addSection(layout.sections[i]);
+            
+            delete layout.sections[i];
+        }
+        
+        for(i = 0; i < l; i++) {
+            if (layout.sections[i] === undefined) 
+                continue;
+
+            lg('append child: "' + layout.sections[i].name + '"');
+            parent.Container.addSection(layout.sections[i]);
+        }
+        */ 
+        
+        $.ajax({ type: "POST",
+            url: 'ajax.php',
+            data: $.param(layout),
+            success: function(result){
+                lg('Layout saved');
+            }
+        });
+        
+        return false;          
+    }
+    
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
@@ -143,12 +221,22 @@
             parent.Toolbar.widthInput.val(w);
             parent.Toolbar.heightInput.val(h);
         },
-
-        addSection: function () {
-            var section = $('<div class="span-3 section">'  + 
-                '<div class="section-content"></div></div>'),
-                self = this, sectionDialog = parent.Dialogs.initSection(section),
+        
+        currentSectionId: 1,
+        
+        addSection: function (old_section) {
+            var id = old_section ? old_section.html_id : this.currentSectionId++;
+            var content = old_section ? old_section.body : '';
+            var sec_width = old_section ? old_section.width : 3;
+            
+            var section = $('<div id="section-' + id + '" class="span-' + 
+                sec_width + ' section"><div class="section-content"></div></div>');
+            
+            section.find('.section-content').html(content);
+            
+            var self = this, sectionDialog = parent.Dialogs.initSection(section),
                 hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
+            
             
             section.click(function (e) {
                 e.stopPropagation();
@@ -239,8 +327,12 @@
                 section.resizable("option", "maxWidth", 
                     self.getSectionWidth(this.currentSection) * config.totalColWidth);         
             }           
-
-            this.currentSection.append(section);
+            
+            if(old_section && old_section.parent !== null)
+                $('#' + old_section.parent).append(section);
+            else 
+                this.currentSection.append(section);
+                
             this.addLast();
         },
         

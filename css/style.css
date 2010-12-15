@@ -30,6 +30,7 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #menuarea { background: url(../images/header.jpg) center top transparent no-repeat; width: 950px; margin: 0 auto; }
 #menu { float: left; margin: 3px 0 0 10px; padding: 0; height: 100%; } 
 #menu li { list-style: none; float: left; margin-left: 30px; padding: 6px;} 
+#menu li a { display: block;} 
 #menu li ul, #menuarea li li { background-color: black; margin: 0; padding: 0; }
 #menu li li { float: none; margin-left: -6px; border: 2px solid black; padding: 2px 4px;}  
 #menu li:hover { background-color: black;}  
