@@ -1,9 +1,11 @@
 (function () {
     var config = {
+        key: 'agpsYXlvdXRzaWRlcg0LEgZMYXlvdXQYhAEM', 
         column_count: 24,
         column_width: 30,
         gutter_width: 10,
-        totalColWidth: 40 // column_width + gutter_width
+        totalColWidth: 40, // column_width + gutter_width
+        removedSections: []
     };   
     
     /* main */
@@ -23,6 +25,7 @@
                 var cs = self.Container.currentSection;
                 // não remover container quando selecionado
                 if(cs[0] != self.Container.ui[0]) {
+                    config.removedSections.push(cs.data('key'));
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
                     self.Container.addLast();
@@ -37,19 +40,20 @@
             'config': config,
             'sections': []
         };
-        
+
         function iter(context) {
             $('> .section', context).each(function (k, v) {
                 var $elm = $(v), childs = $elm.children('.section');    
                 
                 var section = {
+                    'key': $elm.data('key'), 
                     'name': 'section name ' + k,
                     'tagname': v.tagName, 
                     'body': $elm.find('.section-content').html(),
                     'html_id': v.id,
                     'css_class': v.className,
                     'width': parent.Container.getSectionWidth($elm),
-                    'parent': (typeof context == 'object' ? context.id : null),
+                    'child_of': (typeof context == 'object' ? context.id : null),
                     'order': k,
                 };
                 
@@ -62,44 +66,15 @@
         }
         
         iter('#container');
-        // console.log(layout);
-        // carregar layout
-        /*
-        foreach section
-            if section have parent
-                continue
-            addSection(section)    
-        foreach section
-            addSection(section)
-        */
-        /*
-        var i = 0, l = layout.sections.length;
-        
-        for(; i < l; i++) {
-            if(layout.sections[i].parent) {
-                continue;
-            }
-            
-            lg('append "' + layout.sections[i].name + '"');
-            parent.Container.addSection(layout.sections[i]);
-            
-            delete layout.sections[i];
-        }
-        
-        for(i = 0; i < l; i++) {
-            if (layout.sections[i] === undefined) 
-                continue;
-
-            lg('append child: "' + layout.sections[i].name + '"');
-            parent.Container.addSection(layout.sections[i]);
-        }
-        */ 
-        
-        $.ajax({ type: "POST",
+       
+        $.ajax({ 
+            type: "POST",
             url: '/editor/save-layout',
-            data: $.param(layout),
+            contentType: 'application/json',
+            data: JSON.stringify(layout),
             success: function(result){
                 lg('Layout saved');
+                alert(result);
             }
         });
         
@@ -224,19 +199,27 @@
         
         currentSectionId: 1,
         
-        addSection: function (old_section) {
-            var id = old_section ? old_section.html_id : this.currentSectionId++;
-            var content = old_section ? old_section.body : '';
-            var sec_width = old_section ? old_section.width : 3;
+        addSection: function (edit_section) {
+            var section, section_key = '', 
+                id = 'section-' + this.currentSectionId++, 
+                content = '', sec_width = 3;
+
+            if(typeof edit_section !== 'undefined') {
+                id = edit_section.html_id;
+                content = edit_section.body;
+                sec_width = edit_section.width;
+                section_key = edit_section.key
+            } 
             
-            var section = $('<div id="section-' + id + '" class="span-' + 
+            section = $('<div id="' + id + '" class="span-' + 
                 sec_width + ' section"><div class="section-content"></div></div>');
-            
+
+            section.data('key', section_key);            
             section.find('.section-content').html(content);
             
-            var self = this, sectionDialog = parent.Dialogs.initSection(section),
-                hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
-            
+            var self = this, hoverClass = 'hover-section', 
+                nclicks = 0, lastClass = 1, 
+                sectionDialog = parent.Dialogs.initSection(section);
             
             section.click(function (e) {
                 e.stopPropagation();
@@ -328,8 +311,8 @@
                     self.getSectionWidth(this.currentSection) * config.totalColWidth);         
             }           
             
-            if(old_section && old_section.parent !== null)
-                $('#' + old_section.parent).append(section);
+            if(edit_section && edit_section.child_of !== null)
+                $('#' + edit_section.parent).append(section);
             else 
                 this.currentSection.append(section);
                 
@@ -348,10 +331,22 @@
     Layoutside.prototype.Layout = {
         open: function () { 
             lg('open layout'); 
-
+            /*
             for(var i = 0 ; i < 7; i++)
                 parent.Container.addSection();  
+            */
+            
+            $.getJSON('/editor/open-layout', { key: config.key }, function (result) {
+                config = result.config;
+                config.removedSections = [];
                 
+                $.each(result.sections, function (k, v) {
+                    parent.Container.addSection(v);  
+                });
+                
+                lg(result);
+            });
+            
             this.buildGrid();
             parent.Container.setMeasures();
         },
