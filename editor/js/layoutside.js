@@ -1,11 +1,10 @@
 (function () {
     var config = {
-        key: 'agpsYXlvdXRzaWRlcg0LEgZMYXlvdXQYhAEM', 
+        key: '', 
         column_count: 24,
         column_width: 30,
         gutter_width: 10,
         totalColWidth: 40, // column_width + gutter_width
-        removedSections: []
     };   
     
     /* main */
@@ -25,9 +24,6 @@
                 var cs = self.Container.currentSection;
                 // não remover container quando selecionado
                 if(cs[0] != self.Container.ui[0]) {
-                    if(cs.data('key')) 
-                        config.removedSections.push(cs.data('key'));
-                    
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
                     self.Container.addLast();
@@ -35,7 +31,6 @@
             }
         });
     }, parent = Layoutside.prototype;
-   
    
     function saveLayout() {
         var layout = {
@@ -48,7 +43,6 @@
                 var $elm = $(v), childs = $elm.children('.section');    
                 
                 var section = {
-                    'key': $elm.data('key'), 
                     'name': 'section name ' + k,
                     'tagname': v.tagName, 
                     'body': $elm.find('.section-content').html(),
@@ -76,7 +70,6 @@
             data: JSON.stringify(layout),
             success: function(result){
                 alert(result);
-                parent.Layout.open(155, true);
             }
         });
         
@@ -202,21 +195,17 @@
         currentSectionId: 1,
         
         addSection: function (edit_section) {
-            var section, section_key = '', 
-                id = 'section-' + this.currentSectionId++, 
+            var section,  id = 'section-' + this.currentSectionId++, 
                 content = '', sec_width = 3;
 
             if(typeof edit_section !== 'undefined') {
                 id = edit_section.html_id;
                 content = edit_section.body;
                 sec_width = edit_section.width;
-                section_key = edit_section.key
             } 
             
             section = $('<div id="' + id + '" class="span-' + 
                 sec_width + ' section"><div class="section-content"></div></div>');
-
-            section.data('key', section_key);            
             section.find('.section-content').html(content);
             
             var self = this, hoverClass = 'hover-section', 
@@ -291,7 +280,6 @@
                         section.resizable("option", "minWidth", 
                             largMaiorFilho * config.totalColWidth);
                     }
-
                     
                     lastClass = nc;
                     curClass = elm[0].className;
@@ -300,22 +288,16 @@
                     parent.Toolbar.widthInput.val(sectionWidth);
                 }
             });
-/*
-            var target = this.currentSection[0] == self.ui[0] ? 
-                self.ui : this.currentSection.find('> .section-content');
-            target.append(section);
-            */
             
-            // definir largumar maxima da section quando filha
+            // definir largura maxima da section quando filha
             if(this.currentSection[0] != self.ui[0]) {
-                // lgm('maxwidth', self.getSectionWidth(this.currentSection) * config.totalColWidth);
                 section.resizable("option", "maxWidth", 
                     self.getSectionWidth(this.currentSection) * config.totalColWidth);         
             }           
             
             if(edit_section && edit_section.child_of !== null) {
                 if(!$('#' + edit_section.child_of).length) 
-                   throw new Error('Filho sem pai carregado no DOM')
+                    throw new Error('Failed to add section')
                 $('#' + edit_section.child_of).append(section);
             } else 
                 this.currentSection.append(section);
@@ -333,14 +315,12 @@
     };
     
     Layoutside.prototype.Layout = {
-        open: function (id, reload) { 
-            reloadLayout = typeof reload !== 'undefined';
+        open: function (key) { 
             parent.Container.ui.html('');
             lg('open layout'); 
             
-            $.getJSON('/editor/open-layout', { key: config.key }, function (result) {
+            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 config = result.config;
-                config.removedSections = [];
                 
                 result.sections.sort(function (a, b) {
                     if (a.order == b.order) 
@@ -357,15 +337,12 @@
                         parent.Container.addSection(result.sections[i]);  
             });
             
-            if(!reloadLayout) {
-                this.buildGrid();
-                parent.Container.setMeasures();
-            }
+            this.buildGrid();
+            parent.Container.setMeasures();
         },
 
         save: function () {lg('saving');},        
         saveAs: function () {lg('save as');},        
-        // getCode: function () {lg('give me the code');},
         download: function () {},
         buildGrid: function () {
             var ui = $('#containerGrid'), i = 0;

@@ -7,6 +7,9 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from django.utils import simplejson
 from datastore.models import *
 
+# limite de sections deletadas ao salvar um novo layout
+LIMIT_DELETE_SECTIONS = 50
+
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
         self.response.out.write(msg)
@@ -76,25 +79,24 @@ class SaveLayout(BaseRequestHandler):
         
         l.put()
         
+        gql = 'WHERE layout = :1 LIMIT ' + str(LIMIT_DELETE_SECTIONS)
+        sections_atuais = Section.gql(gql, l)
+        db.delete(sections_atuais)
+        
+        # criar novas.. 
         for s in layout['sections']:
-            if s['key'] != '':
-                section = Section.get(s['key'])
-            else:
-                section = Section()
-                
-            section.layout = l
-            section.name = s['name']
-            section.tagname =  s['tagname'].lower()
-            section.body = s['body']
-            section.html_id =  s['html_id']
-            section.css_class =  s['css_class']
-            section.width = s['width']
-            section.order = s['order']
-            section.child_of = s['child_of']
+            section = Section(layout = l,
+                name = s['name'],
+                tagname = s['tagname'].lower(),
+                body = s['body'],
+                html_id = s['html_id'],
+                css_class = s['css_class'],
+                width = s['width'],
+                order = s['order'],
+                child_of = s['child_of'])
             
             section.put()
 
-        db.delete(layout['config']['removedSections'])
         self.write('Layout salvo!')
 
 def main():
