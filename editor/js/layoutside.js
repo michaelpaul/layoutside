@@ -25,7 +25,9 @@
                 var cs = self.Container.currentSection;
                 // não remover container quando selecionado
                 if(cs[0] != self.Container.ui[0]) {
-                    config.removedSections.push(cs.data('key'));
+                    if(cs.data('key')) 
+                        config.removedSections.push(cs.data('key'));
+                    
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
                     self.Container.addLast();
@@ -73,8 +75,8 @@
             contentType: 'application/json',
             data: JSON.stringify(layout),
             success: function(result){
-                lg('Layout saved');
                 alert(result);
+                parent.Layout.open(155, true);
             }
         });
         
@@ -306,14 +308,16 @@
             
             // definir largumar maxima da section quando filha
             if(this.currentSection[0] != self.ui[0]) {
-                lgm('maxwidth', self.getSectionWidth(this.currentSection) * config.totalColWidth);
+                // lgm('maxwidth', self.getSectionWidth(this.currentSection) * config.totalColWidth);
                 section.resizable("option", "maxWidth", 
                     self.getSectionWidth(this.currentSection) * config.totalColWidth);         
             }           
             
-            if(edit_section && edit_section.child_of !== null)
-                $('#' + edit_section.parent).append(section);
-            else 
+            if(edit_section && edit_section.child_of !== null) {
+                if(!$('#' + edit_section.child_of).length) 
+                   throw new Error('Filho sem pai carregado no DOM')
+                $('#' + edit_section.child_of).append(section);
+            } else 
                 this.currentSection.append(section);
                 
             this.addLast();
@@ -329,26 +333,34 @@
     };
     
     Layoutside.prototype.Layout = {
-        open: function () { 
+        open: function (id, reload) { 
+            reloadLayout = typeof reload !== 'undefined';
+            parent.Container.ui.html('');
             lg('open layout'); 
-            /*
-            for(var i = 0 ; i < 7; i++)
-                parent.Container.addSection();  
-            */
             
             $.getJSON('/editor/open-layout', { key: config.key }, function (result) {
                 config = result.config;
                 config.removedSections = [];
                 
-                $.each(result.sections, function (k, v) {
-                    parent.Container.addSection(v);  
+                result.sections.sort(function (a, b) {
+                    if (a.order == b.order) 
+                        return 0;
+                    return (a.order < b.order) ? -1 : 1;
                 });
-                
-                lg(result);
+                // parents
+                for(var i = 0, l = result.sections.length; i < l; i++)
+                    if(result.sections[i].child_of == null)
+                        parent.Container.addSection(result.sections[i]);  
+                // childs
+                for(i = 0; i < l; i++) 
+                    if(result.sections[i].child_of != null)
+                        parent.Container.addSection(result.sections[i]);  
             });
             
-            this.buildGrid();
-            parent.Container.setMeasures();
+            if(!reloadLayout) {
+                this.buildGrid();
+                parent.Container.setMeasures();
+            }
         },
 
         save: function () {lg('saving');},        
