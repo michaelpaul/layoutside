@@ -18,8 +18,10 @@
             <a href="#" title="Layoutside"><img id="logo" src="images/logo.jpg" alt="Layoutside" /></a>
             <ul id="menu">
                 <li><a href="#" title="Layout">layout</a>
-                    <ul><li><a id="save-layout" href="#">save</a></li>
-                        <li><a href="#">save as lorem ispum</a></li></ul>
+                    <ul>
+                        <li><a id="open-layout" href="#">open</a></li>
+                        <li><a id="save-layout" href="#">save</a></li>
+                        <li><a href="#">save as</a></li></ul>
                 </li>
                 <li><a id="openEditor" href="#" title="Editor">editor</a></li>
                 <li><a href="#" title="Layout">download</a></li>
@@ -112,6 +114,13 @@
             <select id="section-list" name="test"></select><br>
             <textarea id="sourceEditor" style="width: 97%;"></textarea>
         </div>
+        
+        <div id="my-layouts" title="My Layouts">
+            <table style="padding-top: 10px;" border="0" cellspacing="0" cellpadding="0">
+                <!-- <thead><tr><th>Layout</th><th>&nbsp;</th></tr></thead> -->
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
     <script src="js/jquery/js/jquery-1.4.2.min.js"></script>
@@ -120,10 +129,8 @@
     <script type="text/javascript">
     jQuery(function () {
         window.Layoutside = new Layoutside();
-        Layoutside.Layout.open('agpsYXlvdXRzaWRlcg0LEgZMYXlvdXQYhAEM');
     });
     </script>
-    
 </body>
 </html>
 

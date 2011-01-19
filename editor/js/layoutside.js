@@ -10,14 +10,13 @@
     /* main */
     var Layoutside = function () {
         var self = this;
-        lg('loaded...');
 
-        // menu bar
-        $('#save-layout').click(saveLayout);
-
+        this.Menubar.init();
         this.Toolbar.init();
         this.Container.init();
         this.Editor.init();
+        
+        this.Layout.buildGrid();
         
         $(document).keydown(function (e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE) {
@@ -32,50 +31,6 @@
         });
     }, parent = Layoutside.prototype;
    
-    function saveLayout() {
-        var layout = {
-            'config': config,
-            'sections': []
-        };
-
-        function iter(context) {
-            $('> .section', context).each(function (k, v) {
-                var $elm = $(v), childs = $elm.children('.section');    
-                
-                var section = {
-                    'name': 'section name ' + k,
-                    'tagname': v.tagName, 
-                    'body': $elm.find('.section-content').html(),
-                    'html_id': v.id,
-                    'css_class': v.className,
-                    'width': parent.Container.getSectionWidth($elm),
-                    'child_of': (typeof context == 'object' ? context.id : null),
-                    'order': k,
-                };
-                
-                layout.sections.push(section);
-                
-                if(childs.length) {
-                    iter(v);
-                }
-            });    
-        }
-        
-        iter('#container');
-       
-        $.ajax({ 
-            type: "POST",
-            url: '/editor/save-layout',
-            contentType: 'application/json',
-            data: JSON.stringify(layout),
-            success: function(result){
-                alert(result);
-            }
-        });
-        
-        return false;          
-    }
-    
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
@@ -297,12 +252,12 @@
             
             if(edit_section && edit_section.child_of !== null) {
                 if(!$('#' + edit_section.child_of).length) 
-                    throw new Error('Failed to add section')
+                    throw new Error('Failed to add section');
                 $('#' + edit_section.child_of).append(section);
             } else 
                 this.currentSection.append(section);
-                
-            this.addLast();
+            
+            this.addLast();  
         },
         
         toggleGrid: function () {
@@ -317,16 +272,17 @@
     Layoutside.prototype.Layout = {
         open: function (key) { 
             parent.Container.ui.html('');
-            lg('open layout'); 
+            lg('open layout: ' + key); 
             
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 config = result.config;
-                
+                /* // desnecessario?
                 result.sections.sort(function (a, b) {
                     if (a.order == b.order) 
                         return 0;
                     return (a.order < b.order) ? -1 : 1;
                 });
+                */
                 // parents
                 for(var i = 0, l = result.sections.length; i < l; i++)
                     if(result.sections[i].child_of == null)
@@ -345,10 +301,10 @@
         saveAs: function () {lg('save as');},        
         download: function () {},
         buildGrid: function () {
-            var ui = $('#containerGrid'), i = 0;
+            var ui = $('#containerGrid').empty(), i = 0;
             var clm = {};
             
-            for(; i < config.column_count; i++){
+            for(; i < config.column_count; i++) {
                 clm = $(document.createElement('div'));
                 clm.css({ width: config.column_width , 
                     marginRight: config.gutter_width
@@ -387,6 +343,93 @@
                     s.height(h);
                 }
             });
+        }
+    };
+    
+    Layoutside.prototype.Menubar = {
+        saveLayout: function (e) {
+            e.preventDefault();
+            
+            var layout = {
+                'config': config,
+                'sections': []
+            };
+
+            function iter(context) {
+                $('> .section', context).each(function (k, v) {
+                    var $elm = $(v), childs = $elm.children('.section');    
+                    
+                    var section = {
+                        'name': 'section name ' + k,
+                        'tagname': v.tagName, 
+                        'body': $elm.find('.section-content').html(),
+                        'html_id': v.id,
+                        'css_class': v.className,
+                        'width': parent.Container.getSectionWidth($elm),
+                        'child_of': (typeof context == 'object' ? context.id : null),
+                        'order': k + 1,
+                    };
+                    
+                    layout.sections.push(section);
+                    
+                    if(childs.length) 
+                        iter(v);
+                });    
+            }
+            
+            iter('#container');
+           
+            $.ajax({ 
+                type: "POST",
+                url: '/editor/save-layout',
+                contentType: 'application/json',
+                data: JSON.stringify(layout),
+                success: function(result){
+                    alert(result);
+                }
+            });
+        },
+        
+        init: function () { 
+            $('#save-layout').click(this.saveLayout);
+            
+            jQuery('#open-layout').click(function (e) {
+                e.preventDefault();   
+                jQuery('#my-layouts').dialog('open');
+            });
+            
+            jQuery('#my-layouts').dialog({
+                resizable: false, autoOpen: true, width: 300, height: 150, 
+                open: function () {
+                     $.getJSON('/editor/layouts', { }, function(result, status) {
+                        if(status != 'success')
+                            throw new Error('Failed to load your layouts');
+                            
+                        $list = $('#my-layouts table tbody').empty();
+                        
+                        $(result).each(function (k, v) { 
+                            $list.append('<tr><td>' + v.name + '</td><td>' + 
+                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">open</a> ' + 
+                            '<a class="delete" lkey="' + v.key + '" href="#' + v.key + '">delete</a>' + 
+                            '</td></tr>');                        
+                        });
+                        
+                        $('#my-layouts table a.open').click(function (e) {
+                            e.preventDefault();
+                            parent.Layout.open(this.getAttribute('lkey'));
+                        });
+                        
+                        $('#my-layouts table a.delete').click(function (e) {
+                            e.preventDefault();
+                            var c = window.confirm("Do you really want to delete the selected layout?");
+                            if(c) {
+                                alert('NotImplemented')                        
+                            }
+                        });
+                    });
+                    
+                }
+	        });
         }
     };
     
@@ -450,19 +493,28 @@
                 }, 
                 open: function () {
                     self.startEditor();
-
-                    var sections = parent.Container.ui.find('> .section');
-                    var o = null;
-                    
                     $('#section-list').html('');
-                    
-                    sections.each(function (i, s) {
-                        o = document.createElement('option');
-                        o.innerHTML = 'Section ' + (i + 1);
-                        $(o).data('domNode', s);
-                        $('#section-list').append(o);                
-                    });
-                    
+
+                    function iter(ctx, level) {
+                        var o = null, sections = ctx.find('> .section');
+                        
+                        if(!sections.length)
+                            return false;
+                        
+                        sections.each(function (i, s) {
+                            o = document.createElement('option');
+                            o.innerHTML = 'Section ' + level + '.' + (i + 1);
+                            $(o).data('domNode', s);
+                            $('#section-list').append(o);                
+                            
+                            var $section = $(s);
+                            
+                            if($section.find('> .section'))
+                                iter($section, level + 1);
+                        });
+                    }
+                    iter(parent.Container.ui, 1);
+
                     target = $($('#section-list option:first').data('domNode'));
                     self.editor.html(target.find('.section-content').html()); // setCode           
                 }

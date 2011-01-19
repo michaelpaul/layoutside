@@ -10,6 +10,8 @@ from datastore.models import *
 # limite de sections deletadas ao salvar um novo layout
 LIMIT_DELETE_SECTIONS = 50
 
+michael = User.get_by_id(96)
+
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
         self.response.out.write(msg)
@@ -21,6 +23,16 @@ class Editor(BaseRequestHandler):
     
     def get(self):
         self.render('index.html')
+
+class ListLayouts(BaseRequestHandler):
+    def get(self):
+        layouts = Layout.gql('WHERE user = :1', michael) 
+        result = []
+        
+        for l in layouts:
+            result.append({'key': str(l.key()), 'name': str(l.create_date)})
+            
+        self.write(simplejson.dumps(result))
 
 class OpenLayout(BaseRequestHandler):
     def get(self):
@@ -46,7 +58,6 @@ class OpenLayout(BaseRequestHandler):
             
             for s in sections:
                 section = {
-                    'key': str(s.key()), 
                     'name': s.name,
                     'tagname': s.tagname, 
                     'body': s.body,
@@ -67,7 +78,6 @@ class SaveLayout(BaseRequestHandler):
     def post(self):
         layout = simplejson.loads(self.request.body)
         config = layout['config']
-        michael = User.get_by_id(96)
         
         if config['key'] != '':
             l = Layout.get(config['key'])
@@ -100,10 +110,13 @@ class SaveLayout(BaseRequestHandler):
         self.write('Layout salvo!')
 
 def main():
+    # basepath 
+    bp = Editor.PATH
     rotas = [
-        (Editor.PATH, Editor), 
-        (Editor.PATH + 'save-layout', SaveLayout),
-        (Editor.PATH + 'open-layout', OpenLayout),
+        (bp, Editor), 
+        (bp + 'layouts', ListLayouts),
+        (bp + 'save-layout', SaveLayout),
+        (bp + 'open-layout', OpenLayout),
     ]
 
     layoutside = webapp.WSGIApplication(rotas, debug=True) 

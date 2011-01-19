@@ -33,6 +33,7 @@ class User(db.Model):
     
 class Layout(db.Model): 
     user = db.ReferenceProperty(User, required=True)
+    name = db.StringProperty()
     fluid = db.BooleanProperty(default=False)
     column_count = db.IntegerProperty(default=24)
     column_width = db.IntegerProperty(default=30) 
