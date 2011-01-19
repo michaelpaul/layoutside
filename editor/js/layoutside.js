@@ -76,6 +76,9 @@
                             }, 
                             stop: function () {
                                 self.addLast();
+                            },
+                            change: function () {   
+                                self.addLast();
                             }
                         });
                     } else 
@@ -103,9 +106,9 @@
             return parseInt(elm[0].className.split(' ')[0].split('-')[1]);
         },
  
-        addLast: function (context) {
+        addLast: function (context) { lg('addLast')
             var hasContext = typeof context !== 'undefined', 
-                sections = $('> .section',  hasContext ? context : this.ui), 
+                sections = $('> .section:not(.ui-sortable-helper)',  hasContext ? context : this.ui), 
                 sum = 0, columnCount = config.column_count, i, f;
 
             if(hasContext) 
@@ -270,9 +273,15 @@
     };
     
     Layoutside.prototype.Layout = {
-        open: function (key) { 
-            parent.Container.ui.html('');
+        loadingLayout: false,
+        
+        open: function (key) {
+            if(this.loadingLayout) 
+                return false;
             lg('open layout: ' + key); 
+                            
+            parent.Container.ui.empty();
+            this.loadingLayout = true;
             
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 config = result.config;
@@ -291,6 +300,7 @@
                 for(i = 0; i < l; i++) 
                     if(result.sections[i].child_of != null)
                         parent.Container.addSection(result.sections[i]);  
+                parent.Layout.loadingLayout = false;
             });
             
             this.buildGrid();
@@ -493,7 +503,7 @@
                 }, 
                 open: function () {
                     self.startEditor();
-                    $('#section-list').html('');
+                    $('#section-list').empty();
 
                     function iter(ctx, level) {
                         var o = null, sections = ctx.find('> .section');

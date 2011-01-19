@@ -15,11 +15,13 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 .togglegrid { opacity: 0; } 
 
 #widetool { bottom: 0; }
+
 #widemenu {     
-    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; 
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); /* for webkit browsers */
+/*    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; 
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); */ /* for IE */
+/*    background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); */ /* for webkit browsers */
 } 
+
 #widetool, #widemenu { position: fixed; width: 100%; z-index: 2; } 
 #widemenu, #toolbar { background-color: #31353e; } 
 #toolbar ul { list-style: none; margin: 0; padding: 0;} 
