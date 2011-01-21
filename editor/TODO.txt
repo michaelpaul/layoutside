@@ -1,12 +1,19 @@
+todo
+
+- opção de criar novo layout
+- opção de "salvar como"
+- exibir o nome do layout na lista de layouts
+- criar um modo de visualização sem grid ou cor de fundo
+
 bugs 
 
-- add clear/last durante o sort e para subsections com diferentes tamanhos 
-- icone resize aparecendo todas as sections aninhadas  
-- área de click nos links do menu, cor do link após clique
-- edição de código para subsections 
+- nomes/identificação de subsections no editor de conteudo
+- permitir edição de conteudo da section apenas quando não houver filhas
 
-* ajustar largura minima/maxima subsection
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
+* add clear/last durante o sort e para subsections com diferentes tamanhos 
+* edição de código para subsections 
+* ajustar largura minima/maxima subsection
 
 * definir section atual quando o click for fora de uma section
 * verificar necessidade de scrollbar na pagina
@@ -16,12 +23,17 @@ bugs
 * remover/ignorar hover disparado ao redimencionar sub section
 * altura da section ao adicionar sub section
 
-otimização
-
-- reduzir o trabalho de "addLast" de acordo com contexto
+x icone resize aparecendo todas as sections aninhadas  
 
 melhoria
 
+- exibir o nome do layout na lista de layouts e durante edição
 - aumentar tamanho dos handles do resize
 - aumentar altura inicial sections
+- área de click nos links do menu, cor do link após clique
+
+otimização
+
+* reduzir o trabalho de "addLast" de acordo com contexto
+
 

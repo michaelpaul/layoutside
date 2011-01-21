@@ -3,11 +3,9 @@
 body { overflow-x: hidden; }
 a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
 
-#containerPlaceholder { padding-top: 42px; } 
-
-#containerGrid { position: absolute; overflow: hidden;} 
-#containerGrid, #containerGrid div { min-height: 600px; } 
-
+#containerPlaceholder { position: relative; padding-top: 42px; } 
+#containerGrid { position: absolute; overflow: hidden; height: 100%; } 
+#containerGrid, #containerGrid div { min-height: 700px; } 
 #containerGrid div { float: left; height: 100%; background-color: #e8effb; }  
 #container { margin-bottom: 42px; overflow: hidden;} 
 
@@ -15,7 +13,6 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 .togglegrid { opacity: 0; } 
 
 #widetool { bottom: 0; }
-
 #widemenu {     
 /*    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; 
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); */ /* for IE */

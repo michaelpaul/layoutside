@@ -106,11 +106,11 @@
             return parseInt(elm[0].className.split(' ')[0].split('-')[1]);
         },
  
-        addLast: function (context) { lg('addLast')
+        addLast: function (context) { 
             var hasContext = typeof context !== 'undefined', 
                 sections = $('> .section:not(.ui-sortable-helper)',  hasContext ? context : this.ui), 
                 sum = 0, columnCount = config.column_count, i, f;
-
+            
             if(hasContext) 
                 columnCount = this.getSectionWidth(context);
 
@@ -265,10 +265,6 @@
         
         toggleGrid: function () {
             $('#containerGrid').toggleClass('togglegrid');
-        },
-
-        updateGridHeight: function () {
-            $('#containerGrid').height(parent.Container.ui.height() + 40);
         }
     };
     
@@ -495,7 +491,6 @@
                             return false;
                         var c = self.editor.val(); // getCode
                         target.find('> .section-content').html(c);        
-                        parent.Container.updateGridHeight();
                     },
                     'Close': function () {
                         self.dialogUi.dialog('close');
