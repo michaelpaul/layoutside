@@ -17,25 +17,25 @@
         <div id="menuarea">
             <a href="#" title="Layoutside"><img id="logo" src="images/logo.jpg" alt="Layoutside" /></a>
             <ul id="menu">
-                <li><a href="#" title="Layout">layout</a>
+                <li><a href="#" title="Layout">Layout</a>
                     <ul>
-                        <li><a id="open-layout" href="#">open</a></li>
-                        <li><a id="save-layout" href="#">save</a></li>
-                        <li><a href="#">save as</a></li></ul>
+                        <li><a id="new-layout" href="#new">New</a></li>
+                        <li><a id="open-layout" href="#open">Open</a></li>
+                        <li><a id="save-layout" href="#save">Save</a></li>
+                    </ul>
                 </li>
-                <li><a id="openEditor" href="#" title="Editor">editor</a></li>
-                <li><a href="#" title="Layout">download</a></li>
-                <li><a href="#" title="Layout">get the code</a>
-                    <ul><li><a href="#">html</a></li>
-                        <li><a href="#">lorem ispum dolor sit amet</a></li>
-                        <li><a href="#">css</a></li>
-                        <li><a href="#">tar package</a></li></ul>
+                <li><a id="openEditor" href="#" title="Editor">Editor</a></li>
+                <li><a href="#" title="Layout">Get the code</a>
+                    <ul>
+                        <li><a href="#get-html">HTML only</a></li>
+                        <li><a href="#get-zip">Zip</a></li>
+                        <li><a href="#get-targz">Tar.gz</a></li></ul>
                 </li>
-                <li><a href="#" title="Layout">feedback</a></li>
-                <li><a href="#" title="Layout">help</a>
-                    <ul><li><a href="#">forum</a></li>
-                        <li><a href="#">go to somewhere else</a></li>
-                        <li><a href="#">about</a></li></ul>
+                <li><a href="#" title="Layout">Help</a>
+                    <ul><li><a href="#help-content">Contents</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                        <li><a href="#shortcuts">Keyboard shortcuts</a></li>
+                        <li><a href="#about">About</a></li></ul>
                 </li>
             </ul>
             <div id="user">
@@ -110,9 +110,12 @@
         </div>
 
         <div id="editor" title="Source editor">
+            <!--
             <label for="section-list">Current section: </label>
-            <select id="section-list" name="test"></select><br>
-            <textarea id="sourceEditor" style="width: 97%;"></textarea>
+            <select id="section-list" name="test"></select>
+            -->
+            <div id="sectionview"></div>
+            <textarea id="sourceEditor"></textarea>
         </div>
         
         <div id="my-layouts" title="My Layouts">

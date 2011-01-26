@@ -1,7 +1,9 @@
 @import "topographic.css"; 
 
 body { overflow-x: hidden; }
-a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
+
+a { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
+a:visited, a:active { border: none; outline: none; }
 
 #containerPlaceholder { position: relative; padding-top: 42px; } 
 #containerGrid { position: absolute; overflow: hidden; height: 100%; } 
@@ -10,7 +12,8 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #container { margin-bottom: 42px; overflow: hidden;} 
 
 .showgrid { background: url(../images/grid.png); }
-.togglegrid { opacity: 0; } 
+.toggle-grid { opacity: 0; } 
+.toggle-section { background-color: transparent !important;} 
 
 #widetool { bottom: 0; }
 #widemenu {     
@@ -28,10 +31,13 @@ a, a:hover { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*
 #widemenu, #menu { height: 37px; z-index: 1000;} 
 #menuarea { background: url(../images/header.jpg) center top transparent no-repeat; width: 950px; margin: 0 auto; }
 #menu { float: left; margin: 3px 0 0 10px; padding: 0; height: 100%; } 
+#menu a { color: white; }
 #menu li { list-style: none; float: left; margin-left: 30px; padding: 6px;} 
-#menu li a { display: block;} 
+#menu li a { display: block; padding: 2px 3px;} 
 #menu li ul, #menuarea li li { background-color: black; margin: 0; padding: 0; }
-#menu li li { float: none; margin-left: -6px; border: 2px solid black; padding: 2px 10px;}  
+#menu li li { float: none; margin-left: -6px; border: 2px solid black; /* padding: 2px 10px; */ }  
+#menu li li a { padding: 2px 5em 2px 15px; outline: none; }  
+
 #menu li:hover { background-color: black;}  
 #menu li li:hover { background-color: #92cecf;}  
 #menu li ul { display: none; margin: 3px 0 0; } 
@@ -99,6 +105,15 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 /* jquery-ui }}} */
 
 #dialogs { display: none;  }
+
+#sectionview { overflow: auto; border: 1px #aaa solid; outline-color: #545454; 
+    height: 260px; width: 170px; margin-right: 10px; float: left; }
+#sectionview ul { list-style-type: square;}
+#sectionview li ul { /*display: none;*/}
+
+/* dialog */
+#editor { margin-top: 10px;}
+#sourceEditor { float: left; margin: 0; width: 500px;}
 
 /* debug/dev actions */
 .section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 

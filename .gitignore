@@ -1,2 +1,3 @@
 editor/remover
 *.pyc
+datastore/main.db

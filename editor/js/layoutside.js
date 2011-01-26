@@ -264,7 +264,8 @@
         },
         
         toggleGrid: function () {
-            $('#containerGrid').toggleClass('togglegrid');
+            $('#containerGrid').toggleClass('toggle-grid');
+            $('.section').toggleClass('toggle-section');
         }
     };
     
@@ -281,21 +282,10 @@
             
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 config = result.config;
-                /* // desnecessario?
-                result.sections.sort(function (a, b) {
-                    if (a.order == b.order) 
-                        return 0;
-                    return (a.order < b.order) ? -1 : 1;
-                });
-                */
-                // parents
+                
                 for(var i = 0, l = result.sections.length; i < l; i++)
-                    if(result.sections[i].child_of == null)
-                        parent.Container.addSection(result.sections[i]);  
-                // childs
-                for(i = 0; i < l; i++) 
-                    if(result.sections[i].child_of != null)
-                        parent.Container.addSection(result.sections[i]);  
+                    parent.Container.addSection(result.sections[i]);  
+                 
                 parent.Layout.loadingLayout = false;
             });
             
@@ -484,7 +474,9 @@
             this.dialogUi = $('#editor');
             
             this.dialogUi.dialog({
-                resizable: true, autoOpen: false, width: '65%', height: 400,
+                resizable: true, autoOpen: false, 
+                minWidth: 725, width: 725, minHeight: 350, height: 350,
+                
                 buttons: {
                     'Update': function () {
                         if(target == null)
@@ -496,40 +488,50 @@
                         self.dialogUi.dialog('close');
                     }
                 }, 
+                
                 open: function () {
                     self.startEditor();
-                    $('#section-list').empty();
-
-                    function iter(ctx, level) {
+                    $('#sectionview').empty();
+                    
+                    function buildSectionTree(ctx, list) {
                         var o = null, sections = ctx.find('> .section');
                         
                         if(!sections.length)
                             return false;
                         
+                        if(typeof list == 'undefined') {
+                            var list = document.createElement('ul');
+                            $('#sectionview').append(list);
+                        }
+                        
                         sections.each(function (i, s) {
-                            o = document.createElement('option');
-                            o.innerHTML = 'Section ' + level + '.' + (i + 1);
-                            $(o).data('domNode', s);
-                            $('#section-list').append(o);                
+                            var $item = $(document.createElement('li')),
+                                $section = $(s);
                             
-                            var $section = $(s);
+                            $item.html('<a href="#">Section ' + (i + 1) + '</a>');
+                            $item.find('a').data('sectionRef', s).click(function (e) {
+                                target = $($(this).data('sectionRef'));
+                                var $content = target.find('.section-content');
+                                e.preventDefault();
+                                
+                                self.editor.val($content.html()); // setCode
+                            });
+                                                        
+                            $(list).append($item);
                             
-                            if($section.find('> .section'))
-                                iter($section, level + 1);
+                            if($section.find('> .section').length) {
+                                var sublist = document.createElement('ul');
+                                $item.append(sublist);
+                                buildSectionTree($section, sublist);
+                            }
                         });
                     }
-                    iter(parent.Container.ui, 1);
-
-                    target = $($('#section-list option:first').data('domNode'));
+                    
+                    buildSectionTree(parent.Container.ui);
+                    target = $($('#sectionview li a:first').data('sectionRef'));
                     self.editor.html(target.find('.section-content').html()); // setCode           
                 }
             }); 
-
-            $('#section-list').change(function () {
-                target = $($(this).find('option')
-                    .eq($(this).attr('selectedIndex')).data('domNode'));
-                self.editor.val(target.find('.section-content').html()); // setCode
-            });
         }
     };
     
