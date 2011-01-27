@@ -15,9 +15,7 @@
         this.Toolbar.init();
         this.Container.init();
         this.Editor.init();
-        
-        this.Layout.buildGrid();
-        
+
         $(document).keydown(function (e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE) {
                 var cs = self.Container.currentSection;
@@ -30,7 +28,18 @@
             }
         });
     }, parent = Layoutside.prototype;
-   
+
+    Layoutside.prototype.Layout = {
+        currentTitle: 'Untitled',
+        
+        setPageTitle: function (newTitle) {
+            if(typeof newTitle !== 'undefined')
+                this.currentTitle = newTitle;
+                
+            $('head title').html(this.currentTitle  + ' - Layoutside');
+        }
+    };
+
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
@@ -167,8 +176,8 @@
             section.find('.section-content').html(content);
             
             var self = this, hoverClass = 'hover-section', 
-                nclicks = 0, lastClass = 1, 
-                sectionDialog = parent.Dialogs.initSection(section);
+                nclicks = 0, lastClass = 1; 
+                // sectionDialog = parent.Dialogs.initSection(section);
             
             section.click(function (e) {
                 e.stopPropagation();
@@ -181,7 +190,7 @@
                         nclicks = 0;
                     }, 500);
                 } else { // handle dblclick
-                    sectionDialog.dialog('open');
+                    // sectionDialog.dialog('open');
                     nclicks = 0;
                 }
             }); 
@@ -259,7 +268,7 @@
                 $('#' + edit_section.child_of).append(section);
             } else 
                 this.currentSection.append(section);
-            
+
             this.addLast();  
         },
         
@@ -267,50 +276,6 @@
             $('#containerGrid').toggleClass('toggle-grid');
             $('.section').toggleClass('toggle-section');
         }
-    };
-    
-    Layoutside.prototype.Layout = {
-        loadingLayout: false,
-        
-        open: function (key) {
-            if(this.loadingLayout) 
-                return false;
-            lg('open layout: ' + key); 
-                            
-            parent.Container.ui.empty();
-            this.loadingLayout = true;
-            
-            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
-                config = result.config;
-                
-                for(var i = 0, l = result.sections.length; i < l; i++)
-                    parent.Container.addSection(result.sections[i]);  
-                 
-                parent.Layout.loadingLayout = false;
-            });
-            
-            this.buildGrid();
-            parent.Container.setMeasures();
-        },
-
-        save: function () {lg('saving');},        
-        saveAs: function () {lg('save as');},        
-        download: function () {},
-        buildGrid: function () {
-            var ui = $('#containerGrid').empty(), i = 0;
-            var clm = {};
-            
-            for(; i < config.column_count; i++) {
-                clm = $(document.createElement('div'));
-                clm.css({ width: config.column_width , 
-                    marginRight: config.gutter_width
-                })
-                ui.append(clm);
-            }
-                
-            ui.find('div:last').css('marginRight', 0);
-        }
-        
     };
     
     Layoutside.prototype.Toolbar = {
@@ -325,7 +290,6 @@
 
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
             $('a.icon-sort').bind('click', function () { c.setEditMode('sort'); });
-
             $('a.icon-section').bind('click', function () { c.addSection(); });
             $('a.icon-toggle-grid').bind('click', function () { c.toggleGrid(); });
 
@@ -343,6 +307,87 @@
     };
     
     Layoutside.prototype.Menubar = {
+        loadingLayout: false,
+        
+        init: function () { 
+            this.buildGrid();
+            
+            $('#save-layout').click(this.saveLayout);
+            
+            jQuery('#open-layout').click(function (e) {
+                e.preventDefault();   
+                jQuery('#my-layouts').dialog('open');
+            });
+            
+            jQuery('#my-layouts').dialog({
+                resizable: false, autoOpen: true, width: 300, height: 150, 
+                open: function () {
+                     $.getJSON('/editor/layouts', { }, function(result, status) {
+                        if(status != 'success')
+                            throw new Error('Failed to load your layouts');
+                            
+                        $list = $('#my-layouts table tbody').empty();
+                        
+                        $(result).each(function (k, v) { 
+                            $list.append('<tr><td>' + v.name + '</td><td>' + 
+                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">open</a> ' + 
+                            '<a class="delete" lkey="' + v.key + '" href="#' + v.key + '">delete</a>' + 
+                            '</td></tr>');                        
+                        });
+                        
+                        $('#my-layouts table a.open').click(function (e) {
+                            e.preventDefault();
+                            parent.Menubar.open(this.getAttribute('lkey'));
+                        });
+                        
+                        $('#my-layouts table a.delete').click(function (e) {
+                            e.preventDefault();
+                            var c = window.confirm("Do you really want to delete the selected layout?");
+                            if(c) {
+                                alert('NotImplemented')                        
+                            }
+                        });
+                    });
+                    
+                }
+	        });
+        },
+        
+        open: function (key) {
+            if(this.loadingLayout) 
+                return false;
+            lg('open layout: ' + key); 
+                            
+            parent.Container.ui.empty();
+            this.loadingLayout = true;
+            
+            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
+                parent.Layout.setPageTitle('New layout');
+                config = result.config;
+                
+                for(var i = 0, l = result.sections.length; i < l; i++)
+                    parent.Container.addSection(result.sections[i]);  
+                 
+                parent.Menubar.loadingLayout = false;
+            });
+            
+            this.buildGrid();
+            parent.Container.setMeasures();
+        },
+        buildGrid: function () {
+            var ui = $('#containerGrid').empty(), i = 0;
+            var clm = {};
+            
+            for(; i < config.column_count; i++) {
+                clm = $(document.createElement('div'));
+                clm.css({ width: config.column_width , 
+                    marginRight: config.gutter_width
+                })
+                ui.append(clm);
+            }
+                
+            ui.find('div:last').css('marginRight', 0);
+        }, 
         saveLayout: function (e) {
             e.preventDefault();
             
@@ -384,48 +429,6 @@
                     alert(result);
                 }
             });
-        },
-        
-        init: function () { 
-            $('#save-layout').click(this.saveLayout);
-            
-            jQuery('#open-layout').click(function (e) {
-                e.preventDefault();   
-                jQuery('#my-layouts').dialog('open');
-            });
-            
-            jQuery('#my-layouts').dialog({
-                resizable: false, autoOpen: true, width: 300, height: 150, 
-                open: function () {
-                     $.getJSON('/editor/layouts', { }, function(result, status) {
-                        if(status != 'success')
-                            throw new Error('Failed to load your layouts');
-                            
-                        $list = $('#my-layouts table tbody').empty();
-                        
-                        $(result).each(function (k, v) { 
-                            $list.append('<tr><td>' + v.name + '</td><td>' + 
-                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">open</a> ' + 
-                            '<a class="delete" lkey="' + v.key + '" href="#' + v.key + '">delete</a>' + 
-                            '</td></tr>');                        
-                        });
-                        
-                        $('#my-layouts table a.open').click(function (e) {
-                            e.preventDefault();
-                            parent.Layout.open(this.getAttribute('lkey'));
-                        });
-                        
-                        $('#my-layouts table a.delete').click(function (e) {
-                            e.preventDefault();
-                            var c = window.confirm("Do you really want to delete the selected layout?");
-                            if(c) {
-                                alert('NotImplemented')                        
-                            }
-                        });
-                    });
-                    
-                }
-	        });
         }
     };
     
@@ -457,7 +460,7 @@
         
         init: function () {
             this.setupDialog();
-            
+
             $('#openEditor').click(function (e) {
                 $('#editor').dialog('open');
                 e.preventDefault();
@@ -492,7 +495,7 @@
                 open: function () {
                     self.startEditor();
                     $('#sectionview').empty();
-                    
+
                     function buildSectionTree(ctx, list) {
                         var o = null, sections = ctx.find('> .section');
                         
