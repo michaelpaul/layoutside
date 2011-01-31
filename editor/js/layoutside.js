@@ -4,7 +4,7 @@
         column_count: 24,
         column_width: 30,
         gutter_width: 10,
-        totalColWidth: 40, // column_width + gutter_width
+        totalColWidth: 40 // column_width + gutter_width
     };   
     
     /* main */
@@ -81,7 +81,8 @@
                             grid: [config.totalColWidth, 10],
                             start: function (e, ui) {   
                                 var ch = ui.helper.height();
-                                ui.placeholder.height(ch);
+                                // ui.placeholder.height(ch);
+                                ui.placeholder.css('height', ch + 'px !important');
                             }, 
                             stop: function () {
                                 self.addLast();
@@ -89,7 +90,7 @@
                             change: function () {   
                                 self.addLast();
                             }
-                        });
+                        }).disableSelection();
                     } else 
                         this.ui.sortable('enable');
 
@@ -112,7 +113,7 @@
         }, 
 
         getSectionWidth: function (elm) {
-            return parseInt(elm[0].className.split(' ')[0].split('-')[1]);
+            return parseInt(elm[0].className.split(' ')[0].split('-')[1], 10);
         },
  
         addLast: function (context) { 
@@ -151,10 +152,9 @@
         },
 
         setMeasures: function (w, h) {
-            var container = parent.Container, 
-                w = w ? w : container.ui.width(),
-                h = h ? h : container.ui.height();
-            
+            var container = parent.Container; 
+            w = w ? w : container.ui.width();
+            h = h ? h : container.ui.height();
             parent.Toolbar.widthInput.val(w);
             parent.Toolbar.heightInput.val(h);
         },
@@ -162,7 +162,7 @@
         currentSectionId: 1,
         
         addSection: function (edit_section) {
-            var section,  id = 'section-' + this.currentSectionId++, 
+            var section, id = 'section-' + this.currentSectionId++, 
                 content = '', sec_width = 3;
 
             if(typeof edit_section !== 'undefined') {
@@ -256,18 +256,19 @@
                 }
             });
             
-            // definir largura maxima da section quando filha
-            if(this.currentSection[0] != self.ui[0]) {
-                section.resizable("option", "maxWidth", 
-                    self.getSectionWidth(this.currentSection) * config.totalColWidth);         
-            }           
-            
             if(edit_section && edit_section.child_of !== null) {
                 if(!$('#' + edit_section.child_of).length) 
                     throw new Error('Failed to add section');
                 $('#' + edit_section.child_of).append(section);
             } else 
                 this.currentSection.append(section);
+
+            var sectionParent = section.parent();
+            // definir largura maxima da section quando filha
+            if(sectionParent[0] != self.ui[0]) {
+                section.resizable("option", "maxWidth", 
+                    self.getSectionWidth(sectionParent) * config.totalColWidth);         
+            }
 
             this.addLast();  
         },
@@ -297,7 +298,7 @@
                 var h = self.heightInput.val(), s = parent.Container.currentSection;
 
                 if(!isNaN(h) && !s.hasClass('container')) {
-                    h = parseInt(h);
+                    h = parseInt(h, 10);
                     if(h < 24) // min-height
                         return false;
                     s.height(h);
@@ -412,7 +413,7 @@
                         'css_class': v.className,
                         'width': parent.Container.getSectionWidth($elm),
                         'child_of': (typeof context == 'object' ? context.id : null),
-                        'order': k + 1,
+                        'order': k + 1
                     };
                     
                     layout.sections.push(section);
@@ -506,8 +507,8 @@
                         if(!sections.length)
                             return false;
                         
-                        if(typeof list == 'undefined') {
-                            var list = document.createElement('ul');
+                        if(!list) {
+                            list = document.createElement('ul');
                             $('#sectionview').append(list);
                         }
                         
@@ -535,7 +536,7 @@
                         });
                     }
                     
-                    buildSectionTree(parent.Container.ui);
+                    buildSectionTree(parent.Container.ui, null);
                     target = $($('#sectionview li a:first').data('sectionRef'));
                     self.editor.html(target.find('.section-content').html()); // setCode           
                 }
