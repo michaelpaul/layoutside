@@ -108,8 +108,10 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 
 #sectionview { overflow: auto; border: 1px #aaa solid; outline-color: #545454; 
     height: 260px; width: 170px; margin-right: 10px; float: left; }
-#sectionview ul { list-style-type: square;}
-#sectionview li ul { /*display: none;*/}
+#sectionview ul { list-style-type: square; margin-top: 5px; margin-left: 7px; padding-left: 1.5em;}
+#sectionview li ul { /*display: none;*/ margin: 0; }
+#sectionview li a { display: block; padding: 2px 0;}
+#sectionview .selected-section { background-color: lightblue; }
 
 /* dialog */
 #editor { margin-top: 10px;}
