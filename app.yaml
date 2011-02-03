@@ -23,6 +23,8 @@ handlers:
   static_dir: editor/js
 - url: /editor/images
   static_dir: editor/images
+- url: /test/
+  static_dir: test
 
 - url: /(index\.html)?
   static_files: index.html

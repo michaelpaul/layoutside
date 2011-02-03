@@ -354,17 +354,19 @@
 	        });
         },
         
-        open: function (key) {
+        open: function (key, url) {
             if(this.loadingLayout) 
                 return false;
-            
+            if(!url)
+                url = '/editor/open-layout';
+
             parent.Container.ui.empty();
             
             lg('open layout: ' + key); 
                  
             this.loadingLayout = true;
             
-            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
+            $.getJSON(url, { 'key': key }, function (result) {
                 parent.Layout.setPageTitle('New layout');
                 config = result.config;
                 
