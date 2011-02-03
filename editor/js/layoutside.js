@@ -1,4 +1,4 @@
-(function () {
+(function ($) {
     var config = {
         key: '', 
         column_count: 24,
@@ -315,12 +315,12 @@
             
             $('#save-layout').click(this.saveLayout);
             
-            jQuery('#open-layout').click(function (e) {
+            $('#open-layout').click(function (e) {
                 e.preventDefault();   
-                jQuery('#my-layouts').dialog('open');
+                $('#my-layouts').dialog('open');
             });
             
-            jQuery('#my-layouts').dialog({
+            $('#my-layouts').dialog({
                 resizable: false, autoOpen: true, width: 300, height: 150, 
                 open: function () {
                      $.getJSON('/editor/layouts', { }, function(result, status) {
@@ -372,7 +372,7 @@
                     parent.Container.addSection(result.sections[i]);  
                  
                 parent.Menubar.loadingLayout = false;
-                jQuery('#my-layouts').dialog('close');
+                $('#my-layouts').dialog('close');
             });
             
             this.buildGrid();
@@ -553,5 +553,5 @@
         lg(m + ': ' + v);
     };
     
-})();
+})(jQuery);
 
