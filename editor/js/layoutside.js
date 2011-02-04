@@ -282,11 +282,6 @@
             }
 
             this.addLast();  
-        },
-        
-        toggleGrid: function () {
-            $('#containerGrid').toggleClass('toggle-grid');
-            $('.section').toggleClass('toggle-section');
         }
     };
     
@@ -294,7 +289,8 @@
         ui: $('#toolbar'),
         widthInput: $('#section-w').val(0), 
         heightInput: $('#section-h').val(0), 
-
+        viewMode: 0,
+        
         init: function () {
             var c = parent.Container, self = this;
 
@@ -303,7 +299,21 @@
             $('a.icon-select').bind('click', function () { c.setEditMode('select'); });
             $('a.icon-sort').bind('click', function () { c.setEditMode('sort'); });
             $('a.icon-section').bind('click', function () { c.addSection(); });
-            $('a.icon-toggle-grid').bind('click', function () { c.toggleGrid(); });
+            $('a.icon-toggle-grid').click(function () { 
+                switch(self.viewMode) {
+                    case 0:
+                        $('.section').addClass('toggle-section');
+                        break;
+                    case 1:
+                        $('#containerGrid').addClass('toggle-grid');
+                        break;
+                    case 2:
+                        $('.section').removeClass('toggle-section');
+                        $('#containerGrid').removeClass('toggle-grid');
+                        break;
+                }
+                self.viewMode = (self.viewMode + 1) % 3;
+            });
 
             this.heightInput.keyup(function () {
                 var h = self.heightInput.val(), s = parent.Container.currentSection;
@@ -376,6 +386,9 @@
             this.loadingLayout = true;
             
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
+                parent.Toolbar.viewMode = 0;
+                $('#containerGrid').removeClass('toggle-grid');
+
                 parent.Layout.setPageTitle('New layout');
                 config = result.config;
                 

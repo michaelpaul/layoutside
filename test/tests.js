@@ -58,10 +58,10 @@ $(function () {
 
     test('Abrir layout', function () {
         closeLayout();
-        openLayout('layout-1.json', function () {
+        openLayout('layout-1.json', function (result) {
             equal($container.find('.section').length, 18, 'Adicionar todas as sections');
-            
         });
+
     });
      
 });

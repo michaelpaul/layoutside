@@ -1,11 +1,11 @@
 todo
 
-- hover sectionview
+* hover sectionview
 - remover dialogs não utilizados 
 * sortable em subsections 
 - opção de criar novo layout
 - exibir o nome do layout na lista de layouts e durante edição
-- criar um modo de visualização sem grid ou cor de fundo (usando toggle?)
+* criar um modo de visualização sem grid ou cor de fundo (usando toggle?)
 - nomes/identificação de subsections no editor de conteudo
 - tooltips nas ferramentas
 
