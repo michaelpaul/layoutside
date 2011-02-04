@@ -8,12 +8,26 @@ $(function () {
     container.ui = $('#container');
     
     layout = {
+        config: {},
         sections: []
     };
     
     function closeLayout() {
         container.ui.empty();
     }        
+
+    function openLayout(file, callback) {
+        $.ajax({
+            url: 'data/' + file,
+            dataType: 'json',
+            async: false, 
+            success: function (result) {
+                for(var i = 0, l = result.sections.length; i < l; i++)
+                    container.addSection(result.sections[i]);
+                callback(result);
+            }   
+        });
+    }
     
     test('Container.getSectionWidth', function() { 
         var section = $('<div>').addClass('span-3 section ui-resizable ui-resizable-autohide');
@@ -37,17 +51,17 @@ $(function () {
         container.addSection(savedSection);             
         var $novaSection = $container.find('.section:last');
 
-        equal(container.getSectionWidth($novaSection), 5, 'Old width');
-        equal($novaSection.attr('id'), savedSection.html_id, 'Old id');
-        equal($novaSection.find('.section-content').html(), savedSection.body, 'Old content');
+        equal(container.getSectionWidth($novaSection), 5, 'Set width');
+        equal($novaSection.attr('id'), savedSection.html_id, 'Set id');
+        equal($novaSection.find('.section-content').html(), savedSection.body, 'Set content');
     });
 
-    asyncTest('Abrir layout', function () {
-        Layoutside.Menubar.open(null, 'data/layout-1.json');
-        setTimeout(function () { 
+    test('Abrir layout', function () {
+        closeLayout();
+        openLayout('layout-1.json', function () {
             equal($container.find('.section').length, 18, 'Adicionar todas as sections');
-            start();
-        }, 25);
+            
+        });
     });
      
 });

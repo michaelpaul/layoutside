@@ -64,8 +64,7 @@ class OpenLayout(BaseRequestHandler):
                     'html_id': s.html_id,
                     'css_class': s.css_class,
                     'width': s.width,
-                    'child_of': s.child_of,
-                    'order': s.order,
+                    'child_of': s.child_of
                 }
                 
                 result['sections'].append(section)

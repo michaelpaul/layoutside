@@ -46,6 +46,7 @@
         grid: $('#containerGrid'), 
         currentSection: null,
         isResizingSection: false, 
+        sections: [],
         
         init: function () {
             var self = this;
@@ -57,7 +58,25 @@
                 self.setMeasures();
             });
         }, 
-
+        
+        sortableOptions: {
+            items: '> div[class^=span]',
+            scroll: false, 
+            opacity: 0.6, 
+            cursor: 'move', 
+            grid: [config.totalColWidth, 10],
+            start: function (e, ui) {   
+                var ch = ui.helper.height();
+                ui.placeholder.css('height', ch + 'px !important');
+            }, 
+            stop: function () {
+                parent.Container.addLast();
+            },
+            change: function () {   
+                parent.Container.addLast();
+            }
+        },
+        
         setEditMode: function (mode) {
             if(this.editMode == mode)
                 return null;
@@ -73,32 +92,24 @@
                     $('a.icon-sort').addClass('icon-active');
 
                     if(!isSortable) {
-                        this.ui.sortable({
-                            items: '> div[class^=span]',
-                            scroll: false, 
-                            opacity: 0.6, 
-                            cursor: 'move', 
-                            grid: [config.totalColWidth, 10],
-                            start: function (e, ui) {   
-                                var ch = ui.helper.height();
-                                // ui.placeholder.height(ch);
-                                ui.placeholder.css('height', ch + 'px !important');
-                            }, 
-                            stop: function () {
-                                self.addLast();
-                            },
-                            change: function () {   
-                                self.addLast();
-                            }
-                        }).disableSelection();
-                    } else 
+                        this.ui.sortable(this.sortableOptions).disableSelection();
+                        this.sortableOptions.items = '> div[class^=span]';
+                        this.sortableOptions.containment = 'parent';
+                        this.sections = $('div[class^=span]').sortable(this.sortableOptions)
+                            .disableSelection();
+                    } else {
                         this.ui.sortable('enable');
+                        this.sections.sortable('enable');
+                    }
 
                     break;
                 case 'select':
                 default:
-                    if(isSortable)
+                    if(isSortable) {
                         this.ui.sortable('disable');
+                        this.sections.sortable('disable');
+                    }
+                    
                     $('a.icon-select').addClass('icon-active');
             }
         },
@@ -354,11 +365,9 @@
 	        });
         },
         
-        open: function (key, url) {
+        open: function (key) {
             if(this.loadingLayout) 
                 return false;
-            if(!url)
-                url = '/editor/open-layout';
 
             parent.Container.ui.empty();
             
@@ -366,7 +375,7 @@
                  
             this.loadingLayout = true;
             
-            $.getJSON(url, { 'key': key }, function (result) {
+            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 parent.Layout.setPageTitle('New layout');
                 config = result.config;
                 
