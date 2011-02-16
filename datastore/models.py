@@ -22,6 +22,15 @@ s = Section(layout = Layout.get_by_id(94),
 
 print s.layout.column_count
 s.put()
+
+
+# new user 
+from google.appengine.api import users
+from datastore.models import *
+
+u = User(email='michael@michaelpaul.com.br', login='michaelpaul', pwd = '12345')
+
+u.put()
 '''
 
 class User(db.Model): 
@@ -33,7 +42,7 @@ class User(db.Model):
     
 class Layout(db.Model): 
     user = db.ReferenceProperty(User, required=True)
-    name = db.StringProperty()
+    name = db.StringProperty(default="Untitled")
     fluid = db.BooleanProperty(default=False)
     column_count = db.IntegerProperty(default=24)
     column_width = db.IntegerProperty(default=30) 

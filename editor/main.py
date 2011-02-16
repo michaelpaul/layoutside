@@ -10,7 +10,7 @@ from datastore.models import *
 # limite de sections deletadas ao salvar um novo layout
 LIMIT_DELETE_SECTIONS = 50
 
-michael = User.get_by_id(96)
+michael = User.get_by_id(1)
 
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
@@ -30,19 +30,21 @@ class ListLayouts(BaseRequestHandler):
         result = []
         
         for l in layouts:
-            result.append({'key': str(l.key()), 'name': str(l.create_date)})
+            result.append({'key': str(l.key()), 'name': str(l.name)})
             
         self.write(simplejson.dumps(result))
 
 class OpenLayout(BaseRequestHandler):
     def get(self):
         layout = Layout.get(self.request.get('key'))
-        
+        self.response.headers['Content-type'] = 'application/json'
+                
         if(layout is None):
             self.write('Layout não encontrado.')
         else:
             config = {
                 'key': str(layout.key()), 
+                'layout_name' : layout.name, 
                 'column_count': 24,
                 'column_width': 30,
                 'gutter_width': 10,
@@ -78,15 +80,23 @@ class SaveLayout(BaseRequestHandler):
         layout = simplejson.loads(self.request.body)
         config = layout['config']
         
-        if config['key'] != '':
-            l = Layout.get(config['key'])
-        else:
-            l = Layout(user = michael,
-                column_count = config['column_count'],
-                column_width = config['column_width'],
-                gutter_width = config['gutter_width'])
+        self.response.headers['Content-type'] = 'application/json'
         
-        l.put()
+        try:
+            if config['key'] != '':
+                l = Layout.get(config['key'])
+            else:
+                l = Layout(user = michael,
+                    name = config['layout_name'], 
+                    column_count = config['column_count'],
+                    column_width = config['column_width'],
+                    gutter_width = config['gutter_width'])
+        
+            l.put()
+        except db.BadValueError:
+            result_str = simplejson.dumps({'status': 1})
+            self.write(result_str)
+            return
         
         gql = 'WHERE layout = :1 LIMIT ' + str(LIMIT_DELETE_SECTIONS)
         sections_atuais = Section.gql(gql, l)
@@ -106,7 +116,8 @@ class SaveLayout(BaseRequestHandler):
             
             section.put()
 
-        self.write('Layout salvo!')
+        result_str = simplejson.dumps({'status': 0, 'key': str(l.key()) })
+        self.write(result_str)
 
 def main():
     # basepath 

@@ -1,11 +1,18 @@
 (function ($) {
     var config = {
-        key: '', 
+        key: '',
+        layout_name: null, 
+        status: null, 
         column_count: 24,
         column_width: 30,
         gutter_width: 10,
         totalColWidth: 40 // column_width + gutter_width
     };   
+    
+    // layout status..
+    var ST_NEW = 1,
+        ST_SAVED = 2,
+        ST_MODIFIED = 4;
     
     /* main */
     var Layoutside = function () {
@@ -30,13 +37,13 @@
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Layout = {
-        currentTitle: 'Untitled',
-        
         setPageTitle: function (newTitle) {
-            if(typeof newTitle !== 'undefined')
-                this.currentTitle = newTitle;
-                
-            $('head title').html(this.currentTitle  + ' - Layoutside');
+            var title = 'Untitled';
+            
+            if(typeof newTitle !== 'undefined' && $.trim(newTitle) != '')
+                title = newTitle;
+            
+            document.title = title  + ' - Layoutside';
         }
     };
 
@@ -280,7 +287,10 @@
                 section.resizable("option", "maxWidth", 
                     self.getSectionWidth(sectionParent) * config.totalColWidth);         
             }
-
+            
+            // if(!edit_section)
+               // config.status |= ST_MODIFIED;
+                
             this.addLast();  
         }
     };
@@ -327,22 +337,73 @@
             });
         }
     };
-    
+
     Layoutside.prototype.Menubar = {
         loadingLayout: false,
+        newLayoutDialog: null, 
+        confirmCloseDialog: null, 
         
         init: function () { 
+            var self = this;
             this.buildGrid();
+
+            $('#menu a').bind('click', function (e) { e.preventDefault(); });
             
-            $('#save-layout').click(this.saveLayout);
-            
-            $('#open-layout').click(function (e) {
-                e.preventDefault();   
-                $('#my-layouts').dialog('open');
+            $('#new-layout').click(function (e) {
+                if(!self.closeLayout()) 
+                    return false;
+                self.newLayoutDialog.dialog('open');
             });
             
+            $('#save-layout').click(function () {
+                self.saveLayout();
+            });
+                            
+            $('#open-layout').click(function () {
+                $('#my-layouts').dialog('open');
+            });
+            // new btn
+            var createLayout = function () {
+                config.key = '';
+                config.status = ST_NEW;
+                config.layout_name = $('#layout-name').val().trim();
+                parent.Layout.setPageTitle(config.layout_name);
+                self.newLayoutDialog.dialog('close');
+                $(this).find('form')[0].reset();
+            }; 
+            
+            this.newLayoutDialog = $('#new-layout-dialog').dialog({
+                resizable: false, autoOpen: false, width: 300,  
+                
+                buttons: {
+                    'Create': createLayout,
+                    'Cancel': function () {
+                        self.newLayoutDialog.dialog('close');
+                        $(this).find('form')[0].reset();
+                    }
+                }
+            }).find('form').submit(function (e) {
+                e.preventDefault();
+                createLayout.call($(this).parent()[0]);
+            }).end();
+            //  new btn /
+            
+            this.confirmCloseDialog = $('#confirm-close-dialog').dialog({
+                resizable: false, autoOpen: false, width: 300,  
+                
+                buttons: {
+                    'Close without saving': function () {
+                         self.closeLayout(true);                       
+                         self.confirmCloseDialog.dialog('close');
+                    },
+                    'Cancel': function () {
+                        self.confirmCloseDialog.dialog('close');
+                    }
+                }
+            });
+                     
             $('#my-layouts').dialog({
-                resizable: false, autoOpen: true, width: 300, height: 150, 
+                resizable: false, autoOpen: false, width: 300, height: 150, 
                 open: function () {
                      $.getJSON('/editor/layouts', { }, function(result, status) {
                         if(status != 'success')
@@ -376,21 +437,19 @@
         },
         
         open: function (key) {
-            if(this.loadingLayout) 
+            if(this.loadingLayout || !this.closeLayout()) 
                 return false;
 
-            parent.Container.ui.empty();
-            
             lg('open layout: ' + key); 
-                 
             this.loadingLayout = true;
             
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
                 parent.Toolbar.viewMode = 0;
                 $('#containerGrid').removeClass('toggle-grid');
 
-                parent.Layout.setPageTitle('New layout');
                 config = result.config;
+                parent.Layout.setPageTitle(config.layout_name);
+                config.status = ST_SAVED;
                 
                 for(var i = 0, l = result.sections.length; i < l; i++)
                     parent.Container.addSection(result.sections[i]);  
@@ -401,6 +460,21 @@
             
             this.buildGrid();
             parent.Container.setMeasures();
+        },
+        
+        closeLayout: function (confirm) {
+            if(config.status & ST_MODIFIED) {
+                if(typeof confirm == 'undefined') {
+                    this.confirmCloseDialog.dialog('open');
+                    return false;
+                }
+            }
+
+            parent.Layout.setPageTitle();
+            parent.Container.ui.empty();
+            config.status = ST_NEW;
+            
+            return true;
         },
         
         buildGrid: function () {
@@ -417,15 +491,13 @@
                 
             ui.find('div:last').css('marginRight', 0);
         }, 
-        saveLayout: function (e) {
-            e.preventDefault();
-            
+        saveLayout: function () {
             var layout = {
                 'config': config,
                 'sections': []
             };
 
-            function iter(context) {
+            function pushChildSectionsOf(context) {
                 $('> .section', context).each(function (k, v) {
                     var $elm = $(v), childs = $elm.children('.section');    
                     
@@ -443,19 +515,32 @@
                     layout.sections.push(section);
                     
                     if(childs.length) 
-                        iter(v);
+                        pushChildSectionsOf(v);
                 });    
             }
             
-            iter('#container');
-           
+            pushChildSectionsOf('#container');
+
             $.ajax({ 
                 type: "POST",
                 url: '/editor/save-layout',
                 contentType: 'application/json',
+                dataType: 'json',
                 data: JSON.stringify(layout),
-                success: function(result){
-                    alert(result);
+                error: function (xhr, textStatus) { 
+                    console.log('XhrError: ' + textStatus); 
+                }, 
+                success: function(result) {
+                    if(result.status == 0) {
+                        if(config.status & ST_NEW)
+                            alert('New layout saved!');
+                        if(config.status & ST_SAVED)
+                            alert('Layout updated!');
+                            
+                        config.status = ST_SAVED;
+                        config.key = result.key;
+                    } else
+                        alert('Failed to save layout');
                 }
             });
         }
