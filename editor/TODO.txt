@@ -1,5 +1,7 @@
 todo
 
+- z-index das sections e dialogs/menus do app
+- mover section com flash
 * hover sectionview
 - remover dialogs não utilizados 
 * sortable em subsections 
@@ -8,6 +10,7 @@ todo
 * criar um modo de visualização sem grid ou cor de fundo (usando toggle?)
 - nomes/identificação de subsections no editor de conteudo
 - tooltips nas ferramentas
+- marcar/verificar section em edição atualmente no editor de código
 
 bugs 
 

@@ -2,8 +2,9 @@
 
 body { overflow-x: hidden; }
 
-a { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
-a:visited, a:active { border: none; outline: none; }
+#widetool a, #widemenu a { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
+#widetool a:visited, #widetool a:active, 
+    #widemenu a:visited, #widemenu a:active { border: none; outline: none; }
 
 #containerPlaceholder { position: relative; padding-top: 42px; } 
 #containerGrid { position: absolute; overflow: hidden; height: 100%; } 

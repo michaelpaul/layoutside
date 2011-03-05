@@ -180,9 +180,11 @@
         currentSectionId: 1,
         
         addSection: function (edit_section) {
-            var section, id = 'section-' + this.currentSectionId++, 
+            var section, id = 'section-' + this.currentSectionId, 
                 content = '', sec_width = 3;
 
+            this.currentSectionId += 1;
+            
             if(typeof edit_section !== 'undefined') {
                 id = edit_section.html_id;
                 content = edit_section.body;
@@ -450,6 +452,7 @@
                 config = result.config;
                 parent.Layout.setPageTitle(config.layout_name);
                 config.status = ST_SAVED;
+                parent.Container.currentSectionId = 1;
                 
                 for(var i = 0, l = result.sections.length; i < l; i++)
                     parent.Container.addSection(result.sections[i]);  
@@ -472,6 +475,7 @@
 
             parent.Layout.setPageTitle();
             parent.Container.ui.empty();
+            parent.Container.currentSectionId = 1;
             config.status = ST_NEW;
             
             return true;
