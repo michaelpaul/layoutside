@@ -113,6 +113,10 @@ class LoadLayout(BaseRequestHandler):
                     if(s.child_of == child_of):
                         classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
                         classe = classe.replace('ui-sortable', '').strip()
+                        
+                        if(s.css_class.find('clear') > -1):
+                            self.write('<div class="clear"></div>')
+                            
                         self.write('\t<div id="{0}" myparent="{3}" class="{1}">{2}\n'.format(s.html_id, classe, 
                             s.body.encode('UTF-8'), s.child_of))
                         addSection(areas, s.html_id)
@@ -124,6 +128,61 @@ class LoadLayout(BaseRequestHandler):
             # result_str = simplejson.dumps(result)
             # self.write(result_str)
             
+
+# http://localhost:8080/editor/open-layout?key=agpsYXlvdXRzaWRlcgwLEgZMYXlvdXQYKww
+class RenderLayout(BaseRequestHandler):
+    def addList(self, sections):
+        sectionTree = []
+        for s in sections:
+            if(s.child_of is None):
+                sectionTree.append(s)
+        return sectionTree
+    output = ''  
+    def get(self):
+        layout = Layout.get(self.request.get('key'))
+        # self.response.headers['Content-type'] = 'application/json'
+                
+        if(layout is None):
+            self.write('Layout não encontrado.')
+        else:
+            config = {
+                'key': str(layout.key()), 
+                'layout_name' : layout.name, 
+                'column_count': 24,
+                'column_width': 30,
+                'gutter_width': 10,
+                'totalColWidth': 40 
+            }
+            
+            result = {
+                'config': config,
+                'sections': []
+            }
+            
+            sections = Section.gql('WHERE layout = :1', layout) 
+            self.output = '<div class="container">\n'
+
+            def addSection(areas, child_of=None):
+                for k, s in enumerate(areas):
+                    if(s.child_of == child_of):
+                        classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
+                        classe = classe.replace('ui-sortable', '').strip()
+                        
+                        if(s.css_class.find('clear') > -1):
+                            self.output += '<div class="clear"></div>'
+                            
+                        self.output += '\t<div id="{0}" myparent="{3}" class="{1}">{2}\n'.format(s.html_id, classe, 
+                            s.body.encode('UTF-8'), s.child_of)
+                        addSection(areas, s.html_id)
+                        self.output += '</div>'
+            
+            addSection(sections, None);
+            
+            self.output += '</div>'
+            self.render('render.html', {'html':self.output})
+            # result_str = simplejson.dumps(result)
+            # self.write(result_str)
+          
 
 
 class SaveLayout(BaseRequestHandler):
@@ -179,6 +238,7 @@ def main():
         (bp + 'save-layout', SaveLayout),
         (bp + 'open-layout', OpenLayout),
         (bp + 'load-layout', LoadLayout),
+        (bp + 'render-layout', RenderLayout),
     ]
 
     layoutside = webapp.WSGIApplication(rotas, debug=True) 

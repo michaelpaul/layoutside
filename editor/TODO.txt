@@ -1,12 +1,13 @@
 todo
 
+- atualizar jquery e jquery ui
 - z-index das sections e dialogs/menus do app
 - mover section com flash
 * hover sectionview
 - remover dialogs não utilizados 
 * sortable em subsections 
-- opção de criar novo layout
-- exibir o nome do layout na lista de layouts e durante edição
+* opção de criar novo layout
+* exibir o nome do layout na lista de layouts e durante edição
 * criar um modo de visualização sem grid ou cor de fundo (usando toggle?)
 - nomes/identificação de subsections no editor de conteudo
 - tooltips nas ferramentas
@@ -14,6 +15,8 @@ todo
 
 bugs 
 
+- ajustar posição das sections ao iniciar drag do sortable
+- layout ainda quebra durante sort
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
 * add clear/last durante o sort e para subsections com diferentes tamanhos 
 * edição de código para subsections 
