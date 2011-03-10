@@ -81,6 +81,16 @@
             },
             change: function () {   
                 parent.Container.addLast();
+            },
+            sort: function (e, ui) {
+                var y = e.pageY;
+                // child section
+                if(ui.placeholder.parent()[0] != parent.Container.ui[0])
+                    y = e.pageY - ui.placeholder.parent().position().top;
+                    
+                ui.helper.css({
+                    top: y + 'px'
+                });
             }
         },
         
@@ -100,7 +110,6 @@
 
                     if(!isSortable) {
                         this.ui.sortable(this.sortableOptions).disableSelection();
-                        this.sortableOptions.items = '> div[class^=span]';
                         this.sortableOptions.containment = 'parent';
                         this.sections = $('div[class^=span]').sortable(this.sortableOptions)
                             .disableSelection();
