@@ -287,11 +287,11 @@
             
             if(edit_section && edit_section.child_of !== null) {
                 if(!$('#' + edit_section.child_of).length) 
-                    throw new Error('Failed to add section');
+                    throw new Error('Failed to add child section');
                 $('#' + edit_section.child_of).append(section);
             } else 
                 this.currentSection.append(section);
-
+            
             var sectionParent = section.parent();
             // definir largura maxima da section quando filha
             if(sectionParent[0] != self.ui[0]) {
@@ -450,7 +450,7 @@
         open: function (key) {
             if(this.loadingLayout || !this.closeLayout()) 
                 return false;
-
+            
             lg('open layout: ' + key); 
             this.loadingLayout = true;
             
@@ -461,13 +461,15 @@
                 config = result.config;
                 parent.Layout.setPageTitle(config.layout_name);
                 config.status = ST_SAVED;
+                parent.Container.currentSection = parent.Container.ui;
                 parent.Container.currentSectionId = 1;
-                
+                                    
                 for(var i = 0, l = result.sections.length; i < l; i++)
                     parent.Container.addSection(result.sections[i]);  
                  
                 parent.Menubar.loadingLayout = false;
                 $('#my-layouts').dialog('close');
+                $(window).scrollTop(0);
             });
             
             this.buildGrid();
