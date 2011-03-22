@@ -157,10 +157,12 @@
             for(i = 0, f = sections.length; i < f; i = i + 1) {
                 var curSection = $(sections[i]), 
                     prevColumnCount = this.getSectionWidth(curSection),
-                    nextSection = curSection.next('.section');
+                    nextSection = null;
 
+                if(i < f)
+                    nextSection = $(sections[i + 1]);
                 sum += prevColumnCount;
-
+                
                 if(sum > columnCount) {
                     curSection.toggleClass('clear');
                     sum = prevColumnCount;
@@ -424,8 +426,9 @@
                         
                         $(result).each(function (k, v) { 
                             $list.append('<tr><td>' + v.name + '</td><td>' + 
-                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">open</a> ' + 
-                            '<a class="delete" lkey="' + v.key + '" href="#' + v.key + '">delete</a>' + 
+                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' + 
+                            '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">view</a> ' + 
+                            '<a class="delete" href="#' + v.key + '">delete</a>' + 
                             '</td></tr>');                        
                         });
                         

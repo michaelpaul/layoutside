@@ -118,6 +118,8 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #editor { margin-top: 10px;}
 #sourceEditor { float: left; margin: 0; width: 500px;}
 
+div#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px;}
+
 /* debug/dev actions */
 .section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 
 .section-content { height: auto; } 
