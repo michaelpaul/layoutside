@@ -111,7 +111,7 @@
                     if(!isSortable) {
                         this.ui.sortable(this.sortableOptions).disableSelection();
                         this.sortableOptions.containment = 'parent';
-                        this.sections = $('div[class^=span]').sortable(this.sortableOptions)
+                        this.sections = this.ui.find('div.section').sortable(this.sortableOptions)
                             .disableSelection();
                     } else {
                         this.ui.sortable('enable');
