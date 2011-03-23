@@ -355,6 +355,7 @@
         loadingLayout: false,
         newLayoutDialog: null, 
         confirmCloseDialog: null, 
+        saveOnCreate: false,
         
         init: function () { 
             var self = this;
@@ -383,6 +384,11 @@
                 parent.Layout.setPageTitle(config.layout_name);
                 self.newLayoutDialog.dialog('close');
                 $(this).find('form')[0].reset();
+                
+                if(parent.Menubar.saveOnCreate) {
+                    parent.Menubar.saveLayout();
+                    parent.Menubar.saveOnCreate = false;
+                }
             }; 
             
             this.newLayoutDialog = $('#new-layout-dialog').dialog({
@@ -472,6 +478,7 @@
                  
                 parent.Menubar.loadingLayout = false;
                 $('#my-layouts').dialog('close');
+                parent.Container.setEditMode('select');
                 $(window).scrollTop(0);
             });
             
@@ -514,7 +521,13 @@
                 'config': config,
                 'sections': []
             };
-
+            
+            if(config.layout_name == null || $.trim(config.layout_name) == '') {
+                parent.Menubar.newLayoutDialog.dialog('open');
+                this.saveOnCreate = true;
+                return false;
+            }
+             
             function pushChildSectionsOf(context) {
                 $('> .section', context).each(function (k, v) {
                     var $elm = $(v), childs = $elm.children('.section');    

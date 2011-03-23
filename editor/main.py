@@ -30,7 +30,10 @@ class ListLayouts(BaseRequestHandler):
         result = []
         
         for l in layouts:
-            result.append({'key': str(l.key()), 'name': str(l.name)})
+            name = 'Untitled'
+            if l.name:
+                name = l.name
+            result.append({'key': str(l.key()), 'name': str(name)})
             
         self.write(simplejson.dumps(result))
 
