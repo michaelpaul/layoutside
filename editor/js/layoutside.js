@@ -622,8 +622,8 @@
             this.dialogUi = $('#editor');
             
             this.dialogUi.dialog({
-                resizable: true, autoOpen: false, 
-                minWidth: 725, width: 725, minHeight: 350, height: 350,
+                resizable: false, autoOpen: true, 
+                minWidth: 735, width: 735, minHeight: 370, height: 370,
                 
                 buttons: {
                     'Update': function () {
