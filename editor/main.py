@@ -216,6 +216,7 @@ class SaveLayout(BaseRequestHandler):
         db.delete(sections_atuais)
         
         # criar novas.. 
+        new_sections = []
         for s in layout['sections']:
             section = Section(layout = l,
                 name = s['name'],
@@ -226,9 +227,9 @@ class SaveLayout(BaseRequestHandler):
                 width = s['width'],
                 order = s['order'],
                 child_of = s['child_of'])
-            
-            section.put()
-
+            new_sections.append(section)
+            # section.put()
+        db.put(new_sections)
         result_str = simplejson.dumps({'status': 0, 'key': str(l.key()) })
         self.write(result_str)
 
