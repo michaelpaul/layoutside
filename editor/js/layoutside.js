@@ -622,7 +622,7 @@
             this.dialogUi = $('#editor');
             
             this.dialogUi.dialog({
-                resizable: false, autoOpen: true, 
+                resizable: false, autoOpen: false, 
                 minWidth: 735, width: 735, minHeight: 370, height: 370,
                 
                 buttons: {
