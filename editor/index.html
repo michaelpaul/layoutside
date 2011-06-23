@@ -27,7 +27,7 @@
                         <li><a id="save-layout" href="#save">Save</a></li>
                     </ul>
                 </li>
-                <li><a id="openEditor" href="#" title="Editor">Editor</a></li>
+                <!-- <li><a id="openEditor" href="#" title="Editor">Editor</a></li> -->
                 <li><a href="#" title="Layout">Get the code</a>
                     <ul>
                         <li><a href="#get-html">HTML only</a></li>
@@ -35,14 +35,17 @@
                         <li><a href="#get-targz">Tar.gz</a></li></ul>
                 </li>
                 <li><a href="#" title="Layout">Help</a>
-                    <ul><li><a href="#help-content">Contents</a></li>
-                        <li><a href="#feedback">Feedback</a></li>
-                        <li><a href="#shortcuts">Keyboard shortcuts</a></li>
+                        <ul>
+                        <li><a href="#shortcuts">Quickstart</a></li>
+                        <!-- <li><a href="#help-content">Contents</a></li>
+                        <li><a href="#feedback">Feedback</a></li> 
+                        <li><a href="#shortcuts">Keyboard shortcuts</a></li> -->
                         <li><a href="#about">About</a></li></ul>
                 </li>
             </ul>
             <div id="user">
-                <a href="#" title="User">{{ user_name }}</a> <br />
+                <a href="#" title="User">{{ user_name }}</a> 
+                <span> | </span> 
                 <a href="{{ logout }}" title="logout">logout</a>
             </div>
         </div>

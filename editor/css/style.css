@@ -61,9 +61,10 @@ body { overflow-x: hidden; }
 
 #toolbar ul { padding: 2px; margin-left: 5px; } 
 #toolbar ul li { float: left; } 
-#user { font-size: 12px; float: right; margin-right: 10px;}
-#user a { float: right; }
 
+#user { padding-top: 11px; float: right; margin-right: 10px; }
+#user span { color: white; margin: 0 4px; } 
+ 
 #measures { float: right; margin-right: 10px; }
 #measures input { border: 0; color: white; padding: 1px; text-align: center; 
     background-color: #1c1d21; width: 30px; font-size: 10px; border: 1px solid #1c1d21; }
