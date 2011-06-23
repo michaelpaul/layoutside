@@ -35,4 +35,4 @@ handlers:
 
 - url: /editor/.*
   script: editor/main.py
-
+  login: required

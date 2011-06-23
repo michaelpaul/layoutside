@@ -1,4 +1,6 @@
-import os, cgi, datetime
+# coding=UTF-8
+
+import logging, os, cgi, datetime
 
 from google.appengine.api import users
 from google.appengine.ext import webapp, db
@@ -7,10 +9,10 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from django.utils import simplejson
 from datastore.models import *
 
+current_user = None
+
 # limite de sections deletadas ao salvar um novo layout
 LIMIT_DELETE_SECTIONS = 50
-
-michael = User.get_by_id(1)
 
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
@@ -22,11 +24,12 @@ class Editor(BaseRequestHandler):
     PATH = '/editor/'
     
     def get(self):
-        self.render('index.html')
+        self.render('index.html', {'user_name':current_user.nickname(),
+            'logout': users.create_logout_url("/")})
 
 class ListLayouts(BaseRequestHandler):
     def get(self):
-        layouts = Layout.gql('WHERE user = :1', michael) 
+        layouts = Layout.gql('WHERE owner = :1', current_user.user_id()) 
         result = []
         
         for l in layouts:
@@ -199,7 +202,7 @@ class SaveLayout(BaseRequestHandler):
             if config['key'] != '':
                 l = Layout.get(config['key'])
             else:
-                l = Layout(user = michael,
+                l = Layout(owner = current_user.user_id(),
                     name = config['layout_name'], 
                     column_count = config['column_count'],
                     column_width = config['column_width'],
@@ -234,6 +237,16 @@ class SaveLayout(BaseRequestHandler):
         self.write(result_str)
 
 def main():
+    global current_user
+    logging.getLogger().setLevel(logging.DEBUG)
+    
+    current_user = users.get_current_user()
+    ga = AppUser.gql('WHERE google_account = :1', current_user) 
+    # verificar se usuário já tem cadastro, se não criar usuario no storage 
+    if(ga.get() == None):
+        nova_conta = AppUser(google_account=current_user, google_id=current_user.user_id())
+        nova_conta.put()
+        
     # basepath 
     bp = Editor.PATH
     rotas = [

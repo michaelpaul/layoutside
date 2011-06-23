@@ -61,7 +61,7 @@ body { overflow-x: hidden; }
 
 #toolbar ul { padding: 2px; margin-left: 5px; } 
 #toolbar ul li { float: left; } 
-#user { display: none; font-size: 12px; float: right; margin-right: 10px;}
+#user { font-size: 12px; float: right; margin-right: 10px;}
 #user a { float: right; }
 
 #measures { float: right; margin-right: 10px; }
