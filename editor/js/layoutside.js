@@ -433,7 +433,7 @@
                         $(result).each(function (k, v) { 
                             $list.append('<tr><td>' + v.name + '</td><td>' + 
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' + 
-                            '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">view</a> ' + 
+                            '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">preview</a> ' + 
                             '<a class="delete" href="#' + v.key + '">delete</a>' + 
                             '</td></tr>');                        
                         });
@@ -456,6 +456,11 @@
 	        });
         },
         
+        previewLink: function (newKey) {
+            var prev = $('#preview-layout').attr('href'); 
+            $('#preview-layout').attr('href', prev.replace(/key=.+/, 'key=' + newKey));
+        },
+         
         open: function (key) {
             if(this.loadingLayout || !this.closeLayout()) 
                 return false;
@@ -473,9 +478,10 @@
                 parent.Container.currentSection = parent.Container.ui;
                 parent.Container.currentSectionId = 1;
                                     
-                for(var i = 0, l = result.sections.length; i < l; i++)
+                for(var i = 0, l = result.sections.length; i < l; i++) {
                     parent.Container.addSection(result.sections[i]);  
-                 
+                }
+                
                 parent.Menubar.loadingLayout = false;
                 $('#my-layouts').dialog('close');
                 parent.Container.setEditMode('select');
@@ -515,7 +521,8 @@
             }
                 
             ui.find('div:last').css('marginRight', 0);
-        }, 
+        },
+         
         saveLayout: function () {
             var layout = {
                 'config': config,

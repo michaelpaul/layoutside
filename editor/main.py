@@ -61,8 +61,8 @@ class OpenLayout(BaseRequestHandler):
                 'config': config,
                 'sections': []
             }
-            
-            sections = Section.gql('WHERE layout = :1', layout) 
+            # priorizar parentesco sobre ordem, permite reconstrução linear no DOM 
+            sections = Section.gql('WHERE layout = :1 ORDER BY child_of, order', layout) 
             
             for s in sections:
                 section = {
@@ -72,7 +72,8 @@ class OpenLayout(BaseRequestHandler):
                     'html_id': s.html_id,
                     'css_class': s.css_class,
                     'width': s.width,
-                    'child_of': s.child_of
+                    'child_of': s.child_of,
+                    'order': s.order
                 }
                 
                 result['sections'].append(section)
@@ -110,7 +111,7 @@ class LoadLayout(BaseRequestHandler):
                 'sections': []
             }
             
-            sections = Section.gql('WHERE layout = :1', layout) 
+            sections = Section.gql('WHERE layout = :1 ORDER BY order', layout) 
             
             self.write('<div class="container">\n')
 
@@ -165,8 +166,8 @@ class RenderLayout(BaseRequestHandler):
                 'sections': []
             }
             
-            sections = Section.gql('WHERE layout = :1', layout) 
-            self.output = '<div class="container">\n'
+            sections = Section.gql('WHERE layout = :1 ORDER BY order', layout) 
+            self.output = '<div class="container">'
 
             def addSection(areas, child_of=None):
                 for k, s in enumerate(areas):
@@ -176,8 +177,8 @@ class RenderLayout(BaseRequestHandler):
                         
                         if(s.css_class.find('clear') > -1):
                             self.output += '<div class="clear"></div>'
-                            
-                        self.output += '\t<div id="{0}" myparent="{3}" class="{1}">{2}\n'.format(s.html_id, classe, 
+
+                        self.output += '\n\t<div id="{0}" myparent="{3}" class="{1}">{2}'.format(s.html_id, classe, 
                             s.body.encode('UTF-8'), s.child_of)
                         addSection(areas, s.html_id)
                         self.output += '</div>'
@@ -185,7 +186,7 @@ class RenderLayout(BaseRequestHandler):
             addSection(sections, None);
             
             self.output += '</div>'
-            self.render('render.html', {'html':self.output})
+            self.render('render.html', {'title': layout.name, 'html':self.output})
             # result_str = simplejson.dumps(result)
             # self.write(result_str)
           
