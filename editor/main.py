@@ -40,6 +40,27 @@ class ListLayouts(BaseRequestHandler):
             
         self.write(simplejson.dumps(result))
 
+class DeleteLayout(BaseRequestHandler):
+    def post(self):
+        result = {'status': 0}
+
+        layout = Layout.get(self.request.get('key'))
+
+        if(layout.owner != current_user.user_id()):
+            logging.error('Usuario (' + current_user.user_id() + 
+                ') tentou excluir o layout (' + self.request.get('key') + 
+                ') sem permissao')
+            result.status = 1
+        
+        else: 
+            sections = Section.gql('WHERE layout = :1', layout)
+            db.delete(sections)
+            layout.delete()
+            logging.info('Layout removido')
+        
+        result_str = simplejson.dumps(result)
+        self.write(result_str)
+
 class OpenLayout(BaseRequestHandler):
     def get(self):
         layout = Layout.get(self.request.get('key'))
@@ -255,6 +276,7 @@ def main():
         (bp + 'layouts', ListLayouts),
         (bp + 'save-layout', SaveLayout),
         (bp + 'open-layout', OpenLayout),
+        (bp + 'delete-layout', DeleteLayout),        
         (bp + 'load-layout', LoadLayout),
         (bp + 'render-layout', RenderLayout),
     ]

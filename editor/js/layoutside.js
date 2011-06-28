@@ -445,9 +445,14 @@
                         
                         $('#my-layouts table a.delete').click(function (e) {
                             e.preventDefault();
-                            var c = window.confirm("Do you really want to delete the selected layout?");
+                            var link = this, c = window.confirm("Do you really want to delete the selected layout?");
+                            
                             if(c) {
-                                alert('NotImplemented')                        
+                                $.post('/editor/delete-layout', {'key': $(this).attr('href').substr(1)}, function (result) {
+                                    if(result.status == 0) {
+                                        $(link).parents('tr').fadeOut();
+                                    }
+                                }, 'json');
                             }
                         });
                         
