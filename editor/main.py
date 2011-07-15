@@ -1,6 +1,8 @@
 # coding=UTF-8
 
-import logging, os, cgi, datetime
+import logging, os, sys, cgi, datetime
+import zipfile
+import StringIO
 
 from google.appengine.api import users
 from google.appengine.ext import webapp, db
@@ -199,6 +201,34 @@ class SaveLayout(BaseRequestHandler):
         result_str = simplejson.dumps({'status': 0, 'key': str(l.key()) })
         self.write(result_str)
 
+class DownloadLayout(BaseRequestHandler):
+    def get(self):
+        # http://localhost:8080/editor/download-layout
+        zipstream = StringIO.StringIO()
+        pacote = zipfile.ZipFile(zipstream, "w")
+
+        esqueleto = '../blueprint-skel'
+        for dirpath, dirnames, filenames in os.walk(esqueleto):
+            for name in filenames:
+		        filename = os.path.join(dirpath, name)
+		        pacote.write(filename, filename.replace(esqueleto, ''))
+
+        tpl = template.render('render.html', {'html': 'Michael Paul!'})
+        # pacote.writestr('index.html', tpl)
+        info = zipfile.ZipInfo('index.html')
+        info.date_time =  datetime.datetime.now().timetuple()
+        info.external_attr = 0644 << 16L 
+        pacote.writestr(info, tpl)
+        
+        pacote.close()
+        zipstream.seek(0)
+        zipcontents = zipstream.getvalue()
+        zipstream.close()
+
+        self.response.headers['Content-Type'] = 'application/zip'
+        self.response.headers['Content-Disposition'] = 'attachment; filename="layout.zip"'	
+        self.write(zipcontents)
+
 def main():
     global current_user
     logging.getLogger().setLevel(logging.DEBUG)
@@ -219,6 +249,7 @@ def main():
         (bp + 'open-layout', OpenLayout),
         (bp + 'delete-layout', DeleteLayout),        
         (bp + 'render-layout', RenderLayout),
+        (bp + 'download-layout', DownloadLayout)
     ]
 
     layoutside = webapp.WSGIApplication(rotas, debug=True) 
