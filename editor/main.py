@@ -151,10 +151,6 @@ class RenderLayout(BaseRequestHandler):
             self.render('render.html', {'title': layout.name, 'html':self.output})
             # result_str = simplejson.dumps(result)
             # self.write(result_str)
-          
-class DownloadLayout(BaseRequestHandler):
-	def get(self):
-		pass
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
