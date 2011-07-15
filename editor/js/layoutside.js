@@ -361,8 +361,26 @@
             var self = this;
             this.buildGrid();
 
-            $('#menu a').bind('click', function (e) { e.preventDefault(); });
-            
+            $('#menu a:not(.download)').bind('click', function (e) { e.preventDefault(); });
+
+            $('#menu a.download').bind('click', function (e) { 
+				if(!config.key) {
+					e.preventDefault();
+					alert('Create or edit a layout to download');
+					return false;
+				}
+				var url = './download-layout?', hash = $(this).attr('rel');
+				switch(hash) {
+				case '#get-html':
+					url += 'html-only=1&key=' + config.key;
+					break;
+				case '#get-zip':
+					url += 'key=' + config.key;
+					break;
+				}
+				$(this).attr('href', url);
+			});
+        	
             $('#new-layout').click(function (e) {
                 if(!self.closeLayout()) 
                     return false;

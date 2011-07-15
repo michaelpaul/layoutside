@@ -200,30 +200,38 @@ class SaveLayout(BaseRequestHandler):
 class DownloadLayout(BaseRequestHandler):
     def get(self):
         # http://localhost:8080/editor/download-layout
-        zipstream = StringIO.StringIO()
-        pacote = zipfile.ZipFile(zipstream, "w")
-
-        esqueleto = '../blueprint-skel'
-        for dirpath, dirnames, filenames in os.walk(esqueleto):
-            for name in filenames:
-		        filename = os.path.join(dirpath, name)
-		        pacote.write(filename, filename.replace(esqueleto, ''))
-
         tpl = template.render('render.html', {'html': 'Michael Paul!'})
-        # pacote.writestr('index.html', tpl)
-        info = zipfile.ZipInfo('index.html')
-        info.date_time =  datetime.datetime.now().timetuple()
-        info.external_attr = 0644 << 16L 
-        pacote.writestr(info, tpl)
-        
-        pacote.close()
-        zipstream.seek(0)
-        zipcontents = zipstream.getvalue()
-        zipstream.close()
+        mimetype = 'text/html'
+        downloadname = 'layout.html'
+        output = tpl
 
-        self.response.headers['Content-Type'] = 'application/zip'
-        self.response.headers['Content-Disposition'] = 'attachment; filename="layout.zip"'	
-        self.write(zipcontents)
+        if not self.request.get('html-only'):
+            zipstream = StringIO.StringIO()
+            pacote = zipfile.ZipFile(zipstream, "w")
+
+            esqueleto = '../blueprint-skel'
+            for dirpath, dirnames, filenames in os.walk(esqueleto):
+                for name in filenames:
+	                filename = os.path.join(dirpath, name)
+	                pacote.write(filename, filename.replace(esqueleto, ''))
+
+            info = zipfile.ZipInfo('index.html')
+            info.date_time =  datetime.datetime.now().timetuple()
+            info.external_attr = 0644 << 16L 
+            pacote.writestr(info, tpl)
+
+            pacote.close()
+            zipstream.seek(0)
+            zipcontents = zipstream.getvalue()
+            zipstream.close()
+
+            mimetype = 'application/zip'
+            downloadname = 'layout.zip'
+            output = zipcontents
+
+        self.response.headers['Content-Type'] = mimetype
+        self.response.headers['Content-Disposition'] = 'attachment; filename="' + downloadname + '"'	
+        self.write(output)
 
 def main():
     global current_user
