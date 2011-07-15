@@ -103,13 +103,8 @@ class OpenLayout(BaseRequestHandler):
             self.write(result_str)
 
 class RenderLayout(BaseRequestHandler):
-    def addList(self, sections):
-        sectionTree = []
-        for s in sections:
-            if(s.child_of is None):
-                sectionTree.append(s)
-        return sectionTree
     output = ''  
+
     def get(self):
         layout = Layout.get(self.request.get('key'))
         # self.response.headers['Content-type'] = 'application/json'
@@ -155,7 +150,9 @@ class RenderLayout(BaseRequestHandler):
             # result_str = simplejson.dumps(result)
             # self.write(result_str)
           
-
+class DownloadLayout(BaseRequestHandler):
+	def get(self):
+		pass
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
