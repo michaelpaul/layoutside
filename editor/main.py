@@ -229,15 +229,21 @@ class LayoutBuilder(object):
         def addSection(areas, child_of=None):
             for k, s in enumerate(areas):
                 if(s.child_of == child_of):
+                    # @TODO fazer um replace melhor..
                     classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
+                    classe = classe.replace('current', '')
+                    classe = classe.replace('--autohide', '')
                     classe = classe.replace('ui-sortable', '').strip()
                     
                     if(s.css_class.find('clear') > -1):
                         self.output += '<div class="clear"></div>'
 
-                    self.output += '\n\t<div id="{0}" class="{1}">{2}'.format(
-                        s.html_id, re.sub(r' +', ' ', classe), s.body.encode('UTF-8')
+                    self.output += '\n\t<div id="%s" class="%s">%s' % (
+                        s.html_id, 
+                        re.sub(r' +', ' ', classe), 
+                        s.body.encode('UTF-8')
                     )
+                    
                     addSection(areas, s.html_id)
                     self.output += '</div>'
         
