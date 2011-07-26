@@ -1,6 +1,6 @@
 # coding=UTF-8
 
-import logging, os, sys, cgi, datetime
+import logging, os, sys, cgi, datetime, re
 import zipfile
 import StringIO
 
@@ -108,49 +108,9 @@ class RenderLayout(BaseRequestHandler):
     output = ''  
 
     def get(self):
-        layout = Layout.get(self.request.get('key'))
-        # self.response.headers['Content-type'] = 'application/json'
-                
-        if(layout is None):
-            self.write('Layout não encontrado.')
-        else:
-            config = {
-                'key': str(layout.key()), 
-                'layout_name' : layout.name, 
-                'column_count': 24,
-                'column_width': 30,
-                'gutter_width': 10,
-                'totalColWidth': 40 
-            }
-            
-            result = {
-                'config': config,
-                'sections': []
-            }
-            
-            sections = Section.gql('WHERE layout = :1 ORDER BY order', layout) 
-            self.output = '<div class="container">'
-
-            def addSection(areas, child_of=None):
-                for k, s in enumerate(areas):
-                    if(s.child_of == child_of):
-                        classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
-                        classe = classe.replace('ui-sortable', '').strip()
-                        
-                        if(s.css_class.find('clear') > -1):
-                            self.output += '<div class="clear"></div>'
-
-                        self.output += '\n\t<div id="{0}" myparent="{3}" class="{1}">{2}'.format(s.html_id, classe, 
-                            s.body.encode('UTF-8'), s.child_of)
-                        addSection(areas, s.html_id)
-                        self.output += '</div>'
-            
-            addSection(sections, None);
-            
-            self.output += '</div>'
-            self.render('render.html', {'title': layout.name, 'html':self.output})
-            # result_str = simplejson.dumps(result)
-            # self.write(result_str)
+        builder = LayoutBuilder()
+        tpl = builder.build(self.request.get('key'), '/editor/')
+        self.write(tpl)
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
@@ -200,7 +160,14 @@ class SaveLayout(BaseRequestHandler):
 class DownloadLayout(BaseRequestHandler):
     def get(self):
         # http://localhost:8080/editor/download-layout
-        tpl = template.render('render.html', {'html': 'Michael Paul!'})
+        builder = LayoutBuilder()
+        key = self.request.get('key')
+        tpl = builder.build(key)
+
+        if tpl == False:
+            logging.error('Falha ao construir layout para download: ' + key)
+            return 
+        
         mimetype = 'text/html'
         downloadname = 'layout.html'
         output = tpl
@@ -232,6 +199,56 @@ class DownloadLayout(BaseRequestHandler):
         self.response.headers['Content-Type'] = mimetype
         self.response.headers['Content-Disposition'] = 'attachment; filename="' + downloadname + '"'	
         self.write(output)
+
+class LayoutBuilder(object):
+    output = ''
+
+    def build(self, key, css_base = ''):
+        layout = Layout.get(key)
+                
+        if(layout is None):
+            return False
+
+        config = {
+            'key': str(layout.key()), 
+            'layout_name' : layout.name, 
+            'column_count': 24,
+            'column_width': 30,
+            'gutter_width': 10,
+            'totalColWidth': 40 
+        }
+        
+        result = {
+            'config': config,
+            'sections': []
+        }
+        
+        sections = Section.gql('WHERE layout = :1 ORDER BY order', layout) 
+        self.output = '<div class="container">'
+
+        def addSection(areas, child_of=None):
+            for k, s in enumerate(areas):
+                if(s.child_of == child_of):
+                    classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
+                    classe = classe.replace('ui-sortable', '').strip()
+                    
+                    if(s.css_class.find('clear') > -1):
+                        self.output += '<div class="clear"></div>'
+
+                    self.output += '\n\t<div id="{0}" class="{1}">{2}'.format(
+                        s.html_id, re.sub(r' +', ' ', classe), s.body.encode('UTF-8')
+                    )
+                    addSection(areas, s.html_id)
+                    self.output += '</div>'
+        
+        addSection(sections, None);
+        self.output += '\n</div>'
+        
+        return template.render('render.html', {
+            'title': layout.name, 
+            'css_basepath' : css_base,
+            'html': self.output
+        })
 
 def main():
     global current_user

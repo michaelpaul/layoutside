@@ -565,7 +565,7 @@
                     var section = {
                         'name': 'section name ' + k,
                         'tagname': v.tagName, 
-                        'body': $elm.find('.section-content').html(),
+                        'body': $elm.find('.section-content').html() || '&nbsp;',
                         'html_id': v.id,
                         'css_class': v.className,
                         'width': parent.Container.getSectionWidth($elm),

@@ -3,20 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>{{ title }}</title>
-    <!-- layoutside -->
-    <link rel="stylesheet" href="http://localhost/layoutside/editor/css/blueprint/screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="http://localhost/layoutside/editor/css/blueprint/print.css" type="text/css" media="print">
+
+    <link rel="stylesheet" href="{{ css_basepath }}css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ css_basepath }}css/blueprint/print.css" type="text/css" media="print">
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="http://localhost/layoutside/editor/css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ css_basepath }}css/blueprint/ie.css" type="text/css" media="screen, projection">
     <![endif]-->
-    <!-- / layoutside -->
     
     <style type="text/css">
     img, iframe, object, embed { max-width: 100%; } 
     </style>
 </head>
 <body>
-    {{ html }}
+{{ html }}
 </body>
 </html>
 

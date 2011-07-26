@@ -9,6 +9,7 @@ builtins:
 - remote_api: on
 
 skip_files:
+- ^(.*/)?\.git
 - ^(.*/)?app\.yaml
 - ^(.*/)?index\.yaml
 - ^(.*/)?#.*#
