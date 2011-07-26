@@ -204,7 +204,10 @@
             
             section = $('<div id="' + id + '" class="span-' + 
                 sec_width + ' section"><div class="section-content"></div></div>');
-            section.find('.section-content').html(content);
+    
+            if(content != '&nbsp;') {
+                section.find('.section-content').html(content);
+            }
             
             var self = this, hoverClass = 'hover-section', 
                 nclicks = 0, lastClass = 1; 
