@@ -129,7 +129,12 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #edit-tabs li a { padding: 4px; text-decoration: none;  outline: none; }
 #edit-tabs li span { margin-left: 4px; font-weight: bolder; cursor: pointer;}
 
+
 div#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px;}
+
+div#my-layouts table { border-collapse:collapse; margin-top: 10px; } 
+div#my-layouts table, div#my-layouts th, div#my-layouts td
+{ border: 1px solid #BBB; }
 
 /* debug/dev actions */
 .section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 

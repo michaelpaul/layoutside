@@ -413,7 +413,7 @@
             }; 
             
             this.newLayoutDialog = $('#new-layout-dialog').dialog({
-                resizable: false, autoOpen: false, width: 300,  
+                resizable: false, autoOpen: false, width: 300, modal: true,
                 
                 buttons: {
                     'Create': createLayout,
@@ -429,7 +429,7 @@
             //  new btn /
             
             this.confirmCloseDialog = $('#confirm-close-dialog').dialog({
-                resizable: false, autoOpen: false, width: 300,  
+                resizable: false, autoOpen: false, width: 300,  modal: true,
                 
                 buttons: {
                     'Close without saving': function () {
@@ -443,16 +443,21 @@
             });
                      
             $('#my-layouts').dialog({
-                resizable: false, autoOpen: false, width: 300, height: 150, 
+                resizable: false, autoOpen: false, width: 300, height: 175, modal: true,
+				buttons: { 
+					'Cancel': function () { 
+			            $('#my-layouts').dialog('close');
+					} 
+				},
                 open: function () {
                      $.getJSON('/editor/layouts', { }, function(result, status) {
                         if(status != 'success')
                             throw new Error('Failed to load your layouts');
                             
                         $list = $('#my-layouts table tbody').empty();
-                        
+
                         $(result).each(function (k, v) { 
-                            $list.append('<tr><td>' + v.name + '</td><td>' + 
+                            $list.append('<tr><td>' + v.name + '</td><td style="text-align: right; width: 100px;">' + 
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' + 
                             '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">preview</a> ' + 
                             '<a class="delete" href="#' + v.key + '">delete</a>' + 
@@ -617,7 +622,7 @@
             var nd = this.sectionUi.clone();
 
             nd.dialog({
-                resizable: false, autoOpen: false, width: 300, height: 225, 
+                resizable: false, autoOpen: false, width: 300, height: 225, modal: true,
                 open: function () {
                     lg('section dialog open');
                 }
