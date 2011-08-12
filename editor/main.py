@@ -241,7 +241,7 @@ class LayoutBuilder(object):
                     self.output += '\n\t<div id="%s" class="%s">%s' % (
                         s.html_id, 
                         re.sub(r' +', ' ', classe), 
-                        s.body.encode('UTF-8')
+                        unicode(s.body)
                     )
                     
                     addSection(areas, s.html_id)
