@@ -25,6 +25,7 @@
                         <li><a id="new-layout" href="#new">New</a></li>
                         <li><a id="open-layout" href="#open">Open</a></li>
                         <li><a id="save-layout" href="#save">Save</a></li>
+                        <li><a id="layout-properties" href="#properties">Properties</a></li>
                         <!-- <li><a id="preview-layout" href="/editor/render-layout?key=">Preview</a></li> -->
                     </ul>
                 </li>
@@ -74,6 +75,21 @@
     </div>
 
     <div id="dialogs">
+        <div id="layout-prop" title="Layout properties">
+            <form id="layoutProperties" class="dialog-form">	        
+                <label>Name</label>
+                <input name="layout_name" type="text">
+                <br class="clear" />
+                <label>Column count</label>
+                <input name="column_count" type="text">
+                <br class="clear" />
+                <label>Column width</label>
+                <input name="column_width" type="text">
+                <br class="clear" />
+                <label>Gutter width</label>
+                <input name="gutter_width" type="text">
+            </form>
+        </div>
         <div class="sectionDialog" title="Section Dialog">
             <form name="sectionProperties">	        
                 <p>

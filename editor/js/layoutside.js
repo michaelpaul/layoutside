@@ -357,6 +357,7 @@
     Layoutside.prototype.Menubar = {
         loadingLayout: false,
         newLayoutDialog: null, 
+        layoutPropDialog: null, 
         confirmCloseDialog: null, 
         saveOnCreate: false,
         
@@ -397,6 +398,11 @@
             $('#open-layout').click(function () {
                 $('#my-layouts').dialog('open');
             });
+            
+            $('#layout-properties').click(function (e) {
+                self.layoutPropDialog.dialog('open');
+            });
+            
             // new btn
             var createLayout = function () {
                 config.key = '';
@@ -457,7 +463,7 @@
                         $list = $('#my-layouts table tbody').empty();
 
                         $(result).each(function (k, v) { 
-                            $list.append('<tr><td>' + v.name + '</td><td style="text-align: right; width: 100px;">' + 
+                            $list.append('<tr><td>' + v.name + '</td><td style="text-align: right; width: 125px;">' + 
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' + 
                             '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">preview</a> ' + 
                             '<a class="delete" href="#' + v.key + '">delete</a>' + 
@@ -485,6 +491,43 @@
                     });
                 }
 	        });
+	        
+	        // init ainda.. :S
+	        function updateProperties(dialog) {
+	            var $frm = $(dialog).find('form');
+                $('input[name=layout_name]', $frm).val(config.layout_name);
+                $('input[name=column_count]', $frm).val(config.column_count);
+                $('input[name=column_width]', $frm).val(config.column_width);
+                $('input[name=gutter_width]', $frm).val(config.gutter_width);
+	        }
+	        self.layoutPropDialog = $('#layout-prop');
+            self.layoutPropDialog.dialog({
+                resizable: false, autoOpen: false, width: 300, height: 180, 
+                buttons: {
+                    'Update': function () {
+                        var $frm = $(this).find('form');
+                        config.layout_name = $('input[name=layout_name]', $frm).val();
+                        config.column_count = parseInt($('input[name=column_count]', $frm).val());
+                        config.column_width = parseInt($('input[name=column_width]', $frm).val());
+                        config.gutter_width = parseInt($('input[name=gutter_width]', $frm).val());
+                        config.totalColWidth = config.column_width + config.gutter_width;
+                        
+                        self.buildGrid();
+                        self.resizeSections();
+                    } ,
+                    'Reset': function () {
+                        updateProperties(this);
+                    } ,
+                    'Cancel': function () {
+                        self.layoutPropDialog.dialog('close');
+                        $(this).find('form')[0].reset();
+                    }
+                },
+                open: function () {
+                    updateProperties(this);
+                }
+		    });
+	        
         },
         
         previewLink: function (newKey) {
@@ -493,9 +536,10 @@
         },
          
         open: function (key) {
-            if(this.loadingLayout || !this.closeLayout()) 
+            if(this.loadingLayout || !this.closeLayout()) {
                 return false;
-            
+            }
+            var self = this;
             lg('open layout: ' + key); 
             this.loadingLayout = true;
             
@@ -505,6 +549,7 @@
 
                 config = result.config;
                 parent.Layout.setPageTitle(config.layout_name);
+                self.buildGrid();
                 config.status = ST_SAVED;
                 parent.Container.currentSection = parent.Container.ui;
                 parent.Container.currentSectionId = 1;
@@ -517,10 +562,10 @@
                 $('#my-layouts').dialog('close');
                 parent.Container.setEditMode('select');
                 $(window).scrollTop(0);
+                
+                self.resizeSections();
+                parent.Container.setMeasures();
             });
-            
-            this.buildGrid();
-            parent.Container.setMeasures();
         },
         
         closeLayout: function (confirm) {
@@ -550,10 +595,38 @@
                 })
                 ui.append(clm);
             }
-                
+            var layout_width = (config.column_count * config.totalColWidth) - config.gutter_width;
+            config.layout_width = layout_width;
+            $('#containerPlaceholder').width(layout_width);
+            lg(layout_width);
             ui.find('div:last').css('marginRight', 0);
         },
-         
+//        resizeSections : function (larg, gutter) {
+        resizeSections : function () {
+//            if(!larg) {
+//                larg = 30;
+//            }
+//            if(!gutter) {
+//                gutter = 10;
+//            }
+            larg = config.column_width;
+            gutter = config.gutter_width;
+            // $('div.container').css('minWidth', '950px');
+            
+            $('div[class^=span-]').each(function () {
+                var n = parseInt(this.className.match(/span-(\d+)/)[1], 10);
+                var novo = (n * (larg + gutter)), new_gutter = gutter;
+                if(n > 1)
+                  novo -= gutter;
+                  
+                if($(this).hasClass('last'))
+                    new_gutter = 0;
+                    
+                $(this).css({width: novo + 'px', marginRight: new_gutter + 'px'});
+            });
+            
+            $('.section').resizable('option', 'grid', [larg + gutter])
+        },  
         saveLayout: function () {
             var layout = {
                 'config': config,

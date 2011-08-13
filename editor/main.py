@@ -38,7 +38,7 @@ class ListLayouts(BaseRequestHandler):
             name = 'Untitled'
             if l.name:
                 name = l.name
-            result.append({'key': str(l.key()), 'name': str(name)})
+            result.append({'key': str(l.key()), 'name': unicode(name)})
             
         self.write(simplejson.dumps(result))
 
@@ -74,10 +74,10 @@ class OpenLayout(BaseRequestHandler):
             config = {
                 'key': str(layout.key()), 
                 'layout_name' : layout.name, 
-                'column_count': 24,
-                'column_width': 30,
-                'gutter_width': 10,
-                'totalColWidth': 40 
+                'column_count': layout.column_count,
+                'column_width': layout.column_width,
+                'gutter_width': layout.gutter_width,
+                'totalColWidth': layout.column_width + layout.gutter_width
             }
             
             result = {
@@ -122,6 +122,10 @@ class SaveLayout(BaseRequestHandler):
         try:
             if config['key'] != '':
                 l = Layout.get(config['key'])
+                l.name = config['layout_name']
+                l.column_count = config['column_count']
+                l.column_width = config['column_width']
+                l.gutter_width = config['gutter_width']
             else:
                 l = Layout(owner = current_user.user_id(),
                     name = config['layout_name'], 

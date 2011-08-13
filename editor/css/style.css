@@ -135,6 +135,11 @@ div#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px;}
 div#my-layouts table { border-collapse:collapse; margin-top: 10px; } 
 div#my-layouts table, div#my-layouts th, div#my-layouts td
 { border: 1px solid #BBB; }
+   
+#layoutProperties { margin: 10px;}
+#layoutProperties label { float: left; width: 30%  /* 85px */;} 
+#layoutProperties input, #layoutProperties select { width: 150px;} 
+
 
 /* debug/dev actions */
 .section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 

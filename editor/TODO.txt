@@ -1,5 +1,6 @@
 todo
 
+- personalização da grid durante edição, gerar grid.css
 - permitir edição do nome do layout salvo
 - melhorar interface da arvore de sections no editor
 - atualizar jquery e jquery ui
