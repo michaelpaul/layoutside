@@ -142,7 +142,7 @@
         getSectionWidth: function (elm) {
             return parseInt(elm[0].className.split(' ')[0].split('-')[1], 10);
         },
- 
+ 		
         addLast: function (context) { 
             var hasContext = typeof context !== 'undefined', 
                 sections = $('> .section:not(.ui-sortable-helper)',  hasContext ? context : this.ui), 
@@ -153,7 +153,8 @@
 
             sections.filter('.last').removeClass('last');
             sections.filter('.clear').removeClass('clear');
-            
+            sections.css('marginRight', config.gutter_width);
+
             for(i = 0, f = sections.length; i < f; i = i + 1) {
                 var curSection = $(sections[i]), 
                     prevColumnCount = this.getSectionWidth(curSection),
@@ -168,9 +169,11 @@
                     sum = prevColumnCount;
                 } else if(sum == columnCount) {
                     curSection.toggleClass('last');
-                  
-                    if(nextSection.length)
+					curSection.css('marginRight', 0);
+
+                    if(nextSection.length) {
                         nextSection.toggleClass('clear');
+					}
                     sum = 0;
                 } 
                 
@@ -294,9 +297,10 @@
                 if(!$('#' + edit_section.child_of).length) 
                     throw new Error('Failed to add child section');
                 $('#' + edit_section.child_of).append(section);
-            } else 
+            } else {
                 this.currentSection.append(section);
-            
+            }
+
             var sectionParent = section.parent();
             // definir largura maxima da section quando filha
             if(sectionParent[0] != self.ui[0]) {
@@ -307,7 +311,8 @@
             // if(!edit_section)
                // config.status |= ST_MODIFIED;
                 
-            this.addLast();  
+            this.addLast();
+			parent.Menubar.resizeSections();  
         }
     };
     
@@ -502,7 +507,7 @@
 	        }
 	        self.layoutPropDialog = $('#layout-prop');
             self.layoutPropDialog.dialog({
-                resizable: false, autoOpen: false, width: 300, height: 180, 
+                resizable: false, autoOpen: false, width: 280, height: 200, 
                 buttons: {
                     'Update': function () {
                         var $frm = $(this).find('form');
@@ -511,6 +516,8 @@
                         config.column_width = parseInt($('input[name=column_width]', $frm).val());
                         config.gutter_width = parseInt($('input[name=gutter_width]', $frm).val());
                         config.totalColWidth = config.column_width + config.gutter_width;
+						var lw = (config.column_count * (config.column_width + config.gutter_width)) - config.gutter_width;
+						$('#layout_width').html(lw + 'px');
                         
                         self.buildGrid();
                         self.resizeSections();
@@ -525,6 +532,8 @@
                 },
                 open: function () {
                     updateProperties(this);
+					var lw = (config.column_count * (config.column_width + config.gutter_width)) - config.gutter_width;
+					$('#layout_width').html(lw + 'px');
                 }
 		    });
 	        
@@ -616,16 +625,19 @@
             $('div[class^=span-]').each(function () {
                 var n = parseInt(this.className.match(/span-(\d+)/)[1], 10);
                 var novo = (n * (larg + gutter)), new_gutter = gutter;
-                if(n > 1)
-                  novo -= gutter;
-                  
-                if($(this).hasClass('last'))
+                if(n > 1) {
+                	novo -= gutter;
+                }
+                if($(this).hasClass('last')) {
                     new_gutter = 0;
-                    
+                }
                 $(this).css({width: novo + 'px', marginRight: new_gutter + 'px'});
             });
-            
-            $('.section').resizable('option', 'grid', [larg + gutter])
+            // @TODO revisar quando atualizar opt maxWidth e qual valor.
+			var layout_width = (config.column_count * (larg + gutter)) - gutter;
+            $('.section')
+				.resizable('option', 'grid', [larg + gutter])
+            	.resizable("option", "maxWidth", layout_width);
         },  
         saveLayout: function () {
             var layout = {
