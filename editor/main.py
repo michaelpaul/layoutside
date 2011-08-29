@@ -260,6 +260,29 @@ class LayoutBuilder(object):
             'html': self.output
         })
 
+class BuildGrid(BaseRequestHandler):
+	def get(self):
+		data = {
+			'page_width': 950,
+			'column_count': 24,
+			'column_width': 30,
+			'gutter_width': 10
+		}
+
+		span_list = ", ".join(map(lambda x: '.span-%d' % x, range(1, data['column_count'] + 1)))
+		data['span_list'] = span_list
+		span_range = []
+		for column in range(2, data['column_count']):
+			span_range.append({
+				'number': column,
+				'width' : (data['column_width'] + ((column - 1) * (data['column_width'] + data['gutter_width'])))
+			})
+
+		data['span_range'] = span_range
+
+		self.response.headers['Content-Type'] = 'text/css'
+		self.render('grid.css', data)
+
 def main():
     global current_user
     logging.getLogger().setLevel(logging.DEBUG)
@@ -280,7 +303,8 @@ def main():
         (bp + 'open-layout', OpenLayout),
         (bp + 'delete-layout', DeleteLayout),        
         (bp + 'render-layout', RenderLayout),
-        (bp + 'download-layout', DownloadLayout)
+        (bp + 'download-layout', DownloadLayout),
+        (bp + 'build-grid', BuildGrid)
     ]
 
     layoutside = webapp.WSGIApplication(rotas, debug=True) 
