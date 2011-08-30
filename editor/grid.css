@@ -17,7 +17,7 @@
   margin: 0 auto;
 }
 
-/* Use this class on any .span-# / .container to see the grid. */
+/* Use this class on any .span / container to see the grid. */
 .showgrid {
   background: url(src/grid.png);
 }
@@ -42,35 +42,35 @@
 .span-{{ column_count }} {width:{{ page_width }}px; margin-right:0;}
 
 /* Use these classes to set the width of an input. */
-<%= (1..column_count).map {|column| "input.span-#{column}, textarea.span-#{column}"}.join(", ") %> {
-  border-left-width: <%= input_border %>px;
-  border-right-width: <%= input_border %>px;
-  padding-left: <%= input_padding %>px;
-  padding-right: <%= input_padding %>px;
+{{ input_list }} {
+  border-left-width: {{ input_border }}px;
+  border-right-width: {{ input_border }}px;
+  padding-left: {{ input_padding }}px;
+  padding-right: {{ input_padding }}px;
 }
-<% (1..column_count).each do |column| %>
-input.span-<%= column %>, textarea.span-<%= column %> { width: <%= ((column_width + gutter_width) * (column - 1) + column_width - 2*(input_padding + input_border))%>px; }<% end %>
+{% for column in input_range %}
+input.span-{{ forloop.counter }}, textarea.span-{{ forloop.counter }} { width: {{ column }}px; }{% endfor %}
 
 /* Add these to a column to append empty cols. */
-<% (1..(column_count-1)).each do |column| %>
-.append-<%= column %> { padding-right: <%= (column * (column_width + gutter_width)).to_i %>px;}<% end %>
+{% for padding_right in append_prepend %}
+.append-{{ forloop.counter }} { padding-right: {{ padding_right }}px;}{% endfor %}
 
 /* Add these to a column to prepend empty cols. */
-<% (1..(column_count-1)).each do |column| %>
-.prepend-<%= column %> { padding-left: <%= (column * (column_width + gutter_width)).to_i %>px;}<% end %>
+{% for padding_left in append_prepend %}
+.prepend-{{ forloop.counter }} { padding-left: {{ padding_left }}px;}{% endfor %}
 
 
 /* Border on right hand side of a column. */
 .border {
-  padding-right: <%= (gutter_width * 0.5 - 1).to_i %>px;
-  margin-right: <%= (gutter_width * 0.5).to_i %>px;
+  padding-right: {{ border_padding }}px;
+  margin-right: {{ border_margin }}px;
   border-right: 1px solid #ddd;
 }
 
 /* Border with more whitespace, spans one column. */
 .colborder {
-  padding-right: <%= (column_width + 2*gutter_width - 1)/2.to_i %>px;
-  margin-right: <%= (column_width + 2 * gutter_width)/2.to_i %>px;
+  padding-right: {{ colborder_padding }}px;
+  margin-right: {{ colborder_margin }}px;
   border-right: 1px solid #ddd;
 }
 
@@ -78,15 +78,15 @@ input.span-<%= column %>, textarea.span-<%= column %> { width: <%= ((column_widt
 /* Use these classes on an element to push it into the
 next column, or to pull it into the previous column.  */
 
-<% (1..column_count).each do |column| %>
-.pull-<%= column %> { margin-left: -<%= (column * (column_width + gutter_width)).to_i %>px; }<% end %>
+{% for pull_margin in pull_push_range %}
+.pull-{{ forloop.counter }} { margin-left: -{{ pull_margin }}px; }{% endfor %}
 
-<%= (1..column_count).map {|c| ".pull-#{c}" }.join(", ") %> {float: left; position:relative;}
+{{ pull_list }} {float: left; position:relative;}
 
-<% (1..(column_count)).each do |column| %>
-.push-<%= column %> { margin: 0 -<%= (column * (column_width + gutter_width)).to_i %>px 1.5em <%= (column * (column_width + gutter_width)).to_i %>px; }<% end %>
+{% for push_margin in pull_push_range %}
+.push-{{ forloop.counter }} { margin: 0 -{{ push_margin }}px 1.5em {{ push_margin }}px; }{% endfor %}
 
-<%= (1..column_count).map {|c| ".push-#{c}" }.join(", ") %> {float: left; position:relative;}
+{{ push_list }} {float: left; position:relative;}
 
 
 /* Misc classes and elements

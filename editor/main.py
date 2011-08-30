@@ -262,26 +262,73 @@ class LayoutBuilder(object):
 
 class BuildGrid(BaseRequestHandler):
 	def get(self):
+		output = ''
+		
+		try:
+			key = self.request.get('key')
+			layout = Layout.get(key)
+			builder = BuildGridCss()
+			output = builder.build(layout)
+		except Exception:
+			pass
+		
+		self.response.headers['Content-Type'] = 'text/css'
+		self.write(output)
+
+class BuildGridCss(BaseRequestHandler):
+	def build(self, layout):
+		column_count = 24
+		columns = range(1, column_count + 1)
+		selector_list = lambda format: ", ".join(map(lambda x: format % x, columns))
+
 		data = {
 			'page_width': 950,
-			'column_count': 24,
+			'column_count': column_count,
 			'column_width': 30,
-			'gutter_width': 10
+			'gutter_width': 10,
+			'input_padding': 5,
+			'input_border': 1,
+			'span_list': selector_list('.span-%d'),
+			'pull_list': selector_list(".pull-%d"),
+			'push_list': selector_list(".push-%d"),
+			'input_list': ", ".join(map(
+				lambda x: "input.span-%d, textarea.span-%d" % (x, x), columns))
 		}
 
-		span_list = ", ".join(map(lambda x: '.span-%d' % x, range(1, data['column_count'] + 1)))
-		data['span_list'] = span_list
-		span_range = []
+		span_range = [] 
+		
 		for column in range(2, data['column_count']):
 			span_range.append({
 				'number': column,
-				'width' : (data['column_width'] + ((column - 1) * (data['column_width'] + data['gutter_width'])))
+				'width' : int(data['column_width'] + ((column - 1) * 
+							(data['column_width'] + data['gutter_width'])))
 			})
+		
+		input_range = map(lambda column: int(
+			(data['column_width'] + data['gutter_width']) * (column - 1) + 
+			data['column_width'] - 2 * (data['input_padding'] + data['input_border'])
+		), columns)
+		
+		pull_push_range = map(lambda column: 
+			int(column * (data['column_width'] + data['gutter_width']))
+		, columns)
 
-		data['span_range'] = span_range
+		append_prepend = map(lambda column: (
+			int(column * (data['column_width'] + data['gutter_width']))
+		), columns[:-1])
 
-		self.response.headers['Content-Type'] = 'text/css'
-		self.render('grid.css', data)
+		data.update({ 
+			'span_range' : span_range,
+			'input_range' : input_range,
+			'append_prepend': append_prepend,
+			'pull_push_range': pull_push_range,
+			'border_padding' : int(data['gutter_width'] * 0.5 - 1),
+			'border_margin' : int(data['gutter_width'] * 0.5),
+			'colborder_padding': int((data['column_width'] + 2 * data['gutter_width'] - 1) / 2), 
+			'colborder_margin': int((data['column_width'] + 2 * data['gutter_width']) / 2)
+		})
+		
+		return template.render('grid.css', data)
 
 def main():
     global current_user
@@ -304,7 +351,7 @@ def main():
         (bp + 'delete-layout', DeleteLayout),        
         (bp + 'render-layout', RenderLayout),
         (bp + 'download-layout', DownloadLayout),
-        (bp + 'build-grid', BuildGrid)
+        (bp + 'custom-layout/grid.css', BuildGrid)
     ]
 
     layoutside = webapp.WSGIApplication(rotas, debug=True) 
