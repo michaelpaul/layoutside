@@ -242,6 +242,9 @@ class LayoutBuilder(object):
                     if(s.css_class.find('clear') > -1):
                         self.output += '<div class="clear"></div>'
 
+                    if (s.body == '&nbsp;' and child_of is None):
+                        s.body = ''
+                    
                     self.output += '\n\t<div id="%s" class="%s">%s' % (
                         s.html_id, 
                         re.sub(r' +', ' ', classe), 

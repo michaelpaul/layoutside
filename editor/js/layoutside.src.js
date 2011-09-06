@@ -203,6 +203,7 @@
                 id = edit_section.html_id;
                 content = edit_section.body;
                 sec_width = edit_section.width;
+                this.currentSectionId += 1;
             } 
             
             section = $('<div id="' + id + '" class="span-' + 
@@ -750,8 +751,11 @@
                 
                 buttons: {
                     'Update': function () {
-                        if(target == null)
+                        if(target == null) {
+                            alert('Select a section');
                             return false;
+                        }
+                            
                         var c = self.editor.val(); // getCode
                         target.find('> .section-content').html(c);        
                     },
@@ -800,7 +804,7 @@
                     }
                     
                     buildSectionTree(parent.Container.ui, null);
-                    target = $($('#sectionview li a:first').data('sectionRef'));
+                    // target = $($('#sectionview li a:first').data('sectionRef'));
                     self.editor.html(target.find('.section-content').html()); // setCode           
                 }
             }); 
