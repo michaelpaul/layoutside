@@ -1,6 +1,6 @@
 # coding=UTF-8
 
-import logging, os, sys, cgi, datetime, re
+import logging, os, sys, cgi, datetime, time, re
 import zipfile
 import StringIO
 
@@ -256,8 +256,9 @@ class LayoutBuilder(object):
         
         addSection(sections, None);
         self.output += '\n</div>'
-        
+        qs = 'key=%s&t=%s' % (key, int(time.time()))
         return template.render('render.html', {
+            'qs': qs, 
             'title': layout.name, 
             'css_basepath' : css_base,
             'html': self.output
@@ -280,15 +281,24 @@ class BuildGrid(BaseRequestHandler):
 
 class BuildGridCss(BaseRequestHandler):
 	def build(self, layout):
-		column_count = 24
+		column_count = layout.column_count
 		columns = range(1, column_count + 1)
 		selector_list = lambda format: ", ".join(map(lambda x: format % x, columns))
-
+		
+		"""
+		Config default;
+		'column_count': 24,
+		'column_width': 30,
+		'gutter_width': 10,
+		'input_padding': 5,
+		'input_border': 1,
+		"""
+		lw = (layout.column_count * (layout.column_width + layout.gutter_width)) - layout.gutter_width;
 		data = {
-			'page_width': 950,
+			'page_width': lw,
 			'column_count': column_count,
-			'column_width': 30,
-			'gutter_width': 10,
+			'column_width': layout.column_width,
+			'gutter_width': layout.gutter_width,
 			'input_padding': 5,
 			'input_border': 1,
 			'span_list': selector_list('.span-%d'),
@@ -297,9 +307,7 @@ class BuildGridCss(BaseRequestHandler):
 			'input_list': ", ".join(map(
 				lambda x: "input.span-%d, textarea.span-%d" % (x, x), columns))
 		}
-
 		span_range = [] 
-		
 		for column in range(2, data['column_count']):
 			span_range.append({
 				'number': column,

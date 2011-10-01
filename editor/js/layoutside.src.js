@@ -46,7 +46,7 @@
             document.title = title  + ' - Layoutside';
         }
     };
-
+    
     Layoutside.prototype.Container = {
         editMode: '', 
         ui: $('#container'),
@@ -142,7 +142,12 @@
         getSectionWidth: function (elm) {
             return parseInt(elm[0].className.split(' ')[0].split('-')[1], 10);
         },
- 		
+        
+        getLayoutWidth: function () {
+            var lw = (config.column_count * (config.column_width + config.gutter_width)) - config.gutter_width;
+            return parseInt(lw, 10);
+        },
+        
         addLast: function (context) { 
             var hasContext = typeof context !== 'undefined', 
                 sections = $('> .section:not(.ui-sortable-helper)',  hasContext ? context : this.ui), 
@@ -247,7 +252,7 @@
             
             section.resizable({
                // minHeight: 24,
-                maxWidth: 950, 
+                maxWidth: parent.Container.getLayoutWidth(), 
                 autoHide: true,
                 zIndex: 100, 
                 grid: [config.totalColWidth],
@@ -517,8 +522,7 @@
                         config.column_width = parseInt($('input[name=column_width]', $frm).val());
                         config.gutter_width = parseInt($('input[name=gutter_width]', $frm).val());
                         config.totalColWidth = config.column_width + config.gutter_width;
-						var lw = (config.column_count * (config.column_width + config.gutter_width)) - config.gutter_width;
-						$('#layout_width').html(lw + 'px');
+						$('#layout_width').html(parent.Container.getLayoutWidth() + 'px');
                         
                         self.buildGrid();
                         self.resizeSections();
@@ -533,8 +537,7 @@
                 },
                 open: function () {
                     updateProperties(this);
-					var lw = (config.column_count * (config.column_width + config.gutter_width)) - config.gutter_width;
-					$('#layout_width').html(lw + 'px');
+					$('#layout_width').html(parent.Container.getLayoutWidth() + 'px');
                 }
 		    });
 	        
