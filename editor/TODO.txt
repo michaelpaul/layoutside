@@ -1,20 +1,24 @@
+lancamento (concluir items para o lançamento)
+
+- criar site (home, sobre, ajuda, contato, etc.)
+- melhorar interface da arvore de sections no editor
+- nomes/identificação de sections no editor de conteudo
+- tooltips nas ferramentas
+- usar novo editor de código (http://ace.ajax.org/)
+
 todo
 
-- personalização da grid durante edição, gerar grid.css
-- melhorar interface da arvore de sections no editor
 - z-index das sections e dialogs/menus do app
-- nomes/identificação de subsections no editor de conteudo
-- tooltips nas ferramentas
-- marcar/verificar section em edição atualmente no editor de código
 - remover dialogs não utilizados 
 - atualizar jquery e jquery ui
 - atalhos (ex. https://github.com/madrobby/keymaster)
 * permitir edição do nome do layout salvo
+* personalização da grid durante edição, gerar grid.css
 
 bugs 
 
 - ajustar posição das sections ao iniciar drag do sortable
-* ação de update do editor 
+* marcar/verificar section em edição atualmente no editor de código
 * layout ainda quebra durante sort
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
 * add clear/last durante o sort e para subsections com diferentes tamanhos 
