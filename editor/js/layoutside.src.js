@@ -476,7 +476,7 @@
                         $(result).each(function (k, v) { 
                             $list.append('<tr><td>' + v.name + '</td><td style="text-align: right; width: 125px;">' + 
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' + 
-                            '<a target="_blank" href="/editor/render-layout?key=' + v.key + '">preview</a> ' + 
+                            '<a target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' + 
                             '<a class="delete" href="#' + v.key + '">delete</a>' + 
                             '</td></tr>');                        
                         });

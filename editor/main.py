@@ -104,12 +104,12 @@ class OpenLayout(BaseRequestHandler):
             result_str = simplejson.dumps(result)
             self.write(result_str)
 
-class RenderLayout(BaseRequestHandler):
+class PreviewLayout(BaseRequestHandler):
     output = ''  
 
     def get(self):
         builder = LayoutBuilder()
-        tpl = builder.build(self.request.get('key'), '/editor/')
+        tpl = builder.build(self.request.get('key'), '/editor/', 'preview')
         self.write(tpl)
 
 class SaveLayout(BaseRequestHandler):
@@ -166,7 +166,8 @@ class DownloadLayout(BaseRequestHandler):
         # http://localhost:8080/editor/download-layout
         builder = LayoutBuilder()
         key = self.request.get('key')
-        tpl = builder.build(key)
+        layout = Layout.get(key)
+        tpl = builder.build(key, '', False)
 
         if tpl == False:
             logging.error('Falha ao construir layout para download: ' + key)
@@ -175,17 +176,31 @@ class DownloadLayout(BaseRequestHandler):
         mimetype = 'text/html'
         downloadname = 'layout.html'
         output = tpl
+        gridcss = False
 
+        try:
+            builder = BuildGridCss()
+            gridcss = builder.build(layout)
+        except Exception:
+            pass
+
+        # grid.css
         if not self.request.get('html-only'):
             zipstream = StringIO.StringIO()
             pacote = zipfile.ZipFile(zipstream, "w")
-
             esqueleto = '../blueprint-skel'
+            screencss_path = None
             for dirpath, dirnames, filenames in os.walk(esqueleto):
                 for name in filenames:
-	                filename = os.path.join(dirpath, name)
-	                pacote.write(filename, filename.replace(esqueleto, ''))
-
+                    filename = os.path.join(dirpath, name)
+                    if (name == "screen.css"):
+                        screencss_path = filename
+                        continue
+                    pacote.write(filename, filename.replace(esqueleto, ''))
+            
+            screencss = open(screencss_path)
+            pacote.writestr('/css/blueprint/screen.css', screencss.read() + gridcss)
+                
             info = zipfile.ZipInfo('index.html')
             info.date_time =  datetime.datetime.now().timetuple()
             info.external_attr = 0644 << 16L 
@@ -207,7 +222,7 @@ class DownloadLayout(BaseRequestHandler):
 class LayoutBuilder(object):
     output = ''
 
-    def build(self, key, css_base = ''):
+    def build(self, key, css_base = '', preview = True):
         layout = Layout.get(key)
                 
         if(layout is None):
@@ -258,6 +273,7 @@ class LayoutBuilder(object):
         self.output += '\n</div>'
         qs = 'key=%s&t=%s' % (key, int(time.time()))
         return template.render('render.html', {
+            'preview': preview,
             'qs': qs, 
             'title': layout.name, 
             'css_basepath' : css_base,
@@ -360,7 +376,7 @@ def main():
         (bp + 'save-layout', SaveLayout),
         (bp + 'open-layout', OpenLayout),
         (bp + 'delete-layout', DeleteLayout),        
-        (bp + 'render-layout', RenderLayout),
+        (bp + 'preview-layout', PreviewLayout),
         (bp + 'download-layout', DownloadLayout),
         (bp + 'custom-layout/grid.css', BuildGrid)
     ]
