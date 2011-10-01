@@ -8,7 +8,11 @@
         gutter_width: 10,
         totalColWidth: 40 // column_width + gutter_width
     };   
-    
+    var default_config = {
+        column_count: 24,
+        column_width: 30,
+        gutter_width: 10
+    };
     // layout status..
     var ST_NEW = 1,
         ST_SAVED = 2,
@@ -504,12 +508,13 @@
 	        });
 	        
 	        // init ainda.. :S
-	        function updateProperties(dialog) {
+	        function updateProperties(dialog, default_config) {
 	            var $frm = $(dialog).find('form');
+                var cfg = default_config || config;
                 $('input[name=layout_name]', $frm).val(config.layout_name);
-                $('input[name=column_count]', $frm).val(config.column_count);
-                $('input[name=column_width]', $frm).val(config.column_width);
-                $('input[name=gutter_width]', $frm).val(config.gutter_width);
+                $('input[name=column_count]', $frm).val(cfg.column_count);
+                $('input[name=column_width]', $frm).val(cfg.column_width);
+                $('input[name=gutter_width]', $frm).val(cfg.gutter_width);
 	        }
 	        self.layoutPropDialog = $('#layout-prop');
             self.layoutPropDialog.dialog({
@@ -528,7 +533,7 @@
                         self.resizeSections();
                     } ,
                     'Reset': function () {
-                        updateProperties(this);
+                        updateProperties(this, default_config);
                     } ,
                     'Cancel': function () {
                         self.layoutPropDialog.dialog('close');
