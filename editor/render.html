@@ -4,13 +4,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>{{ title }}</title>
     {% if preview %}
-    <link rel="stylesheet" href="{{ css_basepath }}css/base-screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="{{ css_basepath }}custom-layout/grid.css?{{ qs }}" type="text/css" media="screen, projection">    
+    <link rel="stylesheet" href="{{ css_baseurl }}css/base-screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ css_baseurl }}custom-layout/grid.css?{{ qs }}" type="text/css" media="screen, projection">    
     {% else %}
-    <link rel="stylesheet" href="{{ css_basepath }}css/blueprint/screen.css" type="text/css" media="screen, projection">
-    {% endif %}<link rel="stylesheet" href="{{ css_basepath }}css/blueprint/print.css" type="text/css" media="print">
+    <link rel="stylesheet" href="{{ css_baseurl }}css/blueprint/screen.css" type="text/css" media="screen, projection">
+    {% endif %}<link rel="stylesheet" href="{{ css_baseurl }}css/blueprint/print.css" type="text/css" media="print">
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="{{ css_basepath }}css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{{ css_baseurl }}css/blueprint/ie.css" type="text/css" media="screen, projection">
     <![endif]-->
     <style type="text/css">
     img, iframe, object, embed { max-width: 100%; } 

@@ -108,8 +108,9 @@ class PreviewLayout(BaseRequestHandler):
     output = ''  
 
     def get(self):
-        builder = LayoutBuilder()
-        tpl = builder.build(self.request.get('key'), '/editor/', 'preview')
+        layout = Layout.get(self.request.get('key'))
+        builder = HtmlBuilder()
+        tpl = builder.build(layout, '/editor/', 'preview')
         self.write(tpl)
 
 class SaveLayout(BaseRequestHandler):
@@ -164,35 +165,37 @@ class SaveLayout(BaseRequestHandler):
 class DownloadLayout(BaseRequestHandler):
     def get(self):
         # http://localhost:8080/editor/download-layout
-        builder = LayoutBuilder()
         key = self.request.get('key')
         layout = Layout.get(key)
-        tpl = builder.build(key, '', False)
-
-        if tpl == False:
-            logging.error('Falha ao construir layout para download: ' + key)
-            return 
         
-        mimetype = 'text/html'
-        downloadname = 'layout.html'
-        output = tpl
-        gridcss = False
+        try:
+            html = HtmlBuilder()
+            html_output = html.build(layout, '', False) 
+        except Exception:
+            logging.error('Falha ao construir HTML para download: ' + key)
+            return False
 
         try:
-            builder = BuildGridCss()
-            gridcss = builder.build(layout)
+            css = CssBuilder()
+            gridcss = css.build(layout)
         except Exception:
-            pass
+            logging.error('Falha ao construir CSS para download: ' + key)
+            return False
 
-        # grid.css
+        mimetype = 'text/html'
+        download_filename = 'layout.html'
+        output = html_output
+        
         if not self.request.get('html-only'):
             zipstream = StringIO.StringIO()
             pacote = zipfile.ZipFile(zipstream, "w")
             esqueleto = '../blueprint-skel'
             screencss_path = None
+            
             for dirpath, dirnames, filenames in os.walk(esqueleto):
                 for name in filenames:
                     filename = os.path.join(dirpath, name)
+                    # não incluir screen.css agora
                     if (name == "screen.css"):
                         screencss_path = filename
                         continue
@@ -204,7 +207,7 @@ class DownloadLayout(BaseRequestHandler):
             info = zipfile.ZipInfo('index.html')
             info.date_time =  datetime.datetime.now().timetuple()
             info.external_attr = 0644 << 16L 
-            pacote.writestr(info, tpl)
+            pacote.writestr(info, html_output)
 
             pacote.close()
             zipstream.seek(0)
@@ -212,24 +215,36 @@ class DownloadLayout(BaseRequestHandler):
             zipstream.close()
 
             mimetype = 'application/zip'
-            downloadname = 'layout.zip'
+            download_filename = 'layout.zip'
             output = zipcontents
 
         self.response.headers['Content-Type'] = mimetype
-        self.response.headers['Content-Disposition'] = 'attachment; filename="' + downloadname + '"'	
+        self.response.headers['Content-Disposition'] = 'attachment; filename="' + download_filename + '"'	
         self.write(output)
 
-class LayoutBuilder(object):
+class BuildGrid(BaseRequestHandler):
+	def get(self):
+		output = ''
+		
+		try:
+			key = self.request.get('key')
+			layout = Layout.get(key)
+			css = CssBuilder()
+			output = css.build(layout)
+		except Exception:
+			pass
+		
+		self.response.headers['Content-Type'] = 'text/css'
+		self.write(output)
+		
+
+class HtmlBuilder(object):
     output = ''
 
-    def build(self, key, css_base = '', preview = True):
-        layout = Layout.get(key)
-                
-        if(layout is None):
-            return False
-
+    def build(self, layout, css_baseurl = '', preview = True):
+        key = str(layout.key())
         config = {
-            'key': str(layout.key()), 
+            'key': key, 
             'layout_name' : layout.name, 
             'column_count': 24,
             'column_width': 30,
@@ -276,26 +291,11 @@ class LayoutBuilder(object):
             'preview': preview,
             'qs': qs, 
             'title': layout.name, 
-            'css_basepath' : css_base,
+            'css_baseurl' : css_baseurl,
             'html': self.output
         })
 
-class BuildGrid(BaseRequestHandler):
-	def get(self):
-		output = ''
-		
-		try:
-			key = self.request.get('key')
-			layout = Layout.get(key)
-			builder = BuildGridCss()
-			output = builder.build(layout)
-		except Exception:
-			pass
-		
-		self.response.headers['Content-Type'] = 'text/css'
-		self.write(output)
-
-class BuildGridCss(BaseRequestHandler):
+class CssBuilder(object):
 	def build(self, layout):
 		column_count = layout.column_count
 		columns = range(1, column_count + 1)
@@ -375,7 +375,7 @@ def main():
         (bp + 'layouts', ListLayouts),
         (bp + 'save-layout', SaveLayout),
         (bp + 'open-layout', OpenLayout),
-        (bp + 'delete-layout', DeleteLayout),        
+        (bp + 'delete-layout', DeleteLayout),
         (bp + 'preview-layout', PreviewLayout),
         (bp + 'download-layout', DownloadLayout),
         (bp + 'custom-layout/grid.css', BuildGrid)
