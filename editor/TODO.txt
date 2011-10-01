@@ -1,19 +1,20 @@
 todo
 
 - personalização da grid durante edição, gerar grid.css
-- permitir edição do nome do layout salvo
 - melhorar interface da arvore de sections no editor
-- atualizar jquery e jquery ui
 - z-index das sections e dialogs/menus do app
 - nomes/identificação de subsections no editor de conteudo
 - tooltips nas ferramentas
 - marcar/verificar section em edição atualmente no editor de código
 - remover dialogs não utilizados 
+- atualizar jquery e jquery ui
+- atalhos (ex. https://github.com/madrobby/keymaster)
+* permitir edição do nome do layout salvo
 
 bugs 
 
-- ação de update do editor 
 - ajustar posição das sections ao iniciar drag do sortable
+* ação de update do editor 
 * layout ainda quebra durante sort
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
 * add clear/last durante o sort e para subsections com diferentes tamanhos 
