@@ -1,10 +1,11 @@
-lancamento (concluir items para o lançamento)
+lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- criar site (home, sobre, ajuda, contato, etc.)
-- melhorar interface da arvore de sections no editor
+- icones para remover e editar as propriedades da section
 - nomes/identificação de sections no editor de conteudo
-- tooltips nas ferramentas
+- melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
 - usar novo editor de código (http://ace.ajax.org/)
+- tooltips nas ferramentas
+- criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 
 todo
 
