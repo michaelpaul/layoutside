@@ -805,6 +805,10 @@
                             
                             if($section.find('> .section').length) {
                                 var sublist = document.createElement('ul');
+                                $item.children('a').addClass('tree-childs').click(function () {
+                                    // alert('show childs');                                
+                                    $(this).toggleClass('tree-open').next().toggle();
+                                });
                                 $item.append(sublist);
                                 buildSectionTree($section, sublist);
                             }
@@ -813,7 +817,7 @@
                     
                     buildSectionTree(parent.Container.ui, null);
                     // target = $($('#sectionview li a:first').data('sectionRef'));
-                    self.editor.html(target.find('.section-content').html()); // setCode           
+                    // self.editor.html(target.find('.section-content').html()); // setCode           
                 }
             }); 
         }
