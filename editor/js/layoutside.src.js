@@ -235,10 +235,13 @@
         },
         
         addSection: function (edit_section) {
-            var section, id = 'section-' + this.currentSectionId, 
-                content = '', sec_width = 3;
-
-            this.currentSectionId += 1;
+            var section, content = '', sec_width = 3;
+                
+            do {
+                this.currentSectionId += 1;
+            } while(!this.checkId('section-' + this.currentSectionId))
+            
+            id = 'section-' + this.currentSectionId
             
             if(typeof edit_section !== 'undefined') {
                 id = edit_section.html_id;
