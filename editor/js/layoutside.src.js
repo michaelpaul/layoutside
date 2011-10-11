@@ -58,18 +58,45 @@
         currentSection: null,
         isResizingSection: false, 
         sections: [],
+        sectionDialog: null,
         
         init: function () {
             var self = this;
             this.setEditMode('select');
             this.currentSection = this.ui;
-
+            this.sectionDialog = $(".sectionDialog");
+            
+            this.sectionDialog.dialog({
+                resizable: false, autoOpen: false, width: 240 /* 260 */, height: 100, modal: true,
+                open: function () {
+                    var id = self.sectionDialog.data('section').id;
+                    $('#section-id', self.sectionDialog).val(id);
+                }, 
+                buttons: {
+                    'Update': function () {  
+                        var $input = $('#section-id', self.sectionDialog),
+                            id = $input.val();
+                        if ($.trim(id) != '' && self.checkId(id)) {
+                            var $section = self.sectionDialog.data('section'); 
+                            $section.id = id;
+                            self.sectionDialog.dialog('close');
+                            $input.val('');
+                        } else {
+                            alert('Invalid ID');
+                        }
+                    },
+                    'Close': function () { self.sectionDialog.dialog('close'); },
+                }
+            });
+            
             this.ui.add(this.grid).click(function (e) {
                 self.setCurrentSection(self.ui); 
                 self.setMeasures();
             });
         }, 
-        
+        checkId: function (id) {
+            return document.getElementById(id) == null;
+        },
         sortableOptions: {
             items: '> div[class^=span]',
             scroll: false, 
@@ -202,6 +229,11 @@
         
         currentSectionId: 1,
         
+        showSectionDialog: function (section) {
+            this.sectionDialog.data('section', section);
+            this.sectionDialog.dialog('open');
+        },
+        
         addSection: function (edit_section) {
             var section, id = 'section-' + this.currentSectionId, 
                 content = '', sec_width = 3;
@@ -238,6 +270,7 @@
                     }, 500);
                 } else { // handle dblclick
                     // sectionDialog.dialog('open');
+                    self.showSectionDialog(this);
                     nclicks = 0;
                 }
             }); 
@@ -518,7 +551,7 @@
 	        }
 	        self.layoutPropDialog = $('#layout-prop');
             self.layoutPropDialog.dialog({
-                resizable: false, autoOpen: false, width: 280, height: 200, 
+                resizable: false, autoOpen: false, width: 270, height: 215, 
                 buttons: {
                     'Update': function () {
                         var $frm = $(this).find('form');
@@ -714,19 +747,20 @@
         
         initSection: function (section) {
             var nd = this.sectionUi.clone();
-
             nd.dialog({
-                resizable: false, autoOpen: false, width: 300, height: 225, modal: true,
+                resizable: false, autoOpen: false, width: 240 /* 260 */, height: 100, modal: true,
                 open: function () {
                     lg('section dialog open');
+                }, 
+                buttons: {
+                    'Update': function () {  },
+                    'Close': function () { nd.dialog('close'); },
                 }
-		    });
-
+	        });
             $('.space-slider', nd).slider( {
 	            min: 1, max: config.column_count,
                 start: function () { }
             });
-
 		    return nd;
         }
     };

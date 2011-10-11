@@ -18,6 +18,7 @@ todo
 
 bugs 
 
+- alternar exibição do grid em novas sections
 - ajustar posição das sections ao iniciar drag do sortable
 * marcar/verificar section em edição atualmente no editor de código
 * layout ainda quebra durante sort

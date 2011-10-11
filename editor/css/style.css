@@ -48,11 +48,13 @@ body { overflow-x: hidden; }
 
 /* {{{ toolbar */
 #toolbar { 
-    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; 
+    /* background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; */
     -moz-border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); /* for webkit browsers */
+    /* for IE */
+    /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); */
+    /* for webkit browsers */
+    /* background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e));  */
     color: #92cecf;
     height: 37px; 
     width: 350px; 
@@ -139,9 +141,15 @@ div#my-layouts table, div#my-layouts th, div#my-layouts td
 { border: 1px solid #BBB; }
    
 #layoutProperties { margin: 10px;}
-#layoutProperties label { float: left; width: 30%  /* 85px */;} 
-#layoutProperties input, #layoutProperties select { width: 150px;} 
+#layoutProperties div { height: 22px;}
+#layoutProperties label { float: left; line-height: 14px; width: 33%  /* 85px */;} 
+#layoutProperties input, #layoutProperties select { width: 150px; margin: 0; padding: 0;} 
 
+#sectionProperties { margin: 5px;} 
+#sectionProperties table { border-collapse:collapse; }
+#sectionProperties table td { height: 20px; padding: 0; }  
+#sectionProperties label { float: left; line-height: 16px; width: 30px /* 72px */;  }  
+#sectionProperties .field { width: 150px; margin: 0; padding: 0; }  
 
 /* debug/dev actions */
 .section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 
@@ -153,9 +161,4 @@ div#my-layouts table, div#my-layouts th, div#my-layouts td
 
 .slider-space-row { width: 30%; float: left; }
 .space-slider { width: 60%; float: left; } 
-
-.sectionDialog input[type=text] { width: 40%; margin: 0.5em 0 0 0;} 
-.sectionDialog select { margin-left: 7%; width: 40%; } 
-.sectionDialog p { margin: 0 0 1em; } 
-.sectionDialog .ui-slider { position: absolute; left: 25%;}
 

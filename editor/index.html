@@ -77,62 +77,60 @@
     <div id="dialogs">
         <div id="layout-prop" title="Layout properties">
             <form id="layoutProperties" class="dialog-form">	        
-                <label>Name</label>
-                <input name="layout_name" type="text">
-                <br class="clear" />
-                <label>Column count</label>
-                <input name="column_count" type="text">
-                <br class="clear" />
-                <label>Column width</label>
-                <input name="column_width" type="text">
-                <br class="clear" />
-                <label>Gutter width</label>
-                <input name="gutter_width" type="text">
-                <br class="clear" />
-				<label>Layout width</label>
-                <strong id="layout_width"></strong>
+                <div>
+                    <label>Name</label>
+                    <input name="layout_name" type="text">
+                </div>
+                <div>
+                    <label>Column count</label>
+                    <input name="column_count" type="text">
+                </div>
+                <div>
+                    <label>Column width</label>
+                    <input name="column_width" type="text">
+                </div>
+                <div>
+                    <label>Gutter width</label>
+                    <input name="gutter_width" type="text">
+                </div>
+                <div>
+				    <label>Layout width</label>
+                    <strong id="layout_width"></strong>
+                </div>
             </form>
         </div>
-        <div class="sectionDialog" title="Section Dialog">
-            <form name="sectionProperties">	        
-                <p>
-                    <label>Id</label>
-                    <input name="sec-id" type="text">
-                    <label>Class</label>
-                    <input name="class-name" type="text">
-                </p>
-	            <p>
-                    <label>Tagname</label>
-                    <select name="tagname">
-                        <option>div</option>
-                        <option>section</option>
-                        <option>nav</option>
-                        <option>header</option>
-                        <option>footer</option>
-                    </select>
-                </p>
-                <p class="slider-space-row">
-                    <label>Left space</label>
-                    <div class="space-slider"></div>
-                </p>
-                <div class="clear"></div>
-                <p class="slider-space-row">
-                    <label>Rigth space</label>
-                    <div class="space-slider"></div>
-                </p>
-                <div class="clear"></div>
-                <p>
-                    <label>Aditional classes</label><br>
-                        <input type="checkbox">Last
-                        <input type="checkbox"> Clear 
-                        <input type="checkbox"> box 
-                        <input type="checkbox"> border
-                        <br>
-                        <input type="checkbox"> colborder 
-                        <input type="checkbox"> append-bottom
-                        <input type="checkbox"> prepend-top
-                </p>
-            </form>
+        <div class="sectionDialog" title="Section Properties">
+             <form id="sectionProperties" name="sectionProperties" class="dialog-form">
+                <div style="margin-bottom: 5px;">
+                    <label>ID</label> 
+                    <input class="field" id="section-id" name="section-id" type="text" /> 
+                </div>
+                <!-- 
+                <div>
+                    <label>Grid classes</label> 
+                    <table class="field">
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>box</td>
+                            <td><input type="checkbox" /></td>
+                            <td>colborder</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>clear</td>
+                            <td><input type="checkbox" /></td>
+                            <td>border</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>box</td>
+                            <td><input type="checkbox" /></td>
+                            <td>prepend-top</td>
+                        </tr>
+                    </table>
+                </div>
+                -->
+            </form> 
         </div>
 
         <div id="editor" title="Source editor">
