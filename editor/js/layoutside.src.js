@@ -66,18 +66,32 @@
             this.currentSection = this.ui;
             this.sectionDialog = $(".sectionDialog");
 
+            $('#sectionProperties').submit(function (e) {
+                e.preventDefault();
+                self.sectionDialog.dialog('option', 'buttons')['Update']();
+            });
+
             this.sectionDialog.dialog({
                 resizable: false, autoOpen: false, width: 240 /* 260 */, height: 100, modal: true,
                 open: function () {
                     var id = self.sectionDialog.data('section').id;
+                    self.sectionDialog.data('current_id', id);
                     $('#section-id', self.sectionDialog).val(id);
                 },
                 buttons: {
                     'Update': function () {
                         var $input = $('#section-id', self.sectionDialog),
                             id = $input.val();
+
+                        if (id == self.sectionDialog.data('current_id')) {
+                            self.sectionDialog.dialog('close');
+                            return false;
+                        }
+
                         if ($.trim(id) != '' && self.checkId(id)) {
                             var $section = self.sectionDialog.data('section');
+                            // normalizar o id conforme http://www.w3schools.com/tags/att_standard_id.asp
+                            id = id.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-_]/g, '');
                             $section.id = id;
                             self.sectionDialog.dialog('close');
                             $input.val('');

@@ -1,6 +1,8 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
 - icones para remover e editar as propriedades da section
+    exemplos de tabelas/listas wordpress, github, dropbox, gmail
+    se icones nao ficarem bons, usar um select
 - nomes/identificação de sections no editor de conteudo
 - melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
 - usar novo editor de código (http://ace.ajax.org/)
@@ -10,21 +12,21 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 todo
 
 - z-index das sections e dialogs/menus do app
-- remover dialogs não utilizados 
+- remover dialogs não utilizados
 - atualizar jquery e jquery ui
 - atalhos (ex. https://github.com/madrobby/keymaster)
 * permitir edição do nome do layout salvo
 * personalização da grid durante edição, gerar grid.css
 
-bugs 
+bugs
 
 - alternar exibição do grid em novas sections
 - ajustar posição das sections ao iniciar drag do sortable
 * marcar/verificar section em edição atualmente no editor de código
 * layout ainda quebra durante sort
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
-* add clear/last durante o sort e para subsections com diferentes tamanhos 
-* edição de código para subsections 
+* add clear/last durante o sort e para subsections com diferentes tamanhos
+* edição de código para subsections
 * ajustar largura minima/maxima subsection
 * definir section atual quando o click for fora de uma section
 * verificar necessidade de scrollbar na pagina
@@ -34,7 +36,7 @@ bugs
 * remover/ignorar hover disparado ao redimencionar sub section
 * altura da section ao adicionar sub section
 
-x icone resize aparecendo todas as sections aninhadas  
+x icone resize aparecendo todas as sections aninhadas
 
 melhoria
 
@@ -44,5 +46,4 @@ melhoria
 otimização
 
 * reduzir o trabalho de "addLast" de acordo com contexto
-
 
