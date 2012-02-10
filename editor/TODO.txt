@@ -1,5 +1,7 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
+- atualizar: 
+    gae sdk
 - icones para remover e editar as propriedades da section
     exemplos de tabelas/listas wordpress, github, dropbox, gmail
     se icones nao ficarem bons, usar um select
@@ -7,10 +9,12 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 - melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
 - usar novo editor de código (http://ace.ajax.org/)
 - tooltips nas ferramentas
+- trocar alerts por um modal/dialog
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 
 todo
 
+- procurar por anotacões "TODO" no código
 - z-index das sections e dialogs/menus do app
 - remover dialogs não utilizados
 - atualizar jquery e jquery ui

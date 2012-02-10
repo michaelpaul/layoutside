@@ -4,6 +4,10 @@ import logging, os, sys, cgi, datetime, time, re
 import zipfile
 import StringIO
 
+from google.appengine.dist import use_library
+
+use_library('django', '1.2')
+
 from google.appengine.api import users
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
