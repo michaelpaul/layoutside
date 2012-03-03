@@ -28,10 +28,10 @@
         this.Editor.init();
 
         $(document).keydown(function (e) {
-            if(e.keyCode == $.ui.keyCode.ESCAPE) {
+            if (e.keyCode == $.ui.keyCode.ESCAPE) {
                 var cs = self.Container.currentSection;
                 // não remover container quando selecionado
-                if(cs[0] != self.Container.ui[0]) {
+                if (cs[0] != self.Container.ui[0]) {
                     cs.remove();
                     self.Container.currentSection = self.Container.ui;
                     self.Container.addLast();
@@ -44,7 +44,7 @@
         setPageTitle: function (newTitle) {
             var title = 'Untitled';
 
-            if(typeof newTitle !== 'undefined' && $.trim(newTitle) != '')
+            if (typeof newTitle !== 'undefined' && $.trim(newTitle) != '')
                 title = newTitle;
 
             document.title = title  + ' - Layoutside';
@@ -130,7 +130,7 @@
             sort: function (e, ui) {
                 var y = e.pageY;
                 // child section
-                if(ui.placeholder.parent()[0] != parent.Container.ui[0])
+                if (ui.placeholder.parent()[0] != parent.Container.ui[0])
                     y = e.pageY - ui.placeholder.parent().position().top;
 
                 ui.helper.css({
@@ -140,7 +140,7 @@
         },
 
         setEditMode: function (mode) {
-            if(this.editMode == mode)
+            if (this.editMode == mode)
                 return null;
 
             this.editMode = mode;
@@ -153,7 +153,7 @@
                 case 'sort':
                     $('a.icon-sort').addClass('icon-active');
 
-                    if(!isSortable) {
+                    if (!isSortable) {
                         this.ui.sortable(this.sortableOptions).disableSelection();
                         this.sortableOptions.containment = 'parent';
                         this.sections = this.ui.find('div.section').sortable(this.sortableOptions)
@@ -166,7 +166,7 @@
                     break;
                 case 'select':
                 default:
-                    if(isSortable) {
+                    if (isSortable) {
                         this.ui.sortable('disable');
                         this.sections.sortable('disable');
                     }
@@ -179,7 +179,7 @@
             var curClass = 'current-section', $n = $(node);
 
             this.ui.find('.' + curClass).removeClass(curClass);
-            if($n.hasClass('section'))
+            if ($n.hasClass('section'))
                 $n.addClass(curClass);
             this.currentSection = $n;
         },
@@ -198,7 +198,7 @@
                 sections = $('> .section:not(.ui-sortable-helper)',  hasContext ? context : this.ui),
                 sum = 0, columnCount = config.column_count, i, f;
 
-            if(hasContext)
+            if (hasContext)
                 columnCount = this.getSectionWidth(context);
 
             sections.filter('.last').removeClass('last');
@@ -210,25 +210,25 @@
                     prevColumnCount = this.getSectionWidth(curSection),
                     nextSection = null;
 
-                if(i < f)
+                if (i < f)
                     nextSection = $(sections[i + 1]);
                 sum += prevColumnCount;
 
-                if(sum > columnCount) {
+                if (sum > columnCount) {
                     curSection.toggleClass('clear');
                     sum = prevColumnCount;
-                } else if(sum == columnCount) {
+                } else if (sum == columnCount) {
                     curSection.toggleClass('last');
 					curSection.css('marginRight', 0);
 
-                    if(nextSection.length) {
+                    if (nextSection.length) {
                         nextSection.toggleClass('clear');
 					}
                     sum = 0;
                 }
 
                 // tem sub sections?
-                if(curSection.find('.section').length)
+                if (curSection.find('.section').length)
                     this.addLast(curSection);
             }
         },
@@ -257,7 +257,7 @@
 
             id = 'section-' + this.currentSectionId
 
-            if(typeof edit_section !== 'undefined') {
+            if (typeof edit_section !== 'undefined') {
                 id = edit_section.html_id;
                 content = edit_section.body;
                 sec_width = edit_section.width;
@@ -267,7 +267,7 @@
             section = $('<div id="' + id + '" class="span-' +
                 sec_width + ' section"><div class="section-content"></div></div>');
 
-            if(content != '&nbsp;') {
+            if (content != '&nbsp;') {
                 section.find('.section-content').html(content);
             }
 
@@ -293,7 +293,7 @@
             });
 
             section.mouseover(function (e) {
-                if(self.isResizingSection)
+                if (self.isResizingSection)
                     return false;
 
                 e.stopPropagation();
@@ -322,13 +322,13 @@
 
                     parent.Toolbar.heightInput.val(ui.size.height);
 
-                    if(lastClass == nc)
+                    if (lastClass == nc)
                         return false;
 
                     var childs = elm.find('> .section');
 
                     // preservar largura min/max quando ouver 'filhos'
-                    if(childs.length) {
+                    if (childs.length) {
                         var largSection = self.getSectionWidth(elm), largMaiorFilho = 0;
 
                         childs.each(function (k, v) {
@@ -337,7 +337,7 @@
                             lgm('max child w', sectionWidth);
                             $c.resizable("option", "maxWidth", sectionWidth);
 
-                            if(cw > largMaiorFilho)
+                            if (cw > largMaiorFilho)
                                 largMaiorFilho = cw;
                         });
 
@@ -353,8 +353,8 @@
                 }
             });
 
-            if(edit_section && edit_section.child_of !== null) {
-                if(!$('#' + edit_section.child_of).length)
+            if (edit_section && edit_section.child_of !== null) {
+                if (!$('#' + edit_section.child_of).length)
                     throw new Error('Failed to add child section');
                 $('#' + edit_section.child_of).append(section);
             } else {
@@ -363,12 +363,12 @@
 
             var sectionParent = section.parent();
             // definir largura maxima da section quando filha
-            if(sectionParent[0] != self.ui[0]) {
+            if (sectionParent[0] != self.ui[0]) {
                 section.resizable("option", "maxWidth",
                     self.getSectionWidth(sectionParent) * config.totalColWidth);
             }
 
-            // if(!edit_section)
+            // if (!edit_section)
                // config.status |= ST_MODIFIED;
 
             this.addLast();
@@ -409,9 +409,9 @@
             this.heightInput.keyup(function () {
                 var h = self.heightInput.val(), s = parent.Container.currentSection;
 
-                if(!isNaN(h) && !s.hasClass('container')) {
+                if (!isNaN(h) && !s.hasClass('container')) {
                     h = parseInt(h, 10);
-                    if(h < 24) // min-height
+                    if (h < 24) // min-height
                         return false;
                     s.height(h);
                 }
@@ -433,7 +433,7 @@
             $('#menu a:not(.download)').bind('click', function (e) { e.preventDefault(); });
 
             $('#menu a.download').bind('click', function (e) {
-				if(!config.key) {
+				if (!config.key) {
 					e.preventDefault();
 					alert('Save or edit a layout to download');
 					return false;
@@ -451,7 +451,7 @@
 			});
 
             $('#new-layout').click(function (e) {
-                if(!self.closeLayout())
+                if (!self.closeLayout())
                     return false;
                 self.newLayoutDialog.dialog('open');
             });
@@ -477,7 +477,7 @@
                 self.newLayoutDialog.dialog('close');
                 $(this).find('form')[0].reset();
 
-                if(parent.Menubar.saveOnCreate) {
+                if (parent.Menubar.saveOnCreate) {
                     parent.Menubar.saveLayout();
                     parent.Menubar.saveOnCreate = false;
                 }
@@ -514,7 +514,7 @@
             });
 
             $('#my-layouts').dialog({
-                resizable: false, autoOpen: false, width: 300, height: 175, modal: true,
+                resizable: false, autoOpen: false, width: 300, /* height: 175, */ modal: true,
 				buttons: {
 					'Cancel': function () {
 			            $('#my-layouts').dialog('close');
@@ -522,20 +522,34 @@
 				},
                 open: function () {
                      $.getJSON('/editor/layouts', { }, function(result, status) {
-                        if(status != 'success')
+                        if (status != 'success')
                             throw new Error('Failed to load your layouts');
 
                         $list = $('#my-layouts table tbody').empty();
-
+                        $('#no-layouts').hide();
+                        
+                        if (result.length < 1) {
+                            $('#no-layouts').show();
+                        } 
+                        
                         $(result).each(function (k, v) {
-                            $list.append('<tr><td>' + v.name + '</td><td style="text-align: right; width: 125px;">' +
+                            $list.append('<tr><td><a class="open-link" lkey="' + v.key + 
+                            '" href="#' + v.key + '">'+ v.name + '</a></td>' + 
+                            '<td class="layout-actions" style="text-align: right; width: 65px; ">' +
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' +
-                            '<a target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
+                            '<a class="preview" target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
                             '<a class="delete" href="#' + v.key + '">delete</a>' +
                             '</td></tr>');
                         });
 
-                        $('#my-layouts table a.open').click(function (e) {
+                        $('#my-layouts table td.layout-actions a').hide();
+                        $('#my-layouts table tr').hover(function () {    
+                            $('td.layout-actions a', this).show();
+                        }, function () {
+                            $('td.layout-actions a', this).hide();
+                        });
+                        
+                        $('a.open, a.open-link', '#my-layouts table').click(function (e) {
                             e.preventDefault();
                             parent.Menubar.open(this.getAttribute('lkey'));
                         });
@@ -544,10 +558,15 @@
                             e.preventDefault();
                             var link = this, c = window.confirm("Do you really want to delete the selected layout?");
 
-                            if(c) {
+                            if (c) {
                                 $.post('/editor/delete-layout', {'key': $(this).attr('href').substr(1)}, function (result) {
-                                    if(result.status == 0) {
-                                        $(link).parents('tr').fadeOut();
+                                    if (result.status == 0) {
+                                        $(link).parents('tr').fadeOut(function () {
+                                            $(this).remove();
+                                            if ($('#my-layouts table tr').size() < 1) {
+                                                $('#no-layouts').show();
+                                            }
+                                        });
                                     }
                                 }, 'json');
                             }
@@ -604,7 +623,7 @@
         },
 
         open: function (key) {
-            if(this.loadingLayout || !this.closeLayout()) {
+            if (this.loadingLayout || !this.closeLayout()) {
                 return false;
             }
             var self = this;
@@ -637,8 +656,8 @@
         },
 
         closeLayout: function (confirm) {
-            if(config.status & ST_MODIFIED) {
-                if(typeof confirm == 'undefined') {
+            if (config.status & ST_MODIFIED) {
+                if (typeof confirm == 'undefined') {
                     this.confirmCloseDialog.dialog('open');
                     return false;
                 }
@@ -671,10 +690,10 @@
         },
 //        resizeSections : function (larg, gutter) {
         resizeSections : function () {
-//            if(!larg) {
+//            if (!larg) {
 //                larg = 30;
 //            }
-//            if(!gutter) {
+//            if (!gutter) {
 //                gutter = 10;
 //            }
             larg = config.column_width;
@@ -684,10 +703,10 @@
             $('div[class^=span-]').each(function () {
                 var n = parseInt(this.className.match(/span-(\d+)/)[1], 10);
                 var novo = (n * (larg + gutter)), new_gutter = gutter;
-                if(n > 1) {
+                if (n > 1) {
                 	novo -= gutter;
                 }
-                if($(this).hasClass('last')) {
+                if ($(this).hasClass('last')) {
                     new_gutter = 0;
                 }
                 $(this).css({width: novo + 'px', marginRight: new_gutter + 'px'});
@@ -704,7 +723,7 @@
                 'sections': []
             };
 
-            if(config.layout_name == null || $.trim(config.layout_name) == '') {
+            if (config.layout_name == null || $.trim(config.layout_name) == '') {
                 parent.Menubar.newLayoutDialog.dialog('open');
                 this.saveOnCreate = true;
                 return false;
@@ -727,7 +746,7 @@
 
                     layout.sections.push(section);
 
-                    if(childs.length)
+                    if (childs.length)
                         pushChildSectionsOf(v);
                 });
             }
@@ -744,10 +763,10 @@
                     console.log('XhrError: ' + textStatus);
                 },
                 success: function(result) {
-                    if(result.status == 0) {
-                        if(config.status & ST_NEW)
+                    if (result.status == 0) {
+                        if (config.status & ST_NEW)
                             alert('New layout saved!');
-                        if(config.status & ST_SAVED)
+                        if (config.status & ST_SAVED)
                             alert('Layout updated!');
 
                         config.status = ST_SAVED;
@@ -796,7 +815,7 @@
         },
 
         startEditor: function () {
-            if(this.editor === null)
+            if (this.editor === null)
                 this.editor = $('#sourceEditor');
         },
 
@@ -810,7 +829,7 @@
 
                 buttons: {
                     'Update': function () {
-                        if(target == null) {
+                        if (target == null) {
                             alert('Select a section');
                             return false;
                         }
@@ -830,10 +849,10 @@
                     function buildSectionTree(ctx, list) {
                         var o = null, sections = ctx.find('> .section');
 
-                        if(!sections.length)
+                        if (!sections.length)
                             return false;
 
-                        if(!list) {
+                        if (!list) {
                             list = document.createElement('ul');
                             $('#sectionview').append(list);
                         }
@@ -854,7 +873,7 @@
 
                             $(list).append($item);
 
-                            if($section.find('> .section').length) {
+                            if ($section.find('> .section').length) {
                                 var sublist = document.createElement('ul');
                                 $item.children('a').addClass('tree-childs').click(function () {
                                     // alert('show childs');
@@ -877,7 +896,7 @@
     window.Layoutside = Layoutside;
 
     var lg = function (f) {
-        if(!console) return false;
+        if (!console) return false;
         console.log(f);
     }, lgm = function (m, v) {
         lg(m + ': ' + v);

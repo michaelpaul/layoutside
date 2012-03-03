@@ -134,11 +134,18 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #edit-tabs li span { margin-left: 4px; font-weight: bolder; cursor: pointer;}
 
 
-div#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px;}
+#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px; color: #1F75CC; } 
 
-div#my-layouts table { border-collapse:collapse; margin-top: 10px; } 
-div#my-layouts table, div#my-layouts th, div#my-layouts td
-{ border: 1px solid #BBB; }
+#my-layouts table { border-collapse:collapse; margin-top: 10px; }
+#my-layouts table tr { height: 26px; }  
+#my-layouts table, #my-layouts th, #my-layouts td { /* border: 1px solid #BBB; */ }
+
+#my-layouts table a.open {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+    background:  url(../images/layout_edit.png) no-repeat transparent; display: block; float: left;} 
+#my-layouts table a.delete {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+    background:  url(../images/layout_delete.png) no-repeat transparent; display: block; float: left;} 
+#my-layouts table a.preview {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+    background:  url(../images/layout_export.png) no-repeat transparent; display: block; float: left;} 
    
 #layoutProperties { margin: 10px;}
 #layoutProperties div { height: 22px;}
