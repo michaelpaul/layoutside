@@ -1,15 +1,14 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- atualizar: 
+- atualizar:
     gae sdk
-- icones para remover e editar as propriedades da section
+* icones para remover e editar as propriedades da section
     exemplos de tabelas/listas wordpress, github, dropbox, gmail
-    se icones nao ficarem bons, usar um select
-- nomes/identificação de sections no editor de conteudo
+* nomes/identificação de sections no editor de conteudo
 - melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
 - usar novo editor de código (http://ace.ajax.org/)
 - tooltips nas ferramentas
-- trocar alerts por um modal/dialog
+* trocar alerts por um modal/dialog
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 
 todo

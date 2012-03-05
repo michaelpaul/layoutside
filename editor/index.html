@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="css/style.css" type="text/css" media="handheld, all">
     <link rel="stylesheet" href="js/jquery-ui-1.8.10.custom/development-bundle/themes/smoothness/jquery-ui-1.8.10.custom.css" type="text/css">
     <style type="text/css">
-    img, iframe, object, embed { max-width: 100%; } 
+    img, iframe, object, embed { max-width: 100%; }
     </style>
 </head>
 <body class="">
-    <div id="widemenu">    
+    <div id="widemenu">
         <div id="menuarea">
             <a href="#" title="Layoutside"><img id="logo" src="images/logo.jpg" alt="Layoutside" /></a>
             <ul id="menu">
@@ -40,24 +40,24 @@
                         <ul>
                         <li><a href="#shortcuts">Quickstart</a></li>
                         <!-- <li><a href="#help-content">Contents</a></li>
-                        <li><a href="#feedback">Feedback</a></li> 
+                        <li><a href="#feedback">Feedback</a></li>
                         <li><a href="#shortcuts">Keyboard shortcuts</a></li> -->
                         <li><a href="#about">About</a></li></ul>
                 </li>
             </ul>
             <div id="user">
-                <a href="#" title="User">{{ user_name }}</a> 
-                <span> | </span> 
+                <a href="#" title="User">{{ user_name }}</a>
+                <span> | </span>
                 <a href="{{ logout }}" title="logout">logout</a>
             </div>
         </div>
     </div>
 
     <div id="containerPlaceholder" class="container">
-        <div id="containerGrid"></div> 
-        <div id="container"></div> 
+        <div id="containerGrid"></div>
+        <div id="container"></div>
     </div>
-            
+
     <div id="widetool">
         <div id="toolbar">
             <ul>
@@ -76,7 +76,7 @@
 
     <div id="dialogs">
         <div id="layout-prop" title="Layout properties">
-            <form id="layoutProperties" class="dialog-form">	        
+            <form id="layoutProperties" class="dialog-form">
                 <div>
                     <label>Name</label>
                     <input name="layout_name" type="text">
@@ -102,12 +102,12 @@
         <div class="sectionDialog" title="Section Properties">
              <form id="sectionProperties" name="sectionProperties" class="dialog-form">
                 <div style="margin-bottom: 5px;">
-                    <label>ID</label> 
-                    <input class="field" id="section-id" name="section-id" type="text" /> 
+                    <label>ID</label>
+                    <input class="field" id="section-id" name="section-id" type="text" />
                 </div>
-                <!-- 
+                <!--
                 <div>
-                    <label>Grid classes</label> 
+                    <label>Grid classes</label>
                     <table class="field">
                         <tr>
                             <td><input type="checkbox" /></td>
@@ -130,7 +130,7 @@
                     </table>
                 </div>
                 -->
-            </form> 
+            </form>
         </div>
 
         <div id="editor" title="Source editor">
@@ -142,12 +142,12 @@
                 <li><a href="#edit-section2">Section one 2</a><span>X</span></li>
 
             </ul>
-            --> 
+            -->
             <br class="clear">
             <div id="sectionview"></div>
             <textarea id="sourceEditor"></textarea>
         </div>
-        
+
         <div id="my-layouts" title="My Layouts">
             <p id="no-layouts" style="display: none;">You don't have any layout.</p>
             <table style="padding-top: 10px;" border="0" cellspacing="0" cellpadding="0">
@@ -155,21 +155,24 @@
                 <tbody></tbody>
             </table>
         </div>
-        
+
         <div id="new-layout-dialog" title="New layout">
             <form action="#" method="GET">
-                <strong>Name:</strong> <input style="margin-left: 5px;width: 80%;" type="text" id="layout-name" name="layout-name" value="" />    
+                <strong>Name:</strong> <input style="margin-left: 5px;width: 80%;" type="text" id="layout-name" name="layout-name" value="" />
             </form>
         </div>
         <div id="confirm-close-dialog" title="">
             <p>Save changes to layout before closing?</p>
+        </div>
+        <div id="alert-modal" title="">
+            <h3 style="margin: 20px 0px 0px 30px;"></h3>
         </div>
     </div>
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
     <script type="text/javascript">!window.jQuery && document.write(unescape('%3Cscript type="text/javascript" src="js/jquery-ui-1.8.10.custom/development-bundle/jquery-1.4.4.js"%3E%3C/script%3E'))</script>
     <script src="js/jquery-ui-1.8.10.custom/development-bundle/ui/jquery-ui-1.8.10.custom.js"></script>
-    <script type="text/javascript" src="js/layoutside.src.js"></script>    
+    <script type="text/javascript" src="js/layoutside.src.js"></script>
     <script type="text/javascript">
     jQuery(function () {
         window.Layoutside = new Layoutside();

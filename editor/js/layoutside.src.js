@@ -18,6 +18,29 @@
         ST_SAVED = 2,
         ST_MODIFIED = 4;
 
+    var MSG_SUCCESS = 'Success',
+        MSG_ERROR = 'Error',
+        MSG_NOTICE = 'Notice';
+
+    function alert_modal(msg, title) {
+        var title = typeof title !== 'undefined' ? title: '';
+        $("#alert-modal").dialog({
+		    height: 120,
+		    modal: true,
+		    resizable: false,
+		    title: title,
+            buttons: {
+                'OK': function () {
+                    $("#alert-modal").dialog('close');
+                }
+            },
+            open: function(event, ui) {
+                $("#alert-modal").dialog('widget').find('button').width(70);
+                $("#alert-modal h3").html(msg);
+            }
+	    });
+    }
+
     /* main */
     var Layoutside = function () {
         var self = this;
@@ -96,7 +119,7 @@
                             self.sectionDialog.dialog('close');
                             $input.val('');
                         } else {
-                            alert('Invalid ID');
+                            alert_modal('Invalid ID', MSG_ERROR);
                         }
                     },
                     'Close': function () { self.sectionDialog.dialog('close'); },
@@ -435,7 +458,7 @@
             $('#menu a.download').bind('click', function (e) {
 				if (!config.key) {
 					e.preventDefault();
-					alert('Save or edit a layout to download');
+					alert_modal('Save or edit a layout to download.', MSG_NOTICE);
 					return false;
 				}
 				var url = './download-layout?', hash = $(this).attr('rel');
@@ -765,14 +788,14 @@
                 success: function(result) {
                     if (result.status == 0) {
                         if (config.status & ST_NEW)
-                            alert('New layout saved!');
+                            alert_modal('New layout saved!', MSG_SUCCESS);
                         if (config.status & ST_SAVED)
-                            alert('Layout updated!');
+                            alert_modal('Layout updated!', MSG_SUCCESS);
 
                         config.status = ST_SAVED;
                         config.key = result.key;
                     } else
-                        alert('Failed to save layout');
+                        alert_modal('Failed to save layout', MSG_ERROR);
                 }
             });
         }
@@ -830,7 +853,7 @@
                 buttons: {
                     'Update': function () {
                         if (target == null) {
-                            alert('Select a section');
+                            alert_modal('Select a section.', MSG_NOTICE);
                             return false;
                         }
 
@@ -876,7 +899,7 @@
                             if ($section.find('> .section').length) {
                                 var sublist = document.createElement('ul');
                                 $item.children('a').addClass('tree-childs').click(function () {
-                                    // alert('show childs');
+                                    // alert_modal('show childs');
                                     $(this).toggleClass('tree-open').next().toggle();
                                 });
                                 $item.append(sublist);
