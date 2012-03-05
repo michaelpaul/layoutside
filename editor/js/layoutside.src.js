@@ -527,14 +527,14 @@
 
                         $list = $('#my-layouts table tbody').empty();
                         $('#no-layouts').hide();
-                        
+
                         if (result.length < 1) {
                             $('#no-layouts').show();
-                        } 
-                        
+                        }
+
                         $(result).each(function (k, v) {
-                            $list.append('<tr><td><a class="open-link" lkey="' + v.key + 
-                            '" href="#' + v.key + '">'+ v.name + '</a></td>' + 
+                            $list.append('<tr><td><a class="open-link" lkey="' + v.key +
+                            '" href="#' + v.key + '">'+ v.name + '</a></td>' +
                             '<td class="layout-actions" style="text-align: right; width: 65px; ">' +
                             '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' +
                             '<a class="preview" target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
@@ -543,12 +543,12 @@
                         });
 
                         $('#my-layouts table td.layout-actions a').hide();
-                        $('#my-layouts table tr').hover(function () {    
+                        $('#my-layouts table tr').hover(function () {
                             $('td.layout-actions a', this).show();
                         }, function () {
                             $('td.layout-actions a', this).hide();
                         });
-                        
+
                         $('a.open, a.open-link', '#my-layouts table').click(function (e) {
                             e.preventDefault();
                             parent.Menubar.open(this.getAttribute('lkey'));
@@ -861,7 +861,7 @@
                             var $item = $(document.createElement('li')),
                                 $section = $(s);
 
-                            $item.html('<a href="#">Section ' + (i + 1) + '</a>');
+                            $item.html('<a href="#">' + s.id + '</a>');
                             $item.find('a').data('sectionRef', s).click(function (e) {
                                 target = $($(this).data('sectionRef'));
                                 var $content = target.find('.section-content');
