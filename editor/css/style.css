@@ -1,53 +1,53 @@
-@import "topographic.css"; 
+@import "topographic.css";
 
 body { overflow-x: hidden; }
 
 #widetool a, #widemenu a { font-family:"Trebuchet MS"; color: white; text-decoration: none; /*font-weight: bold;*/}
-#widetool a:visited, #widetool a:active, 
+#widetool a:visited, #widetool a:active,
     #widemenu a:visited, #widemenu a:active { border: none; outline: none; }
 
-#containerPlaceholder { position: relative; padding-top: 42px; } 
-#containerGrid { position: absolute; overflow: hidden; height: 100%; } 
-#containerGrid, #containerGrid div { min-height: 700px; } 
-#containerGrid div { float: left; height: 100%; background-color: #e8effb; }  
-#container { margin-bottom: 42px; overflow: hidden;} 
+#containerPlaceholder { position: relative; padding-top: 42px; }
+#containerGrid { position: absolute; overflow: hidden; height: 100%; }
+#containerGrid, #containerGrid div { min-height: 700px; }
+#containerGrid div { float: left; height: 100%; background-color: #e8effb; }
+#container { margin-bottom: 42px; overflow: hidden;}
 
 .showgrid { background: url(../images/grid.png); }
-.toggle-grid { opacity: 0; } 
-.toggle-section { background-color: transparent !important;} 
+.toggle-grid { opacity: 0; }
+.toggle-section { background-color: transparent !important;}
 
 #widetool { bottom: 0; }
-#widemenu {     
-/*    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; 
+#widemenu {
+/*    background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434854', endColorstr='#31353e'); */ /* for IE */
 /*    background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e)); */ /* for webkit browsers */
-} 
+}
 
-#widetool, #widemenu { position: fixed; width: 100%; z-index: 2; } 
-#widemenu, #toolbar { background-color: #404652  /* #31353e */  ; } 
-#toolbar ul { list-style: none; margin: 0; padding: 0;} 
+#widetool, #widemenu { position: fixed; width: 100%; z-index: 2; }
+#widemenu, #toolbar { background-color: #404652  /* #31353e */  ; }
+#toolbar ul { list-style: none; margin: 0; padding: 0;}
 
 /* {{{ menubar */
-#logo { float: left; width: 127px; height: 35px; margin-top: 1px;}
-#widemenu { height: 37px; z-index: 1000; box-shadow:rgba(0, 0, 0, 0.5) 0px 1px 2px 0px; } 
+#logo { float: left; /* width: 127px; height: 35px; */ margin-top: 4px; margin-left: 4px;}
+#widemenu { height: 37px; z-index: 1000; box-shadow:rgba(0, 0, 0, 0.5) 0px 1px 2px 0px; }
 #menuarea { /* background: url(../images/header.jpg) center top transparent no-repeat; */ width: 950px; height: 37px; margin: 0 auto; }
-#menu { float: left; margin: 3px 0 0 10px; padding: 0; } 
+#menu { float: left; margin: 3px 0 0 10px; padding: 0; }
 #menu a { color: white; }
-#menu li { list-style: none; float: left; margin-left: 30px; padding: 6px;} 
-#menu li a { display: block; padding: 2px 3px;} 
+#menu li { list-style: none; float: left; margin-left: 30px; padding: 6px;}
+#menu li a { display: block; padding: 2px 3px;}
 #menu li ul, #menuarea li li { background-color: black; margin: 0; padding: 0; }
-#menu li li { float: none; margin-left: -6px; border: 2px solid black; /* padding: 2px 10px; */ }  
-#menu li li a { padding: 2px 5em 2px 15px; outline: none; }  
+#menu li li { float: none; margin-left: -6px; border: 2px solid black; /* padding: 2px 10px; */ }
+#menu li li a { padding: 2px 5em 2px 15px; outline: none; }
 
-#menu li:hover { background-color: black;}  
-#menu li li:hover { background-color: #92cecf;}  
-#menu li ul { display: none; margin: 3px 0 0; } 
-#menu li:hover ul { display: block; position: absolute;}  
+#menu li:hover { background-color: black;}
+#menu li li:hover { background-color: #92cecf;}
+#menu li ul { display: none; margin: 3px 0 0; }
+#menu li:hover ul { display: block; position: absolute;}
 
 /* menubar }}} */
 
 /* {{{ toolbar */
-#toolbar { 
+#toolbar {
     /* background: -moz-linear-gradient(center top , #434854, #31353e) repeat scroll 0 0 transparent; */
     -moz-border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
@@ -56,45 +56,45 @@ body { overflow-x: hidden; }
     /* for webkit browsers */
     /* background: -webkit-gradient(linear, left top, left bottom, from(#434854), to(#31353e));  */
     color: #92cecf;
-    height: 37px; 
-    width: 350px; 
+    height: 37px;
+    width: 350px;
     margin: 0 auto;
 }
 
-#toolbar ul { padding: 2px; margin-left: 5px; } 
-#toolbar ul li { float: left; } 
+#toolbar ul { padding: 2px; margin-left: 5px; }
+#toolbar ul li { float: left; }
 
 #user { padding-top: 11px; float: right; margin-right: 10px; }
-#user span { color: white; margin: 0 4px; } 
- 
+#user span { color: white; margin: 0 4px; }
+
 #measures { float: right; margin-right: 10px; }
-#measures input { border: 0; color: white; padding: 1px; text-align: center; 
+#measures input { border: 0; color: white; padding: 1px; text-align: center;
     background-color: #1c1d21; width: 30px; font-size: 10px; border: 1px solid #1c1d21; }
 
 #measures input:focus { border: 1px solid #92cecf; }
- 
+
 /* icons */
 /*
 document.execCommand("BackgroundImageCache",false,true);
 png ie
 filter: progid:DXImageTransform.Microsoft
-    .AlphaImageLoader (src='images/mater.png', sizingMethod='scale'); 
+    .AlphaImageLoader (src='images/mater.png', sizingMethod='scale');
 http://msdn.microsoft.com/en-us/library/ms532969.aspx
 */
 .icon { width: 32px; height: 32px; overflow: hidden; float: left; text-indent: -200px;
     background:  url(../images/icons.png) no-repeat transparent; }
 .icon-separator { padding: 2px; margin-top: 4px;color: gray; font-weight: bold; font-size: 1.2em;}
 .icon-resize {    background-position: -32px 0; }
-.icon-sort {      background-position: -64px 0; } 
+.icon-sort {      background-position: -64px 0; }
 .icon-section {   background-position: -96px 0; }
 .icon-container { background-position: -128px 0; }
 .icon-clear {     background-position: -160px 0; }
 .icon-hr {        background-position: -192px 0; }
 .icon-toggle-grid { background-position: -224px 0; }
 /* icons hover */
-.icon-select:hover, .icon-select.icon-active {    background-position: 0 -32px; }  
-.icon-resize:hover, .icon-resize.icon-active {    background-position: -32px -32px; }  
-.icon-sort:hover, .icon-sort.icon-active {      background-position: -64px -32px; } 
+.icon-select:hover, .icon-select.icon-active {    background-position: 0 -32px; }
+.icon-resize:hover, .icon-resize.icon-active {    background-position: -32px -32px; }
+.icon-sort:hover, .icon-sort.icon-active {      background-position: -64px -32px; }
 .icon-section:hover, .icon-section.icon-active {   background-position: -96px -32px; }
 .icon-container:hover, .icon-container.icon-active{ background-position: -128px -32px; }
 .icon-clear:hover, .icon-clear.icon-active {     background-position: -160px -32px; }
@@ -105,12 +105,12 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 /* {{{ jquery-ui */
 .ui-sortable-placeholder { visibility: visible !important; }
 .ui-sortable-placeholder * { visibility: hidden; }
-.ui-dialog { font-size: 75% !important;} 
+.ui-dialog { font-size: 75% !important;}
 /* jquery-ui }}} */
 
 #dialogs { display: none;  }
 
-#sectionview { overflow: auto; border: 1px solid #BBBBBB;  
+#sectionview { overflow: auto; border: 1px solid #BBBBBB;
     height: 260px; width: 170px; margin-right: 10px; float: left; }
 #sectionview ul { list-style-type: square; margin: 2px 0 0 0; padding: 0; /* margin-top: 5px; padding-left: 1em; */ }
 #sectionview li { padding-left: 2px; list-style: none; }
@@ -126,7 +126,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 
 #edit-tabs-box { width: 500px; overflow: hidden;  }
 #edit-tabs { float: left; margin-left: 116px; margin-top: 2px; margin-bottom: 1px;}
-#edit-tabs li { display: inline; padding: 4px; background-color: lightgray; border: 1px solid #BBBBBB; 
+#edit-tabs li { display: inline; padding: 4px; background-color: lightgray; border: 1px solid #BBBBBB;
     -moz-border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
 }
@@ -134,38 +134,38 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #edit-tabs li span { margin-left: 4px; font-weight: bolder; cursor: pointer;}
 
 
-#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px; color: #1F75CC; } 
+#my-layouts.ui-dialog-content a { text-decoration: none; margin-right: 5px; color: #1F75CC; }
 
 #my-layouts table { border-collapse:collapse; margin-top: 10px; }
-#my-layouts table tr { height: 26px; }  
+#my-layouts table tr { height: 26px; }
 #my-layouts table, #my-layouts th, #my-layouts td { /* border: 1px solid #BBB; */ }
 
 #my-layouts table a.open {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
-    background:  url(../images/layout_edit.png) no-repeat transparent; display: block; float: left;} 
+    background:  url(../images/layout_edit.png) no-repeat transparent; display: block; float: left;}
 #my-layouts table a.delete {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
-    background:  url(../images/layout_delete.png) no-repeat transparent; display: block; float: left;} 
+    background:  url(../images/layout_delete.png) no-repeat transparent; display: block; float: left;}
 #my-layouts table a.preview {  width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
-    background:  url(../images/layout_export.png) no-repeat transparent; display: block; float: left;} 
-   
+    background:  url(../images/layout_export.png) no-repeat transparent; display: block; float: left;}
+
 #layoutProperties { margin: 10px;}
 #layoutProperties div { height: 22px;}
-#layoutProperties label { float: left; line-height: 14px; width: 33%  /* 85px */;} 
-#layoutProperties input, #layoutProperties select { width: 150px; margin: 0; padding: 0;} 
+#layoutProperties label { float: left; line-height: 14px; width: 33%  /* 85px */;}
+#layoutProperties input, #layoutProperties select { width: 150px; margin: 0; padding: 0;}
 
-#sectionProperties { margin: 5px;} 
+#sectionProperties { margin: 5px;}
 #sectionProperties table { border-collapse:collapse; }
-#sectionProperties table td { height: 20px; padding: 0; }  
-#sectionProperties label { float: left; line-height: 16px; width: 30px /* 72px */;  }  
-#sectionProperties .field { width: 150px; margin: 0; padding: 0; }  
+#sectionProperties table td { height: 20px; padding: 0; }
+#sectionProperties label { float: left; line-height: 16px; width: 30px /* 72px */;  }
+#sectionProperties .field { width: 150px; margin: 0; padding: 0; }
 
 /* debug/dev actions */
-.section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ } 
-.section-content { height: auto; } 
-.current-section { background-color: DodgerBlue !important; } 
-.hover-section { background-color: lightgreen  !important; } 
+.section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ }
+.section-content { height: auto; }
+.current-section { background-color: DodgerBlue !important; }
+.hover-section { background-color: lightgreen  !important; }
 .ui-sortable .hover-section { cursor: move; }
 .ui-sortable-disabled .hover-section { cursor: auto; }
 
 .slider-space-row { width: 30%; float: left; }
-.space-slider { width: 60%; float: left; } 
+.space-slider { width: 60%; float: left; }
 
