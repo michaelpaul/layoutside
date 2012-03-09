@@ -1,6 +1,5 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- logo transparente 127x35
 - atualizar:
     gae sdk
 * icones para remover e editar as propriedades da section
@@ -10,6 +9,12 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 - usar novo editor de código (http://ace.ajax.org/)
 * trocar alerts por um modal/dialog
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
+
+anunciar
+
+- hn
+- comunidades blueprint
+- sites como http://www.webresourcesdepot.com/suggest-free-web-resources
 
 todo
 
