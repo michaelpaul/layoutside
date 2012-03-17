@@ -122,7 +122,7 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 
 /* dialog */
 #editor { margin: 1em; overflow: hidden; padding-right: 0; }
-#sourceEditor { float: left; margin: 0; width: 500px;}
+#sourceEditor { position: absolute; left: 188px; margin: 0; width: 527px; height: 262px; }
 
 #edit-tabs-box { width: 500px; overflow: hidden;  }
 #edit-tabs { float: left; margin-left: 116px; margin-top: 2px; margin-bottom: 1px;}

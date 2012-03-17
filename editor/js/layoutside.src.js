@@ -831,15 +831,20 @@
         init: function () {
             this.setupDialog();
 
+            this.editor = ace.edit("sourceEditor");
+
+            this.editor.setTheme("ace/theme/cobalt");
+            this.editor.renderer.setHScrollBarAlwaysVisible(false);
+            this.editor.renderer.setShowGutter(false);
+            this.editor.renderer.setShowPrintMargin(false);
+            
+            var HtmlMode = ace.require("ace/mode/html").Mode;
+            this.editor.getSession().setMode(new HtmlMode());
+            
             $('#openEditor').click(function (e) {
                 $('#editor').dialog('open');
                 e.preventDefault();
             });
-        },
-
-        startEditor: function () {
-            if (this.editor === null)
-                this.editor = $('#sourceEditor');
         },
 
         setupDialog: function () {
@@ -857,7 +862,8 @@
                             return false;
                         }
 
-                        var c = self.editor.val(); // getCode
+                        // var c = self.editor.val(); // getCode
+                        var c = self.editor.getSession().getValue(); // getCode
                         target.find('> .section-content').html(c);
                     },
                     'Close': function () {
@@ -866,7 +872,7 @@
                 },
 
                 open: function () {
-                    self.startEditor();
+                    self.editor.getSession().setValue("");
                     $('#sectionview').empty();
 
                     function buildSectionTree(ctx, list) {
@@ -891,7 +897,8 @@
                                 e.preventDefault();
                                 $('#sectionview li a').removeClass('selected-section');
                                 $item.children('a').addClass('selected-section');
-                                self.editor.val($content.html()); // setCode
+                                // self.editor.val($content.html()); // setCode
+                                self.editor.getSession().setValue($content.html());
                             });
 
                             $(list).append($item);
@@ -911,6 +918,9 @@
                     buildSectionTree(parent.Container.ui, null);
                     // target = $($('#sectionview li a:first').data('sectionRef'));
                     // self.editor.html(target.find('.section-content').html()); // setCode
+                },
+                close: function(event, ui) { 
+                    target = null;
                 }
             });
         }
