@@ -873,7 +873,7 @@
 
                 open: function () {
                     self.editor.getSession().setValue("");
-                    $('#sectionview').empty();
+                    $('#sectionview ul').remove();
 
                     function buildSectionTree(ctx, list) {
                         var o = null, sections = ctx.find('> .section');
