@@ -827,10 +827,12 @@
     Layoutside.prototype.Editor = {
         editor: null,
         dialogUi: null,
-
+        selected_bg: null,
+        
         init: function () {
             this.setupDialog();
-
+            this.selected_bg = $('#bg-item');
+            
             this.editor = ace.edit("sourceEditor");
 
             this.editor.setTheme("ace/theme/cobalt");
@@ -883,6 +885,7 @@
 
                         if (!list) {
                             list = document.createElement('ul');
+                            list.className = 'sectionTree';
                             $('#sectionview').append(list);
                         }
 
@@ -896,9 +899,10 @@
                                 var $content = target.find('.section-content');
                                 e.preventDefault();
                                 $('#sectionview li a').removeClass('selected-section');
-                                $item.children('a').addClass('selected-section');
-                                // self.editor.val($content.html()); // setCode
+                                // $item.children('a').addClass('selected-section');
                                 self.editor.getSession().setValue($content.html());
+                                var pos = $(this).position();
+                                self.selected_bg.css('top', pos.top).show();
                             });
 
                             $(list).append($item);
