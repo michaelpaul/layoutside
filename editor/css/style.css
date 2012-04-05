@@ -161,12 +161,12 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #sectionProperties .field { width: 150px; margin: 0; padding: 0; }
 
 /* debug/dev actions */
-.section { min-height: 2em; /* height: auto !important; */ background-color: lightblue; /* overflow: hidden; */ }
-.section .icon-delete { position: absolute; right: 20px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+.section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ }
+.section .icon-delete { position: absolute; left: 20px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
     background:  url(../images/cross.png) no-repeat transparent; display: block; }
-.section .icon-edit { position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+.section .icon-edit { position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
     background:  url(../images/cog.png) no-repeat transparent; display: block; }
-.section-content { /* height: auto; */ }
+.section-content { height: auto; }
 .current-section { background-color: DodgerBlue !important; }
 .hover-section { background-color: lightgreen  !important; }
 .ui-sortable .hover-section { cursor: move; }
