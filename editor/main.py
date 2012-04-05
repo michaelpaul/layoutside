@@ -206,12 +206,15 @@ class DownloadLayout(BaseRequestHandler):
                     pacote.write(filename, filename.replace(esqueleto, ''))
 
             screencss = open(screencss_path)
-            pacote.writestr('/css/blueprint/screen.css', screencss.read() + gridcss)
+            info = zipfile.ZipInfo('/css/blueprint/screen.css')
+            info.date_time =  datetime.datetime.now().timetuple()
+            info.external_attr = 0644 << 16L
+            pacote.writestr(info, screencss.read() + gridcss.encode('utf-8'))
 
             info = zipfile.ZipInfo('index.html')
             info.date_time =  datetime.datetime.now().timetuple()
             info.external_attr = 0644 << 16L
-            pacote.writestr(info, html_output)
+            pacote.writestr(info, html_output.encode('utf-8'))
 
             pacote.close()
             zipstream.seek(0)

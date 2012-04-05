@@ -11,6 +11,8 @@
     <![endif]-->
     <link rel="stylesheet" href="css/style.css" type="text/css" media="handheld, all">
     <link rel="stylesheet" href="js/jquery-ui-1.8.10.custom/development-bundle/themes/smoothness/jquery-ui-1.8.10.custom.css" type="text/css">
+    <link rel="stylesheet" href="css/tipsy.css" type="text/css">
+
     <style type="text/css">
     img, iframe, object, embed { max-width: 100%; }
     </style>
@@ -61,12 +63,12 @@
     <div id="widetool">
         <div id="toolbar">
             <ul>
-                <li><a class="icon icon-select" href="#select" title="Select">Select</a></li>
-                <li><a class="icon icon-sort" href="#sort" title="Reorder">Reorder</a></li>
+                <li><a class="icon icon-select" href="#select" rel="tipsy" title="Select">Select</a></li>
+                <li><a class="icon icon-sort" href="#sort" rel="tipsy" title="Reorder">Reorder</a></li>
                 <li class="icon-separator">|</li>
-                <li><a class="icon icon-section" href="#add-section" title="Add section">Add section</a></li>
+                <li><a class="icon icon-section" href="#add-section" rel="tipsy" title="Add section">Add section</a></li>
                 <li class="icon-separator">|</li>
-                <li><a class="icon icon-toggle-grid" href="#" title="Toggle grid">toggle grid</a></li>
+                <li><a class="icon icon-toggle-grid" href="#" rel="tipsy" title="Toggle grid">toggle grid</a></li>
             </ul>
             <div id="measures">
                 <input id="section-w" type="text" value="0" disabled="disabled"> x <input id="section-h" type="text" value="0"> px
@@ -178,6 +180,7 @@
     <script src="js/ace/ace-noconflict.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/ace/theme-cobalt-noconflict.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/ace/mode-html-noconflict.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.tipsy.js"></script>
     
     <script type="text/javascript" src="js/layoutside.src.js"></script>
     <script type="text/javascript">

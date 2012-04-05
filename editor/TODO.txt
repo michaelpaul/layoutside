@@ -1,20 +1,23 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
+- aumentar tamanho dos handles do resize
+- aumentar altura inicial sections
+- criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
     gae sdk
 * icones para remover e editar as propriedades da section
     exemplos de tabelas/listas wordpress, github, dropbox, gmail
 * nomes/identificação de sections no editor de conteudo
-- melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
-- usar novo editor de código (http://ace.ajax.org/)
+* melhorar interface da arvore de sections no editor (ex. nautilus, mac, explorer)
+* usar novo editor de código (http://ace.ajax.org/)
 * trocar alerts por um modal/dialog
-- criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 
 anunciar
 
 - hn
-- comunidades blueprint
+- comunidades blueprint e de desenvolvedores web
 - sites como http://www.webresourcesdepot.com/suggest-free-web-resources
+- revistas?
 
 todo
 
@@ -30,6 +33,7 @@ bugs
 
 - alternar exibição do grid em novas sections
 - ajustar posição das sections ao iniciar drag do sortable
+- icone resize aparecendo todas as sections aninhadas
 * marcar/verificar section em edição atualmente no editor de código
 * layout ainda quebra durante sort
 * altura da grid deve atingir fundo, toolbar deve cobrir grid
@@ -43,13 +47,6 @@ bugs
 * cursor no modo sort e select
 * remover/ignorar hover disparado ao redimencionar sub section
 * altura da section ao adicionar sub section
-
-x icone resize aparecendo todas as sections aninhadas
-
-melhoria
-
-- aumentar tamanho dos handles do resize
-- aumentar altura inicial sections
 
 otimização
 

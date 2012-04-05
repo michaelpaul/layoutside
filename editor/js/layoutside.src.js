@@ -50,15 +50,11 @@
         this.Container.init();
         this.Editor.init();
 
+        $('a[rel=tipsy]').tipsy({fade: true, gravity: 's', delayIn: 500});
+
         $(document).keydown(function (e) {
             if (e.keyCode == $.ui.keyCode.ESCAPE) {
-                var cs = self.Container.currentSection;
-                // não remover container quando selecionado
-                if (cs[0] != self.Container.ui[0]) {
-                    cs.remove();
-                    self.Container.currentSection = self.Container.ui;
-                    self.Container.addLast();
-                }
+                
             }
         });
     }, parent = Layoutside.prototype;
@@ -95,7 +91,7 @@
             });
 
             this.sectionDialog.dialog({
-                resizable: false, autoOpen: false, width: 240 /* 260 */, height: 100, modal: true,
+                resizable: false, autoOpen: false, width: 240 /* 260 */, height: 110, modal: true,
                 open: function () {
                     var id = self.sectionDialog.data('section').id;
                     self.sectionDialog.data('current_id', id);
@@ -133,6 +129,7 @@
         },
         checkId: function (id) {
             return document.getElementById(id) == null;
+            // return $('#' + id, this.ui).size() == 0;
         },
         sortableOptions: {
             items: '> div[class^=span]',
@@ -272,6 +269,7 @@
         },
 
         addSection: function (edit_section) {
+            var self = this;
             var section, content = '', sec_width = 3;
 
             do {
@@ -288,14 +286,32 @@
             }
 
             section = $('<div id="' + id + '" class="span-' +
-                sec_width + ' section"><div class="section-content"></div></div>');
+                sec_width + ' section"><div class="section-content"></div>' +
+                '<a class="icon-delete icon" title="Delete">Delete</a><a class="icon-edit icon" title="Edit">Edit</a>'
+                + '</div>');
+
+            section.children('.icon').hide();
+
+            section.children('.icon-edit').click(function (e) {
+                e.preventDefault();
+                self.showSectionDialog(section.get(0));
+            });
+            
+            section.children('.icon-delete').click(function (e) {
+                e.preventDefault();
+                // não remover container quando selecionado
+                if (section[0] != self.ui[0]) {
+                    section.remove();
+                    self.currentSection = self.ui;
+                    self.addLast();
+                }
+            });
 
             if (content != '&nbsp;') {
                 section.find('.section-content').html(content);
             }
 
-            var self = this, hoverClass = 'hover-section',
-                nclicks = 0, lastClass = 1;
+            var hoverClass = 'hover-section', nclicks = 0, lastClass = 1;
                 // sectionDialog = parent.Dialogs.initSection(section);
 
             section.click(function (e) {
@@ -321,7 +337,9 @@
 
                 e.stopPropagation();
                 section.addClass(hoverClass);
+                section.children('.icon').show();
             }).mouseout(function (e) {
+                section.children('.icon').hide();
                 section.removeClass(hoverClass);
             });
 
@@ -329,15 +347,19 @@
 
             section.resizable({
                // minHeight: 24,
-                maxWidth: parent.Container.getLayoutWidth(),
+               // maxWidth: parent.Container.getLayoutWidth(),
                 autoHide: true,
                 zIndex: 100,
                 grid: [config.totalColWidth],
                 handles: 'e',
                 // containment: 'parent',
 
-                start: function (e, ui) { },
-                stop: function () { },
+                start: function (e, ui) { 
+                    self.isResizingSection = true;
+                },
+                stop: function () { 
+                    self.isResizingSection = false;
+                },
 
                 resize: function (e, ui) {
                     var elm = ui.helper, sectionWidth = elm.width(), curClass = '',
@@ -345,11 +367,12 @@
 
                     parent.Toolbar.heightInput.val(ui.size.height);
 
-                    if (lastClass == nc)
+                    if (lastClass == nc) {
                         return false;
-
+                    }
+                    
                     var childs = elm.find('> .section');
-
+                    
                     // preservar largura min/max quando ouver 'filhos'
                     if (childs.length) {
                         var largSection = self.getSectionWidth(elm), largMaiorFilho = 0;
@@ -357,11 +380,11 @@
                         childs.each(function (k, v) {
                             var $c = $(v), cw = self.getSectionWidth($c);
 
-                            lgm('max child w', sectionWidth);
                             $c.resizable("option", "maxWidth", sectionWidth);
 
-                            if (cw > largMaiorFilho)
+                            if (cw > largMaiorFilho) {
                                 largMaiorFilho = cw;
+                            }
                         });
 
                         section.resizable("option", "minWidth",
@@ -384,13 +407,14 @@
                 this.currentSection.append(section);
             }
 
+            /*
             var sectionParent = section.parent();
             // definir largura maxima da section quando filha
             if (sectionParent[0] != self.ui[0]) {
                 section.resizable("option", "maxWidth",
                     self.getSectionWidth(sectionParent) * config.totalColWidth);
             }
-
+            */
             // if (!edit_section)
                // config.status |= ST_MODIFIED;
 
@@ -559,12 +583,13 @@
                             $list.append('<tr><td><a class="open-link" lkey="' + v.key +
                             '" href="#' + v.key + '">'+ v.name + '</a></td>' +
                             '<td class="layout-actions" style="text-align: right; width: 65px; ">' +
-                            '<a class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' +
-                            '<a class="preview" target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
-                            '<a class="delete" href="#' + v.key + '">delete</a>' +
+                            '<a rel="tipsy" title="Open" class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' +
+                            '<a rel="tipsy" title="Preview" class="preview" target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
+                            '<a rel="tipsy" title="Delete" class="delete" href="#' + v.key + '">delete</a>' +
                             '</td></tr>');
                         });
-
+                        $('a[rel=tipsy]', $list).tipsy({gravity: 's', delayIn: 500});
+                        
                         $('#my-layouts table td.layout-actions a').hide();
                         $('#my-layouts table tr').hover(function () {
                             $('td.layout-actions a', this).show();
@@ -579,6 +604,7 @@
 
                         $('#my-layouts table a.delete').click(function (e) {
                             e.preventDefault();
+                            // @TODO usar um modal no lugar do window.confirm
                             var link = this, c = window.confirm("Do you really want to delete the selected layout?");
 
                             if (c) {
@@ -711,14 +737,8 @@
             lg(layout_width);
             ui.find('div:last').css('marginRight', 0);
         },
-//        resizeSections : function (larg, gutter) {
+
         resizeSections : function () {
-//            if (!larg) {
-//                larg = 30;
-//            }
-//            if (!gutter) {
-//                gutter = 10;
-//            }
             larg = config.column_width;
             gutter = config.gutter_width;
             // $('div.container').css('minWidth', '950px');
@@ -732,13 +752,18 @@
                 if ($(this).hasClass('last')) {
                     new_gutter = 0;
                 }
-                $(this).css({width: novo + 'px', marginRight: new_gutter + 'px'});
+                $(this).css({'float': 'left', 'width': novo + 'px', 'marginRight': new_gutter + 'px'});
             });
-            // @TODO revisar quando atualizar opt maxWidth e qual valor.
+
 			var layout_width = (config.column_count * (larg + gutter)) - gutter;
-            $('.section')
-				.resizable('option', 'grid', [larg + gutter])
-            	.resizable("option", "maxWidth", layout_width);
+            $('.section').resizable('option', 'grid', [larg + gutter]).each(function () {
+                var $section = $(this), $parent = $section.parent('.section');
+                if ($parent.size() == 0) {
+                    $section.resizable("option", "maxWidth", layout_width);
+                } else {
+                    $section.resizable("option", "maxWidth", $parent.width());
+                }
+            });
         },
         saveLayout: function () {
             var layout = {
@@ -828,21 +853,21 @@
         editor: null,
         dialogUi: null,
         selected_bg: null,
-        
+
         init: function () {
             this.setupDialog();
             this.selected_bg = $('#bg-item');
-            
+
             this.editor = ace.edit("sourceEditor");
 
             this.editor.setTheme("ace/theme/cobalt");
             this.editor.renderer.setHScrollBarAlwaysVisible(false);
             this.editor.renderer.setShowGutter(false);
             this.editor.renderer.setShowPrintMargin(false);
-            
+
             var HtmlMode = ace.require("ace/mode/html").Mode;
             this.editor.getSession().setMode(new HtmlMode());
-            
+
             $('#openEditor').click(function (e) {
                 $('#editor').dialog('open');
                 e.preventDefault();
@@ -923,7 +948,7 @@
                     // target = $($('#sectionview li a:first').data('sectionRef'));
                     // self.editor.html(target.find('.section-content').html()); // setCode
                 },
-                close: function(event, ui) { 
+                close: function(event, ui) {
                     target = null;
                 }
             });
