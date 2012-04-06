@@ -1,5 +1,6 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
+- limitar o numero de sections para 50 
 - aumentar tamanho dos handles do resize
 - aumentar altura inicial sections
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
@@ -21,6 +22,8 @@ anunciar
 
 todo
 
+- indentar corretamente o html gerado, utilizar um parser de HTML?
+  http://pt.wikipedia.org/wiki/Indenta%C3%A7%C3%A3o
 - procurar por anotacões "TODO" no código
 - z-index das sections e dialogs/menus do app
 - remover dialogs não utilizados

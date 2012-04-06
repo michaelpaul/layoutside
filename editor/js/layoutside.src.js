@@ -400,8 +400,10 @@
             });
 
             if (edit_section && edit_section.child_of !== null) {
-                if (!$('#' + edit_section.child_of).length)
-                    throw new Error('Failed to add child section');
+                if (!$('#' + edit_section.child_of).length) {
+                    // throw new Error('Failed to add child section. ID ' + edit_section.child_of + ' not found.');
+                    return false;
+                }
                 $('#' + edit_section.child_of).append(section);
             } else {
                 this.currentSection.append(section);
@@ -420,6 +422,7 @@
 
             this.addLast();
 			parent.Menubar.resizeSections();
+			return true;
         }
     };
 
@@ -676,7 +679,7 @@
                 return false;
             }
             var self = this;
-            lg('open layout: ' + key);
+            // lg('open layout: ' + key);
             this.loadingLayout = true;
 
             $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
@@ -690,8 +693,30 @@
                 parent.Container.currentSection = parent.Container.ui;
                 parent.Container.currentSectionId = 1;
 
+                /*
                 for(var i = 0, l = result.sections.length; i < l; i++) {
                     parent.Container.addSection(result.sections[i]);
+                }
+                */
+                var adicionada, atual, max_tentativas = result.sections.length * 8;
+
+                for (var i = 0, a = 0, l = result.sections.length; true ; i++) {
+                    if (a == l || i > max_tentativas) {
+                        break;
+                    }
+                    atual = i % l;
+                    if (typeof result.sections[atual] == 'undefined') {
+                        continue;
+                    }
+                    adicionada = parent.Container.addSection(result.sections[atual]);
+                    if (adicionada) {
+                        a++;
+                        delete result.sections[atual];
+                    }
+                }
+                // console.log('a: ' + a + ', i: ' + i + ', l: ' + l);
+                if (a != l) {
+                    alert_modal('Failed to build your layout, please report us about this.', MSG_ERROR);
                 }
 
                 parent.Menubar.loadingLayout = false;
@@ -734,7 +759,7 @@
             var layout_width = (config.column_count * config.totalColWidth) - config.gutter_width;
             config.layout_width = layout_width;
             $('#containerPlaceholder').width(layout_width);
-            lg(layout_width);
+            // lg(layout_width);
             ui.find('div:last').css('marginRight', 0);
         },
 
@@ -808,7 +833,7 @@
                 dataType: 'json',
                 data: JSON.stringify(layout),
                 error: function (xhr, textStatus) {
-                    console.log('XhrError: ' + textStatus);
+                    // console.log('XhrError: ' + textStatus);
                 },
                 success: function(result) {
                     if (result.status == 0) {
@@ -834,7 +859,7 @@
             nd.dialog({
                 resizable: false, autoOpen: false, width: 240 /* 260 */, height: 100, modal: true,
                 open: function () {
-                    lg('section dialog open');
+                
                 },
                 buttons: {
                     'Update': function () {  },
@@ -895,13 +920,15 @@
                     },
                     'Close': function () {
                         self.dialogUi.dialog('close');
+                        self.selected_bg.css('top', 0).hide();
                     }
                 },
 
                 open: function () {
                     self.editor.getSession().setValue("");
                     $('#sectionview ul').remove();
-
+                    self.selected_bg.css('top', 0).hide();
+                        
                     function buildSectionTree(ctx, list) {
                         var o = null, sections = ctx.find('> .section');
 
