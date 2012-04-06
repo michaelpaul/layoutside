@@ -19,6 +19,8 @@ current_user = None
 
 # limite de sections deletadas ao salvar um novo layout
 LIMIT_DELETE_SECTIONS = 50
+# limite de sections por layout
+LIMIT_CREATE_SECTIONS = 50
 
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
@@ -124,6 +126,11 @@ class SaveLayout(BaseRequestHandler):
 
         self.response.headers['Content-type'] = 'application/json'
 
+        if (len(layout['sections']) > LIMIT_CREATE_SECTIONS): 
+            result_str = simplejson.dumps({'status': 5, 'key': None })
+            self.write(result_str)
+            return False
+        
         try:
             if config['key'] != '':
                 l = Layout.get(config['key'])

@@ -844,8 +844,11 @@
 
                         config.status = ST_SAVED;
                         config.key = result.key;
-                    } else
+                    } else if (result.status == 5) {
+                        alert_modal('Failed to save layout, section limit reached!', MSG_NOTICE);
+                    } else {
                         alert_modal('Failed to save layout', MSG_ERROR);
+                    }
                 }
             });
         }
