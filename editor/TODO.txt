@@ -2,10 +2,11 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 
 - limitar o numero de sections para 50 
 - aumentar tamanho dos handles do resize
-- aumentar altura inicial sections
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
     gae sdk
+* aumentar altura inicial sections
+* colocar um fundo e bordas nos icones de hover da section
 * icones para remover e editar as propriedades da section
     exemplos de tabelas/listas wordpress, github, dropbox, gmail
 * nomes/identificação de sections no editor de conteudo

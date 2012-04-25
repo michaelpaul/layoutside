@@ -287,17 +287,18 @@
 
             section = $('<div id="' + id + '" class="span-' +
                 sec_width + ' section"><div class="section-content"></div>' +
-                '<a class="icon-delete icon" title="Delete">Delete</a><a class="icon-edit icon" title="Edit">Edit</a>'
+                '<div class="icon-set"><a href="#edit-section" class="icon-edit icon" title="Edit">Edit</a>' + 
+                '<a href="#delete-section" class="icon-delete icon" title="Delete">Delete</a></div>'
                 + '</div>');
 
             section.children('.icon').hide();
 
-            section.children('.icon-edit').click(function (e) {
+            section.find('.icon-set .icon-edit').click(function (e) {
                 e.preventDefault();
                 self.showSectionDialog(section.get(0));
             });
             
-            section.children('.icon-delete').click(function (e) {
+            section.find('.icon-set .icon-delete').click(function (e) {
                 e.preventDefault();
                 // não remover container quando selecionado
                 if (section[0] != self.ui[0]) {
@@ -337,9 +338,9 @@
 
                 e.stopPropagation();
                 section.addClass(hoverClass);
-                section.children('.icon').show();
+                section.children('.icon-set').show();
             }).mouseout(function (e) {
-                section.children('.icon').hide();
+                section.children('.icon-set').hide();
                 section.removeClass(hoverClass);
             });
 

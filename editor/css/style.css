@@ -158,14 +158,60 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #sectionProperties table { border-collapse:collapse; }
 #sectionProperties table td { height: 20px; padding: 0; }
 #sectionProperties label { float: left; line-height: 16px; width: 30px /* 72px */;  }
-#sectionProperties .field { width: 150px; margin: 0; padding: 0; }
+#sectionProperties .field { width: 1icon-delete50px; margin: 0; padding: 0; }
 
 /* debug/dev actions */
-.section { min-height: 2em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ }
-.section .icon-delete { position: absolute; left: 20px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
-    background:  url(../images/cross.png) no-repeat transparent; display: block; }
-.section .icon-edit { position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
-    background:  url(../images/cog.png) no-repeat transparent; display: block; }
+.section { min-height: 3em; height: auto !important; background-color: lightblue; /* overflow: hidden; */ }
+
+.section .icon-set {
+    color: #333333;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    *background-color: #e6e6e6;
+    background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #cccccc;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-bottom-color: #b3b3b3;
+    -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+    filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+    *zoom: 1;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    width: 40px;
+    height: 20px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    display: none;
+}
+
+.section .icon-delete { 
+    margin: 2px 2px 2px 0;
+    float: left;
+    width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+    background:  url(../images/cross.png) no-repeat transparent; 
+
+}
+.section .icon-edit { 
+    margin: 2px;
+    float: left;
+    width: 16px; height: 16px; overflow: hidden; text-indent: 20px;
+    background:  url(../images/cog.png) no-repeat transparent;
+}
+
 .section-content { height: auto; }
 .current-section { background-color: DodgerBlue !important; }
 .hover-section { background-color: lightgreen  !important; }
