@@ -51,12 +51,7 @@
         this.Editor.init();
 
         $('a[rel=tipsy]').tipsy({fade: true, gravity: 's', delayIn: 500});
-
-        $(document).keydown(function (e) {
-            if (e.keyCode == $.ui.keyCode.ESCAPE) {
-                
-            }
-        });
+        $('.icon-section').tipsy('show');
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Layout = {
@@ -699,7 +694,7 @@
                     parent.Container.addSection(result.sections[i]);
                 }
                 */
-                var adicionada, atual, max_tentativas = result.sections.length * 8;
+                var adicionada, atual, max_tentativas = result.sections.length * 10;
 
                 for (var i = 0, a = 0, l = result.sections.length; true ; i++) {
                     if (a == l || i > max_tentativas) {

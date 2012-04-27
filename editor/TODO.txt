@@ -1,10 +1,10 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- limitar o numero de sections para 50 
 - aumentar tamanho dos handles do resize
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
     gae sdk
+* limitar o numero de sections para 50 
 * aumentar altura inicial sections
 * colocar um fundo e bordas nos icones de hover da section
 * icones para remover e editar as propriedades da section
