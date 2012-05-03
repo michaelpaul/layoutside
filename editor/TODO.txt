@@ -1,9 +1,10 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- aumentar tamanho dos handles do resize
+- bug deletar layout em edicao
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
     gae sdk
+* aumentar tamanho dos handles do resize
 * limitar o numero de sections para 50 
 * aumentar altura inicial sections
 * colocar um fundo e bordas nos icones de hover da section
