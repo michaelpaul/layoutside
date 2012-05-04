@@ -1,10 +1,11 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- rodar app na raiz do site
+- exibir o tooltip "add section" corretamente, usar cookies
 - bug deletar layout em edicao
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
     gae sdk
+* rodar app na raiz do site
 * aumentar tamanho dos handles do resize
 * limitar o numero de sections para 50 
 * aumentar altura inicial sections

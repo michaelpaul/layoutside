@@ -44,14 +44,16 @@
     /* main */
     var Layoutside = function () {
         var self = this;
-
+        
         this.Menubar.init();
         this.Toolbar.init();
         this.Container.init();
         this.Editor.init();
 
         $('a[rel=tipsy]').tipsy({fade: true, gravity: 's', delayIn: 500});
-        $('.icon-section').tipsy('show');
+        window.setTimeout(function () {
+            $('.icon-section').tipsy('show');
+        }, 2000);
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Layout = {
@@ -567,7 +569,7 @@
 					}
 				},
                 open: function () {
-                     $.getJSON('/editor/layouts', { }, function(result, status) {
+                     $.getJSON('/layouts', { }, function(result, status) {
                         if (status != 'success')
                             throw new Error('Failed to load your layouts');
 
@@ -583,7 +585,7 @@
                             '" href="#' + v.key + '">'+ v.name + '</a></td>' +
                             '<td class="layout-actions" style="text-align: right; width: 65px; ">' +
                             '<a rel="tipsy" title="Open" class="open" lkey="' + v.key + '" href="#' + v.key + '">edit</a> ' +
-                            '<a rel="tipsy" title="Preview" class="preview" target="_blank" href="/editor/preview-layout?key=' + v.key + '">preview</a> ' +
+                            '<a rel="tipsy" title="Preview" class="preview" target="_blank" href="/preview-layout?key=' + v.key + '">preview</a> ' +
                             '<a rel="tipsy" title="Delete" class="delete" href="#' + v.key + '">delete</a>' +
                             '</td></tr>');
                         });
@@ -607,7 +609,7 @@
                             var link = this, c = window.confirm("Do you really want to delete the selected layout?");
 
                             if (c) {
-                                $.post('/editor/delete-layout', {'key': $(this).attr('href').substr(1)}, function (result) {
+                                $.post('/delete-layout', {'key': $(this).attr('href').substr(1)}, function (result) {
                                     if (result.status == 0) {
                                         $(link).parents('tr').fadeOut(function () {
                                             $(this).remove();
@@ -678,7 +680,7 @@
             // lg('open layout: ' + key);
             this.loadingLayout = true;
 
-            $.getJSON('/editor/open-layout', { 'key': key }, function (result) {
+            $.getJSON('/open-layout', { 'key': key }, function (result) {
                 parent.Toolbar.viewMode = 0;
                 $('#containerGrid').removeClass('toggle-grid');
 
@@ -824,7 +826,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/editor/save-layout',
+                url: '/save-layout',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify(layout),

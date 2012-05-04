@@ -18,22 +18,19 @@ skip_files:
 - ^(.*/)?\..*
 
 handlers:
-- url: /editor/css
+- url: /css
   static_dir: editor/css
-- url: /editor/js
+- url: /js
   static_dir: editor/js
-- url: /editor/images
+- url: /images
   static_dir: editor/images
 - url: /test/
   static_dir: test
 
-- url: /(index\.html)?
-  static_files: index.html
-  upload: index.html
 - url: /favicon.ico
   static_files: favicon.ico
   upload: favicon.ico
 
-- url: /editor/.*
+- url: /.*
   script: editor/main.py
   login: required

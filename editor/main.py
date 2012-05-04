@@ -29,7 +29,7 @@ class BaseRequestHandler(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
 class Editor(BaseRequestHandler):
-    PATH = '/editor/'
+    PATH = '/'
 
     def get(self):
         self.render('index.html', {'user_name':current_user.nickname(),
