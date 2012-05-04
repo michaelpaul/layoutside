@@ -1,5 +1,6 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
+- rodar app na raiz do site
 - bug deletar layout em edicao
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - atualizar:
