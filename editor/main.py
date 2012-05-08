@@ -286,6 +286,7 @@ class HtmlBuilder(object):
                     classe = s.css_class.replace('section ui-resizable', '').replace('ui-resizable-autohide', '')
                     classe = classe.replace('current', '')
                     classe = classe.replace('--autohide', '')
+                    classe = classe.replace('-disabled', '')
                     classe = classe.replace('ui-sortable', '').strip()
 
                     if(s.css_class.find('clear') > -1):
