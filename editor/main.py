@@ -33,7 +33,7 @@ class Editor(BaseRequestHandler):
 
     def get(self):
         self.render('index.html', {'user_name':current_user.nickname(),
-            'logout': users.create_logout_url("/")})
+            'logout': users.create_logout_url("http://layoutside.com")})
 
 class ListLayouts(BaseRequestHandler):
     def get(self):

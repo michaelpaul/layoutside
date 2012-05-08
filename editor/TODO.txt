@@ -1,6 +1,6 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- redirect pro site apos logout 
+
 - adicionar loading em partes que podem demorar
 - exibir o tooltip "add section" corretamente ou remove-lo. usar cookies
 - bug deletar layout em edicao
@@ -8,6 +8,7 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 - testar a parada em produção antes de comunicar o lançamento!
 - atualizar:
     gae sdk
+* redirect pro site apos logout 
 * rodar app na raiz do site
 * aumentar tamanho dos handles do resize
 * limitar o numero de sections para 50 
