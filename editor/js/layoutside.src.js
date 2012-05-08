@@ -41,19 +41,37 @@
 	    });
     }
 
+    var LoadingMsg = {
+        timer: null,
+        show: function () {
+            var cnt = 0;
+            $('#loading-msg').show();
+            var timer = setInterval(function () {
+                var msg = 'Loading';
+                var ndots = cnt % 3;
+                for (i = 0; i <= ndots; i++) {
+                    msg += '.';
+                }
+                cnt++;
+                $('#loading-msg').text(msg);
+            }, 400);    
+        },
+        hide: function () {
+            window.clearInterval(this.timer);
+            $('#loading-msg').hide();
+        }
+    }; 
+    
     /* main */
     var Layoutside = function () {
         var self = this;
-        
+
         this.Menubar.init();
         this.Toolbar.init();
         this.Container.init();
         this.Editor.init();
 
         $('a[rel=tipsy]').tipsy({fade: true, gravity: 's', delayIn: 500});
-        window.setTimeout(function () {
-            $('.icon-section').tipsy('show');
-        }, 2000);
     }, parent = Layoutside.prototype;
 
     Layoutside.prototype.Layout = {
@@ -569,7 +587,8 @@
 					}
 				},
                 open: function () {
-                     $.getJSON('/layouts', { }, function(result, status) {
+                    LoadingMsg.show();
+                    $.getJSON('/layouts', { }, function(result, status) {
                         if (status != 'success')
                             throw new Error('Failed to load your layouts');
 
@@ -609,7 +628,9 @@
                             var link = this, c = window.confirm("Do you really want to delete the selected layout?");
 
                             if (c) {
+                                LoadingMsg.show();
                                 $.post('/delete-layout', {'key': $(this).attr('href').substr(1)}, function (result) {
+                                    LoadingMsg.hide();
                                     if (result.status == 0) {
                                         $(link).parents('tr').fadeOut(function () {
                                             $(this).remove();
@@ -621,7 +642,7 @@
                                 }, 'json');
                             }
                         });
-
+                        LoadingMsg.hide();
                     });
                 }
 	        });
@@ -679,7 +700,7 @@
             var self = this;
             // lg('open layout: ' + key);
             this.loadingLayout = true;
-
+            LoadingMsg.show();
             $.getJSON('/open-layout', { 'key': key }, function (result) {
                 parent.Toolbar.viewMode = 0;
                 $('#containerGrid').removeClass('toggle-grid');
@@ -724,6 +745,7 @@
 
                 self.resizeSections();
                 parent.Container.setMeasures();
+                LoadingMsg.hide();
             });
         },
 
@@ -793,7 +815,7 @@
                 'config': config,
                 'sections': []
             };
-
+            
             if (config.layout_name == null || $.trim(config.layout_name) == '') {
                 parent.Menubar.newLayoutDialog.dialog('open');
                 this.saveOnCreate = true;
@@ -824,6 +846,7 @@
 
             pushChildSectionsOf('#container');
 
+            LoadingMsg.show();
             $.ajax({
                 type: "POST",
                 url: '/save-layout',
@@ -834,6 +857,8 @@
                     // console.log('XhrError: ' + textStatus);
                 },
                 success: function(result) {
+                    LoadingMsg.hide();
+                    
                     if (result.status == 0) {
                         if (config.status & ST_NEW)
                             alert_modal('New layout saved!', MSG_SUCCESS);

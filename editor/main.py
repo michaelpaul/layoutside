@@ -106,7 +106,7 @@ class OpenLayout(BaseRequestHandler):
                 }
 
                 result['sections'].append(section)
-
+            
             result_str = simplejson.dumps(result)
             self.write(result_str)
 
@@ -169,6 +169,7 @@ class SaveLayout(BaseRequestHandler):
                 child_of = s['child_of'])
             new_sections.append(section)
             # section.put()
+
         db.put(new_sections)
         result_str = simplejson.dumps({'status': 0, 'key': str(l.key()) })
         self.write(result_str)
