@@ -134,6 +134,10 @@ class SaveLayout(BaseRequestHandler):
         try:
             if config['key'] != '':
                 l = Layout.get(config['key'])
+            else: 
+                l = None
+            
+            if l != None and isinstance(l, db.Model):
                 l.name = config['layout_name']
                 l.column_count = config['column_count']
                 l.column_width = config['column_width']
@@ -146,7 +150,7 @@ class SaveLayout(BaseRequestHandler):
                     gutter_width = config['gutter_width'])
 
             l.put()
-        except db.BadValueError:
+        except Exception, db.BadValueError:
             result_str = simplejson.dumps({'status': 1})
             self.write(result_str)
             return

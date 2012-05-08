@@ -1,13 +1,12 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-
-- adicionar loading em partes que podem demorar
-- exibir o tooltip "add section" corretamente ou remove-lo. usar cookies
 - bug deletar layout em edicao
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - testar a parada em produção antes de comunicar o lançamento!
 - atualizar:
     gae sdk
+* exibir o tooltip "add section" corretamente ou remove-lo. usar cookies
+* adicionar loading em partes que podem demorar
 * redirect pro site apos logout 
 * rodar app na raiz do site
 * aumentar tamanho dos handles do resize
