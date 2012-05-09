@@ -121,7 +121,7 @@ class PreviewLayout(BaseRequestHandler):
         try:
             layout = Layout.get(self.request.get('key'))
             builder = HtmlBuilder()
-            tpl = builder.build(layout, '/editor/', 'preview')
+            tpl = builder.build(layout, '/', 'preview')
             self.write(tpl)
         except Exception:
             logging.error("Falha no preview!")

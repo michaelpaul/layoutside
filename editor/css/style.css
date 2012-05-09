@@ -120,8 +120,8 @@ http://msdn.microsoft.com/en-us/library/ms532969.aspx
 #sectionview li ul { padding: 0 0 0 10px; margin-top: 0; display: none; margin: 0; }
 #sectionview li a { display: block; padding: 2px 2px 2px 10px; margin-right: 2px; text-decoration: none; outline: none; }
 #sectionview .selected-section { background-color: lightblue; }
-#sectionview .tree-childs { background: url('/editor/images/treeRightTriangleBlack.png') no-repeat left center; }
-#sectionview .tree-open { background: url('/editor/images/treeDownTriangleBlack.png') no-repeat left center; }
+#sectionview .tree-childs { background: url('/images/treeRightTriangleBlack.png') no-repeat left center; }
+#sectionview .tree-open { background: url('/images/treeDownTriangleBlack.png') no-repeat left center; }
 #bg-item { background-color: lightblue; display: none; height: 17px; z-index: -8; position: absolute; width: 100%; margin-top: 2px; }
 
 /* dialog */
