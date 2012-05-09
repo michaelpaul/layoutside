@@ -496,7 +496,7 @@
             var self = this;
             this.buildGrid();
 
-            $('#menu a:not(.download)').bind('click', function (e) { e.preventDefault(); });
+            $('#menu a').not('.download, .external').bind('click', function (e) { e.preventDefault(); });
 
             $('#menu a.download').bind('click', function (e) {
 				if (!config.key) {
