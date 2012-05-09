@@ -1,6 +1,7 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
+- limitar numero de layouts por usuario
 - testar a parada em produção antes de comunicar o lançamento!
 - atualizar:
     gae sdk
@@ -37,6 +38,7 @@ todo
 - remover dialogs não utilizados
 - atualizar jquery e jquery ui
 - atalhos (ex. https://github.com/madrobby/keymaster)
+- rever uso do botao "selecionar"
 * permitir edição do nome do layout salvo
 * personalização da grid durante edição, gerar grid.css
 
