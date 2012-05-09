@@ -16,6 +16,7 @@ skip_files:
 - ^(.*/)?.*~
 - ^(.*/)?.*\.py[co]
 - ^(.*/)?\..*
+- ^(.*/)?closure-compiler
 
 handlers:
 - url: /css

@@ -35,8 +35,12 @@ class Editor(BaseRequestHandler):
     PATH = '/'
 
     def get(self):
-        self.render('index.html', {'user_name':current_user.nickname(),
-            'logout': users.create_logout_url("http://layoutside.com")})
+        env_prod =  os.environ['SERVER_SOFTWARE'].startswith("Development")
+        self.render('index.html', {
+            'user_name':current_user.nickname(),
+            'logout': users.create_logout_url("http://layoutside.com"),
+            'env_prod': env_prod
+        })
 
 class ListLayouts(BaseRequestHandler):
     def get(self):

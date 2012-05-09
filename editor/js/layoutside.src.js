@@ -135,7 +135,7 @@
                             alert_modal('Invalid ID', MSG_ERROR);
                         }
                     },
-                    'Close': function () { self.sectionDialog.dialog('close'); },
+                    'Close': function () { self.sectionDialog.dialog('close'); }
                 }
             });
 
@@ -894,7 +894,7 @@
                 },
                 buttons: {
                     'Update': function () {  },
-                    'Close': function () { nd.dialog('close'); },
+                    'Close': function () { nd.dialog('close'); }
                 }
 	        });
             $('.space-slider', nd).slider( {
