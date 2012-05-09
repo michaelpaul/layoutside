@@ -22,10 +22,12 @@
         MSG_ERROR = 'Error',
         MSG_NOTICE = 'Notice';
 
-    function alert_modal(msg, title) {
+    function alert_modal(msg, title, height) {
         var title = typeof title !== 'undefined' ? title: '';
+        var height = typeof height !== 'undefined' ? height: 120;
+
         $("#alert-modal").dialog({
-		    height: 120,
+		    'height': height,
 		    modal: true,
 		    resizable: false,
 		    title: title,
@@ -869,6 +871,9 @@
                         config.key = result.key;
                     } else if (result.status == 5) {
                         alert_modal('Failed to save layout, section limit reached!', MSG_NOTICE);
+                    } else if (result.status == 6) {
+                        var alert = 'Unable to save layout, this is a beta version and your layouts limit was reached!';
+                        alert_modal(alert, MSG_NOTICE, 150);
                     } else {
                         alert_modal('Failed to save layout', MSG_ERROR);
                     }

@@ -1,5 +1,7 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
+- logs?
+- comprimir js
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 - limitar numero de layouts por usuario
 - testar a parada em produção antes de comunicar o lançamento!

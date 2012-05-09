@@ -17,10 +17,13 @@ from datastore.models import *
 
 current_user = None
 
+# limite de layouts por usuário
+LIMIT_SAVED_LAYOUTS = 3
 # limite de sections deletadas ao salvar um novo layout
 LIMIT_DELETE_SECTIONS = 50
 # limite de sections por layout
 LIMIT_CREATE_SECTIONS = 50
+
 
 class BaseRequestHandler(webapp.RequestHandler):
     def write(self, msg):
@@ -138,11 +141,21 @@ class SaveLayout(BaseRequestHandler):
                 l = None
             
             if l != None and isinstance(l, db.Model):
+                # atualizar layout
                 l.name = config['layout_name']
                 l.column_count = config['column_count']
                 l.column_width = config['column_width']
                 l.gutter_width = config['gutter_width']
             else:
+                # inserir layout
+                query = db.Query(Layout)
+                layout_count = query.filter("owner = ", current_user.user_id()).count()
+                
+                if (layout_count >= LIMIT_SAVED_LAYOUTS): 
+                    result_str = simplejson.dumps({'status': 6, 'key': None })
+                    self.write(result_str)
+                    return False
+                
                 l = Layout(owner = current_user.user_id(),
                     name = config['layout_name'],
                     column_count = config['column_count'],
