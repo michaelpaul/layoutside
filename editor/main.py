@@ -78,7 +78,8 @@ class OpenLayout(BaseRequestHandler):
         self.response.headers['Content-type'] = 'application/json'
 
         if(layout is None):
-            self.write('Layout não encontrado.')
+            logging.error("Não foi possivel abrir o layout (%s).", self.request.get('key'))
+            # self.write('Layout não encontrado.')
         else:
             config = {
                 'key': str(layout.key()),
@@ -117,10 +118,13 @@ class PreviewLayout(BaseRequestHandler):
     output = ''
 
     def get(self):
-        layout = Layout.get(self.request.get('key'))
-        builder = HtmlBuilder()
-        tpl = builder.build(layout, '/editor/', 'preview')
-        self.write(tpl)
+        try:
+            layout = Layout.get(self.request.get('key'))
+            builder = HtmlBuilder()
+            tpl = builder.build(layout, '/editor/', 'preview')
+            self.write(tpl)
+        except Exception:
+            logging.error("Falha no preview!")
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
@@ -164,6 +168,7 @@ class SaveLayout(BaseRequestHandler):
 
             l.put()
         except Exception, db.BadValueError:
+            logging.error("Erro ao salvar layout.")
             result_str = simplejson.dumps({'status': 1})
             self.write(result_str)
             return

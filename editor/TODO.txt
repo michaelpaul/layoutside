@@ -1,13 +1,13 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- logs?
 - comprimir js
 - criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
-- limitar numero de layouts por usuario
 - testar a parada em produção antes de comunicar o lançamento!
 - atualizar:
     gae sdk
-    
+
+* logs
+* limitar numero de layouts por usuario    
 * bug deletar layout em edicao
 * exibir o tooltip "add section" corretamente ou remove-lo. usar cookies
 * adicionar loading em partes que podem demorar
