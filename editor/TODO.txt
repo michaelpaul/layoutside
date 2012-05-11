@@ -1,11 +1,12 @@
 lançamento (concluir items para o lançamento, ordenados por prioridade)
 
-- comprimir js
-- criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
+- fazer ajuste recomendado pelo sunny
+- modificar pagina de erro!
 - definir uma rotina de testes funcionais e testar a parada em produção antes de comunicar o lançamento!
-- atualizar:
-    gae sdk
+- atualizar gae sdk, jquery ui.
 
+* comprimir js
+* criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 * logs
 * limitar numero de layouts por usuario    
 * bug deletar layout em edicao
@@ -30,6 +31,13 @@ anunciar
 - comunidades blueprint e de desenvolvedores web
 - sites como http://www.webresourcesdepot.com/suggest-free-web-resources
 - revistas?
+
+ideias 
+
+- integrar com o gdrive. criar um arquivo/formato para os layouts. (by guilha)
+- criar app chrome 
+- criar API 
+- colocar um editor WYSIWYG (pablo) 
 
 todo
 
