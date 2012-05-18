@@ -60,11 +60,17 @@
                         <li><a target="_blanck" class="external" href="http://layoutside.com/getting-started/">Getting Started</a></li></ul>
                 </li>
             </ul>
+            {% if user_name %}
             <div id="user">
                 <a href="#" title="User">{{ user_name }}</a>
                 <span> | </span>
                 <a href="{{ logout }}" title="logout">logout</a>
             </div>
+            {% else %}
+            <div id="user">
+                <a href="{{ login_url }}" title="login">login</a>
+            </div>
+            {% endif %}
         </div>
     </div>
 

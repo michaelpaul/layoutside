@@ -34,4 +34,3 @@ handlers:
   
 - url: /.*
   script: editor/main.py
-  login: required

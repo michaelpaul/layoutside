@@ -874,6 +874,8 @@
                     } else if (result.status == 6) {
                         var alert = 'Unable to save layout, this is a beta version and your layouts limit was reached!';
                         alert_modal(alert, MSG_NOTICE, 150);
+                    } else if (result.status == 2) {
+                        alert_modal('Sign in to save your layout', MSG_ERROR);
                     } else {
                         alert_modal('Failed to save layout', MSG_ERROR);
                     }

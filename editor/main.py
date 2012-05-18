@@ -36,9 +36,11 @@ class Editor(BaseRequestHandler):
 
     def get(self):
         env_prod = not os.environ['SERVER_SOFTWARE'].startswith("Development")
+        nickname = current_user.nickname() if not current_user == None else ''
         self.render('index.html', {
-            'user_name':current_user.nickname(),
+            'user_name':nickname,
             'logout': users.create_logout_url("http://layoutside.com"),
+            'login_url': users.create_login_url("/"),
             'env_prod': env_prod
         })
 
@@ -132,6 +134,11 @@ class PreviewLayout(BaseRequestHandler):
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
+        if current_user == None:
+            logging.error("Salvar layout sem login.")
+            result_str = simplejson.dumps({'status': 2})
+            self.write(result_str)
+            return
         layout = simplejson.loads(self.request.body)
         config = layout['config']
 
@@ -407,7 +414,7 @@ def main():
     current_user = users.get_current_user()
     ga = AppUser.gql('WHERE google_account = :1', current_user)
     # verificar se usuário já tem cadastro, se não criar usuario no storage
-    if(ga.get() == None):
+    if(ga.get() == None and not current_user == None):
         nova_conta = AppUser(google_account=current_user, google_id=current_user.user_id())
         nova_conta.put()
 
