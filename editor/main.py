@@ -328,7 +328,7 @@ class HtmlBuilder(object):
                     if (s.body.strip() == '&nbsp;'):
                         s.body = ''
 
-                    self.output += '\n\t<div id="%s" class="%s">%s' % (
+                    self.output += '\n\t\t\t<div id="%s" class="%s">%s' % (
                         s.html_id,
                         re.sub(r' +', ' ', classe),
                         unicode(s.body)
@@ -338,7 +338,7 @@ class HtmlBuilder(object):
                     self.output += '</div>'
 
         addSection(sections, None);
-        self.output += '\n</div>'
+        self.output += '\n\t\t</div>'
         qs = 'key=%s&t=%s' % (key, int(time.time()))
         return template.render('render.html', {
             'preview': preview,
