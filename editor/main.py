@@ -46,8 +46,11 @@ class Editor(BaseRequestHandler):
 
 class ListLayouts(BaseRequestHandler):
     def get(self):
-        layouts = Layout.gql('WHERE owner = :1', current_user.user_id())
+        layouts = []
         result = []
+        
+        if current_user != None:
+            layouts = Layout.gql('WHERE owner = :1', current_user.user_id())
 
         for l in layouts:
             name = 'Untitled'
