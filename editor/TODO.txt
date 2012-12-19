@@ -1,21 +1,16 @@
-lançamento (concluir items para o lançamento, ordenados por prioridade)
-
-- fazer ajuste recomendado pelo sunny
-- modificar pagina de erro!
-- definir uma rotina de testes funcionais e testar a parada em produção antes de comunicar o lançamento!
 - atualizar gae sdk, jquery ui.
 
 * comprimir js
 * criar site com o tema elegantthemes.com/gallery/webly/ (conteudo, paginas: home, sobre, ajuda, contato, etc.)
 * logs
-* limitar numero de layouts por usuario    
+* limitar numero de layouts por usuario
 * bug deletar layout em edicao
 * exibir o tooltip "add section" corretamente ou remove-lo. usar cookies
 * adicionar loading em partes que podem demorar
-* redirect pro site apos logout 
+* redirect pro site apos logout
 * rodar app na raiz do site
 * aumentar tamanho dos handles do resize
-* limitar o numero de sections para 50 
+* limitar o numero de sections para 50
 * aumentar altura inicial sections
 * colocar um fundo e bordas nos icones de hover da section
 * icones para remover e editar as propriedades da section
@@ -25,24 +20,15 @@ lançamento (concluir items para o lançamento, ordenados por prioridade)
 * usar novo editor de código (http://ace.ajax.org/)
 * trocar alerts por um modal/dialog
 
-anunciar
-
-- hn
-- comunidades blueprint e de desenvolvedores web
-- sites como http://www.webresourcesdepot.com/suggest-free-web-resources
-- revistas?
-
-ideias 
+ideias
 
 - integrar com o gdrive. criar um arquivo/formato para os layouts. (by guilha)
-- criar app chrome 
-- criar API 
-- colocar um editor WYSIWYG (pablo) 
+- criar app chrome
+- criar API
+- colocar um editor WYSIWYG (pablo)
 
 todo
 
-- indentar corretamente o html gerado, utilizar um parser de HTML?
-  http://pt.wikipedia.org/wiki/Indenta%C3%A7%C3%A3o
 - procurar por anotacões "TODO" no código
 - z-index das sections e dialogs/menus do app
 - remover dialogs não utilizados
