@@ -1,3 +1,4 @@
+- explicar utilização no README.md
 - atualizar gae sdk, jquery ui.
 
 * comprimir js
