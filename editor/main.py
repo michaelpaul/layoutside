@@ -3,19 +3,16 @@
 import logging, os, sys, cgi, datetime, time, re
 import zipfile
 import StringIO
-
-from google.appengine.dist import use_library
-
-use_library('django', '1.2')
+import webapp2
 
 from google.appengine.api import users
-from google.appengine.ext import webapp, db
+from google.appengine.ext import db
 from google.appengine.ext.webapp import template
-from google.appengine.ext.webapp.util import run_wsgi_app
-from django.utils import simplejson
 from datastore.models import *
 
-current_user = None
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+from django.utils import simplejson
 
 # limite de layouts por usuário
 LIMIT_SAVED_LAYOUTS = 3
@@ -24,8 +21,7 @@ LIMIT_DELETE_SECTIONS = 50
 # limite de sections por layout
 LIMIT_CREATE_SECTIONS = 50
 
-
-class BaseRequestHandler(webapp.RequestHandler):
+class BaseRequestHandler(webapp2.RequestHandler):
     def write(self, msg):
         self.response.out.write(msg)
     def render(self, path, template_values = {}):
@@ -35,9 +31,10 @@ class Editor(BaseRequestHandler):
     PATH = '/'
 
     def get(self):
+        current_user = users.get_current_user()
         env_prod = not os.environ['SERVER_SOFTWARE'].startswith("Development")
         nickname = current_user.nickname() if not current_user == None else ''
-        self.render('index.html', {
+        self.render('editor/index.html', {
             'user_name':nickname,
             'logout': users.create_logout_url("http://layoutside.com"),
             'login_url': users.create_login_url("/"),
@@ -46,9 +43,10 @@ class Editor(BaseRequestHandler):
 
 class ListLayouts(BaseRequestHandler):
     def get(self):
+        current_user = users.get_current_user()
         layouts = []
         result = []
-        
+
         if current_user != None:
             layouts = Layout.gql('WHERE owner = :1', current_user.user_id())
 
@@ -62,6 +60,7 @@ class ListLayouts(BaseRequestHandler):
 
 class DeleteLayout(BaseRequestHandler):
     def post(self):
+        current_user = users.get_current_user()
         result = {'status': 0}
 
         layout = Layout.get(self.request.get('key'))
@@ -119,7 +118,7 @@ class OpenLayout(BaseRequestHandler):
                 }
 
                 result['sections'].append(section)
-            
+
             result_str = simplejson.dumps(result)
             self.write(result_str)
 
@@ -137,6 +136,7 @@ class PreviewLayout(BaseRequestHandler):
 
 class SaveLayout(BaseRequestHandler):
     def post(self):
+        current_user = users.get_current_user()
         if current_user == None:
             logging.error("Salvar layout sem login.")
             result_str = simplejson.dumps({'status': 2})
@@ -147,17 +147,17 @@ class SaveLayout(BaseRequestHandler):
 
         self.response.headers['Content-type'] = 'application/json'
 
-        if (len(layout['sections']) > LIMIT_CREATE_SECTIONS): 
+        if (len(layout['sections']) > LIMIT_CREATE_SECTIONS):
             result_str = simplejson.dumps({'status': 5, 'key': None })
             self.write(result_str)
             return False
-        
+
         try:
             if config['key'] != '':
                 l = Layout.get(config['key'])
-            else: 
+            else:
                 l = None
-            
+
             if l != None and isinstance(l, db.Model):
                 # atualizar layout
                 l.name = config['layout_name']
@@ -168,12 +168,12 @@ class SaveLayout(BaseRequestHandler):
                 # inserir layout
                 query = db.Query(Layout)
                 layout_count = query.filter("owner = ", current_user.user_id()).count()
-                
-                if (layout_count >= LIMIT_SAVED_LAYOUTS): 
+
+                if (layout_count >= LIMIT_SAVED_LAYOUTS):
                     result_str = simplejson.dumps({'status': 6, 'key': None })
                     self.write(result_str)
                     return False
-                
+
                 l = Layout(owner = current_user.user_id(),
                     name = config['layout_name'],
                     column_count = config['column_count'],
@@ -237,7 +237,7 @@ class DownloadLayout(BaseRequestHandler):
         if not self.request.get('html-only'):
             zipstream = StringIO.StringIO()
             pacote = zipfile.ZipFile(zipstream, "w")
-            esqueleto = '../blueprint-skel'
+            esqueleto = 'blueprint-skel'
             screencss_path = None
 
             for dirpath, dirnames, filenames in os.walk(esqueleto):
@@ -248,6 +248,10 @@ class DownloadLayout(BaseRequestHandler):
                         screencss_path = filename
                         continue
                     pacote.write(filename, filename.replace(esqueleto, ''))
+
+            if screencss_path is None:
+                logging.error('Falha ao localizar screen.css')
+                return False
 
             screencss = open(screencss_path)
             info = zipfile.ZipInfo('/css/blueprint/screen.css')
@@ -287,7 +291,6 @@ class BuildGrid(BaseRequestHandler):
 
 		self.response.headers['Content-Type'] = 'text/css'
 		self.write(output)
-
 
 class HtmlBuilder(object):
     output = ''
@@ -340,7 +343,7 @@ class HtmlBuilder(object):
         addSection(sections, None);
         self.output += '\n\t\t</div>'
         qs = 'key=%s&t=%s' % (key, int(time.time()))
-        return template.render('render.html', {
+        return template.render('editor/render.html', {
             'preview': preview,
             'qs': qs,
             'title': layout.name,
@@ -408,13 +411,12 @@ class CssBuilder(object):
 			'colborder_margin': int((data['column_width'] + 2 * data['gutter_width']) / 2)
 		})
 
-		return template.render('grid.css', data)
+		return template.render('editor/grid.css', data)
 
-def main():
-    global current_user
+def app_routes():
+    current_user = users.get_current_user()
     logging.getLogger().setLevel(logging.DEBUG)
 
-    current_user = users.get_current_user()
     ga = AppUser.gql('WHERE google_account = :1', current_user)
     # verificar se usuário já tem cadastro, se não criar usuario no storage
     if(ga.get() == None and not current_user == None):
@@ -423,7 +425,7 @@ def main():
 
     # basepath
     bp = Editor.PATH
-    rotas = [
+    routes = [
         (bp, Editor),
         (bp + 'layouts', ListLayouts),
         (bp + 'save-layout', SaveLayout),
@@ -433,10 +435,7 @@ def main():
         (bp + 'download-layout', DownloadLayout),
         (bp + 'custom-layout/grid.css', BuildGrid)
     ]
+    return routes
 
-    layoutside = webapp.WSGIApplication(rotas, debug=True)
-    run_wsgi_app(layoutside)
-
-if __name__ == '__main__':
-    main()
+app = webapp2.WSGIApplication(app_routes())
 
